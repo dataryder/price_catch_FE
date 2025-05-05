@@ -4,7 +4,7 @@ import {
 	// NavbarMenu,
 	// NavbarMenuItem,
 	// NavbarMenuDropdown,
-	NavbarAction,
+	// NavbarAction,
 } from "@govtechmy/myds-react/navbar";
 import { ThemeSwitch } from "@govtechmy/myds-react/theme-switch";
 

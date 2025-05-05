@@ -12,7 +12,7 @@ import {
 	SearchBarResults,
 	SearchBarResultsList,
 	SearchBarResultsItem,
-	SearchBarHint,
+	// SearchBarHint,
 } from "@govtechmy/myds-react/search-bar";
 
 import { ChevronRightIcon } from "@govtechmy/myds-react/icon";
