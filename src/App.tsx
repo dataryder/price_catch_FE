@@ -10,7 +10,7 @@ function App() {
 
   return (
     <div className="bg-bg-white container mx-auto w-full min-h-screen">
-      <div className='w-sm md:w=md lg:w-5xl mx-auto min-h-screen border border-otl-gray-200 flex flex-col flex-gro'>
+      <div className='w=md lg:w-5xl mx-auto min-h-screen border border-otl-gray-200 flex flex-col flex-gro'>
         <header className="mb-8 text-center">
           <NavBarHeader />
         </header>
