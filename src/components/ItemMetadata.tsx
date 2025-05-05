@@ -89,7 +89,7 @@ const ItemMetadataDisplay: React.FC<ItemMetadataDisplayProps> = ({
 					<div className='text-3xl font-semibold text-center'>
 						{formatPrice(metadata.minimum)}
 					</div>
-					<div className='text-sm text-center border-t mt-2 pt-2'>
+					<div className='text-sm text-center border-t border-otl-gray-300 mt-2 pt-2'>
 						Lowest Price
 					</div>
 				</div>
@@ -108,7 +108,7 @@ const ItemMetadataDisplay: React.FC<ItemMetadataDisplayProps> = ({
 					<div className='text-3xl font-semibold text-center'>
 						{formatPrice(metadata.median)}
 					</div>
-					<div className='text-sm text-center border-t mt-2 pt-2'>
+					<div className='text-sm text-center border-t border-otl-gray-300 mt-2 pt-2'>
 						Median Price
 					</div>
 				</div>

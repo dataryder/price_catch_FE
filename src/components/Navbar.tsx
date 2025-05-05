@@ -12,8 +12,8 @@ export default function NavBarHeader() {
 	return (
 		<Navbar className="px-4">
 			<NavbarLogo
-				src="https://d2391uizq0pg2.cloudfront.net/common/logo.svg"
-				alt="Malaysian Government Design System"
+				src="/icon.png"
+				alt="Money Logo"
 			>
 				Price Tracking
 			</NavbarLogo>

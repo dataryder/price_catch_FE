@@ -1,18 +1,1 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="32" height="32" viewBox="0 0 32 32" xml:space="preserve">
-<desc>Created with Fabric.js 5.2.4</desc>
-<defs>
-</defs>
-<g transform="matrix(0 0 0 0 0 0)" id="8522ad92-b48c-48e0-8861-24f80ac8f8d9"  >
-</g>
-<g transform="matrix(1 0 0 1 16 16)" id="6422880b-44c1-424f-be17-d661dceb1e93"  >
-<rect style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(255,255,255); fill-rule: nonzero; opacity: 1; visibility: hidden;" vector-effect="non-scaling-stroke"  x="-16" y="-16" rx="0" ry="0" width="32" height="32" />
-</g>
-<g transform="matrix(0.32 0 0 0.32 16.17 16.17)" id="ea305a41-5208-45f5-be38-9bd79276d01e"  >
-<circle style="stroke: rgb(0,0,0); stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(255,255,255); fill-rule: nonzero; opacity: 1;" vector-effect="non-scaling-stroke"  cx="0" cy="0" r="35" />
-</g>
-<g transform="matrix(1.6 0 0 1.6 16 16)"  >
-<path style="stroke: rgb(0,128,0); stroke-width: 1.5; stroke-dasharray: none; stroke-linecap: round; stroke-dashoffset: 0; stroke-linejoin: round; stroke-miterlimit: 4; fill: rgb(255,255,255); fill-rule: nonzero; opacity: 1;"  transform=" translate(-10, -10)" d="M 12.25 6.75 L 9.375 6.75 C 8.4775 6.75 7.75 7.47754 7.75 8.375 C 7.75 9.2725 8.4775 10 9.375 10 L 10.625 10 C 11.5225 10 12.25 10.7275 12.25 11.625 C 12.25 12.5225 11.5225 13.25 10.625 13.25 L 7.75 13.25 M 10 5.75 L 10 6.25 M 10 13.75 L 10 14.25 M 17.25 10 C 17.25 14.0041 14.0041 17.25 10 17.25 C 5.99594 17.25 2.75 14.0041 2.75 10 C 2.75 5.99594 5.99594 2.75 10 2.75 C 14.0041 2.75 17.25 5.99594 17.25 10 Z" stroke-linecap="round" />
-</g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" xml:space="preserve"><g transform="scale(0)"/><g transform="translate(16 16)"/><circle style="stroke:#000;stroke-width:0;stroke-dasharray:none;stroke-linecap:butt;stroke-dashoffset:0;stroke-linejoin:miter;stroke-miterlimit:4;fill:#fff;fill-rule:nonzero;opacity:1" vector-effect="non-scaling-stroke" r="35" transform="matrix(.32 0 0 .32 16.17 16.17)"/><path style="stroke:green;stroke-width:1.5;stroke-dasharray:none;stroke-linecap:round;stroke-dashoffset:0;stroke-linejoin:round;stroke-miterlimit:4;fill:#fff;fill-rule:nonzero;opacity:1" transform="scale(1.6)" d="M12.25 6.75H9.375a1.625 1.625 0 1 0 0 3.25h1.25a1.625 1.625 0 1 1 0 3.25H7.75M10 5.75v.5m0 7.5v.5M17.25 10a7.25 7.25 0 1 1-14.5 0 7.25 7.25 0 0 1 14.5 0" stroke-linecap="round"/></svg>
