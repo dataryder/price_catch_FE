@@ -257,7 +257,7 @@ const ItemDetailsWrapper: React.FC<ItemDetailsWrapperProps> = () => {
 					<div className="text-center p-4 text-gray-500 border rounded-md">No price history found for the selected criteria.</div>
 				)}
 				{!isLoadingHistoryAndFilters && sortedAndFilteredPriceHistory.length > 0 && (
-					<div className="overflow-x-auto ">
+					<div className="overflow-x-auto overflow-y-auto max-h-[500px]">
 						<DataTable data={sortedAndFilteredPriceHistory} columns={columns} className='p-2 rounded-md text-xs md:text-md' />
 					</div>
 				)}
