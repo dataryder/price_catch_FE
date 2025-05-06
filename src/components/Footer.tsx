@@ -4,10 +4,11 @@ import {
   FooterSection,
   FooterLogo,
 } from "@govtechmy/myds-react/footer";
-import { GithubIcon } from "@govtechmy/myds-react/icon";
 import { Link } from "@govtechmy/myds-react/link";
 
 export default function FooterBar() {
+  var d = new Date();
+  d.setDate(d.getDate() - 1);
   return (
     <Footer className="top-0 z-10 overflow-hidden py-4 md:py-6 lg:py-6 ">
       <FooterSection className="flex justify-between w-full py-0 border-none">
@@ -47,7 +48,7 @@ export default function FooterBar() {
             <p className="max-sm:hidden inline">DataRyder</p>
           </div>
           <div>
-            <p className="max-sm:hidden inline">Last updated: </p>5th May 2025
+            <p className="max-sm:hidden inline">Last updated: </p>{d.toLocaleDateString("en-MY")}
           </div>
         </div>
       </FooterSection>

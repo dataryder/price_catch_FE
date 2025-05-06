@@ -238,7 +238,7 @@ const ItemDetailsWrapper: React.FC<ItemDetailsWrapperProps> = () => {
 			<ItemMetadataDisplay metadata={itemDetails} isLoading={isLoadingMetadata} error={error} />
 
 
-			<div className='flex flex-col gap-4 border border-otl-gray-200 p-4 rounded-md shadow-card mt-4'>
+			<div className='flex flex-col gap-2 md:gap-4 border border-otl-gray-200 p-4 rounded-md shadow-card my-4'>
 				<h3 className="text-xl text-txt-black-900 font-semibold mb-1 text-center">Latest Prices in {selectedState}{selectedDistrict ? ` - ${selectedDistrict}` : ''}</h3>
 				<div className="flex flex-col md:flex-row gap-4 items-center">
 					<Select
@@ -275,16 +275,16 @@ const ItemDetailsWrapper: React.FC<ItemDetailsWrapperProps> = () => {
 					<div className="text-center p-4 text-gray-500 border rounded-md">No latest price found for the selected criteria.</div>
 				)}
 				{!isLoadingAndFilters && sortedAndFilteredPriceLatest.length > 0 && (
-					<div>
-						<div className="overflow-x-auto overflow-y-auto max-h-[500px]">
-							<DataTable data={sortedAndFilteredPriceLatest} columns={columns} className='p-2 rounded-md text-xs md:text-md' />
-						</div>
 
-						<div>
-							<PriceHistoryChart data={priceHistory} />
-						</div>
+					<div className="overflow-x-auto overflow-y-auto max-h-[300px] md:max-h-[500px]">
+						<DataTable data={sortedAndFilteredPriceLatest} columns={columns} className='p-2 rounded-md text-xs md:text-md' />
 					</div>
+
 				)}
+			</div>
+			<div className='flex flex-col gap-4 border border-otl-gray-200 p-4 rounded-md shadow-card my-4'>
+				<h3 className="text-xl text-txt-black-900 font-semibold mb-1 text-center">Price History</h3>
+				<PriceHistoryChart data={priceHistory} />
 			</div>
 		</div>
 	);

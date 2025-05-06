@@ -39,6 +39,7 @@ export interface ItemMetadata {
 	minimum: number;
 	maximum: number;
 	q75: number;
+	last_updated: string;
 }
 
 export interface ItemLatest {

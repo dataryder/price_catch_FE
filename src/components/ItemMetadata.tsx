@@ -3,7 +3,7 @@
 import React from 'react';
 import { ItemMetadata } from '../types'; // Assuming ItemMetadata has name, unit, group, category
 import { Tag } from '@govtechmy/myds-react/tag';
-import { QuestionCircleIcon } from "@govtechmy/myds-react/icon";
+import { CalendarIcon, QuestionCircleIcon } from "@govtechmy/myds-react/icon";
 import {
 	Tooltip,
 	TooltipTrigger,
@@ -23,6 +23,10 @@ const formatPrice = (price: number | null): string => {
 	}
 	return `${price.toFixed(2)}`;
 };
+
+function isDateValid(dateStr: string) {
+	return !isNaN(new Date(dateStr).getTime());
+}
 
 const ItemMetadataDisplay: React.FC<ItemMetadataDisplayProps> = ({
 	metadata,
@@ -62,17 +66,27 @@ const ItemMetadataDisplay: React.FC<ItemMetadataDisplayProps> = ({
 	}
 
 	return (
-		<div className="flex flex-col gap-4 items-center">
-			<h2 className="text-xl font-semibold mb-3 text-txt-black-700 flex">
+		<div className="flex flex-col gap-2 md:gap-4 items-center">
+			<h2 className="text-lg md:text-xl font-semibold text-txt-black-700 flex">
 				{metadata.item}
 				<p className='px-2 text-xs'>per {metadata.unit}</p>
 			</h2>
 
-			<div className="flex gap-2">
-				<Tag size='small' variant='warning' mode='default'>{metadata.item_category}</Tag>
-				<Tag size='small' variant='primary' mode='pill'>{metadata.item_group}</Tag>
+			<div className='flex flex-col gap-1 items-center'>
+				<div className="flex gap-2">
+					<Tag size='small' variant='warning' mode='default'>{metadata.item_category}</Tag>
+					<Tag size='small' variant='primary' mode='pill'>{metadata.item_group}</Tag>
+				</div>
+				{isDateValid(metadata.last_updated) && (
+					<div className='flex items-center gap-1 max-sm:hidden'>
+						<CalendarIcon className='text-txt-black-500 h-4 w-4' />
+						<p className='italic text-txt-black-500 text-xs'>Data updated on {new Date(metadata.last_updated).toLocaleDateString("en-MY", {})}</p>
+					</div>)}
+				{!isDateValid(metadata.last_updated) && (
+					<div>
+						<p className='italic text-txt-black-500 text-xs text-center'>Data not available</p>
+					</div>)}
 			</div>
-
 			<div className='flex gap-4'>
 				<div className='flex flex-col border border-otl-gray-200 rounded-md max-w-30 max-h-50 shadow-card text-txt-success p-4'>
 					<div className="flex justify-between items-center">
