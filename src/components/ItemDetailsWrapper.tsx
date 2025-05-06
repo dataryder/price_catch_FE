@@ -18,9 +18,10 @@ import {
 } from "@govtechmy/myds-react/icon";
 import { ColumnDef } from "@tanstack/react-table";
 
-import { SearchResultItem, ItemMetadata, ItemLatest } from '../types';
-import { getItemMetadata, getItemLatest } from '../services/apiClient';
+import { SearchResultItem, ItemMetadata, ItemLatest, ItemPriceHistory } from '../types';
+import { getItemMetadata, getItemLatest, getItemPriceHistory } from '../services/apiClient';
 import ItemMetadataDisplay from './ItemMetadata';
+import PriceHistoryChart from './PriceHistoryChart';
 
 interface ItemDetailsWrapperProps {
 	searchResults: SearchResultItem[];
@@ -29,10 +30,10 @@ interface ItemDetailsWrapperProps {
 const DEFAULT_STATE = "Selangor";
 const ALL_DISTRICTS_VALUE = "__ALL_DISTRICTS__";
 
-const getFilterOptionsFromHistory = (history: ItemLatest[]) => { /* ... */
+const getFilterOptionsFromLatest = (data: ItemLatest[]) => {
 	const states = new Set<string>();
 	const districtsByState: Record<string, Set<string>> = {};
-	history.forEach(entry => {
+	data.forEach(entry => {
 		states.add(entry.state);
 		if (!districtsByState[entry.state]) { districtsByState[entry.state] = new Set<string>(); }
 		districtsByState[entry.state].add(entry.district);
@@ -51,9 +52,9 @@ const ItemDetailsWrapper: React.FC<ItemDetailsWrapperProps> = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
 	const [itemDetails, setItemDetails] = useState<ItemMetadata | null>(null);
-	const [allPriceHistory, setAllPriceHistory] = useState<ItemLatest[]>([]);
+	const [allPriceLatest, setAllPriceLatest] = useState<ItemLatest[]>([]);
 	const [isLoadingMetadata, setIsLoadingMetadata] = useState<boolean>(true);
-	const [isLoadingHistoryAndFilters, setIsLoadingHistoryAndFilters] = useState<boolean>(true);
+	const [isLoadingAndFilters, setIsLoadingAndFilters] = useState<boolean>(true);
 	const [error, setError] = useState<string | null>(null);
 	const [availableFilters, setAvailableFilters] = useState<{ states: string[]; districtsByState: Record<string, string[]>; }>({ states: [], districtsByState: {} });
 	const initialFilters = useMemo(() => {
@@ -62,6 +63,7 @@ const ItemDetailsWrapper: React.FC<ItemDetailsWrapperProps> = () => {
 	}, [location.search]);
 	const [selectedState, setSelectedState] = useState<string>(initialFilters.state);
 	const [selectedDistrict, setSelectedDistrict] = useState<string>(initialFilters.district);
+	const [priceHistory, setPriceHistory] = useState<ItemPriceHistory[]>([]);
 
 	const updateUrlFilters = useCallback((newState: string, newDistrict: string) => {
 		const params = new URLSearchParams();
@@ -87,25 +89,41 @@ const ItemDetailsWrapper: React.FC<ItemDetailsWrapperProps> = () => {
 	}, [itemCode]);
 
 	useEffect(() => {
+		if (!itemCode) return;
+		const fetchHistory = async () => {
+			try {
+				const priceHistory = await getItemPriceHistory({ item_code: itemCode });
+				if (priceHistory && priceHistory.length > 0) { setPriceHistory(priceHistory); }
+				else { throw new Error(`History not found for item code ${itemCode}`); }
+			} catch (err) {
+				console.error("Failed to fetch history:", err);
+				setError(err instanceof Error ? `History error: ${err.message}` : `Could not load history for ${itemCode}`);
+			} finally { setIsLoadingMetadata(false); }
+		};
+		fetchHistory();
+	}, [itemCode]);
+
+
+	useEffect(() => {
 		if (!itemCode || isLoadingMetadata || !itemDetails) return;
-		setIsLoadingHistoryAndFilters(true); setError(null);
+		setIsLoadingAndFilters(true); setError(null);
 		const fetchAllData = async () => {
 			try {
-				const history = await getItemLatest({ item_code: itemCode });
-				setAllPriceHistory(history);
-				const filterOptions = getFilterOptionsFromHistory(history);
+				const data = await getItemLatest({ item_code: itemCode });
+				setAllPriceLatest(data);
+				const filterOptions = getFilterOptionsFromLatest(data);
 				setAvailableFilters(filterOptions);
 			} catch (err) {
-				console.error("Failed to fetch price history:", err);
-				setError(err instanceof Error ? `Data fetch error: ${err.message}` : 'Could not load item history');
-				setAllPriceHistory([]); setAvailableFilters({ states: [], districtsByState: {} });
-			} finally { setIsLoadingHistoryAndFilters(false); }
+				console.error("Failed to fetch latest price:", err);
+				setError(err instanceof Error ? `Data fetch error: ${err.message}` : 'Could not load latest item');
+				setAllPriceLatest([]); setAvailableFilters({ states: [], districtsByState: {} });
+			} finally { setIsLoadingAndFilters(false); }
 		};
 		fetchAllData();
 	}, [itemCode, isLoadingMetadata, itemDetails]);
 
 	useEffect(() => {
-		if (!isLoadingHistoryAndFilters && !initialFilters.state && availableFilters.states.length > 0) {
+		if (!isLoadingAndFilters && !initialFilters.state && availableFilters.states.length > 0) {
 			if (availableFilters.states.includes(DEFAULT_STATE)) {
 				setSelectedState(DEFAULT_STATE); setSelectedDistrict('');
 				updateUrlFilters(DEFAULT_STATE, '');
@@ -113,36 +131,36 @@ const ItemDetailsWrapper: React.FC<ItemDetailsWrapperProps> = () => {
 				setSelectedState(availableFilters.states[0]); setSelectedDistrict('');
 				updateUrlFilters(availableFilters.states[0], '');
 			}
-		} else if (!isLoadingHistoryAndFilters && initialFilters.state && initialFilters.district) {
+		} else if (!isLoadingAndFilters && initialFilters.state && initialFilters.district) {
 			setSelectedDistrict(initialFilters.district);
-		} else if (!isLoadingHistoryAndFilters && initialFilters.state && !initialFilters.district) {
+		} else if (!isLoadingAndFilters && initialFilters.state && !initialFilters.district) {
 			setSelectedDistrict('');
 		}
-	}, [isLoadingHistoryAndFilters, initialFilters.state, initialFilters.district, availableFilters.states, itemCode, updateUrlFilters]);
+	}, [isLoadingAndFilters, initialFilters.state, initialFilters.district, availableFilters.states, itemCode, updateUrlFilters]);
 
-	const filteredPriceHistory = useMemo(() => {
-		if (isLoadingHistoryAndFilters || !allPriceHistory) return [];
-		return allPriceHistory.filter(entry => {
+	const filteredPriceLatest = useMemo(() => {
+		if (isLoadingAndFilters || !allPriceLatest) return [];
+		return allPriceLatest.filter(entry => {
 			const stateMatch = !selectedState || entry.state === selectedState;
 			const districtMatch = !selectedState || !selectedDistrict || entry.district === selectedDistrict;
 			return stateMatch && districtMatch;
 		});
-	}, [allPriceHistory, selectedState, selectedDistrict, isLoadingHistoryAndFilters]);
+	}, [allPriceLatest, selectedState, selectedDistrict, isLoadingAndFilters]);
 
-	const sortedAndFilteredPriceHistory = useMemo(() => {
-		return [...filteredPriceHistory].sort((a, b) => {
+	const sortedAndFilteredPriceLatest = useMemo(() => {
+		return [...filteredPriceLatest].sort((a, b) => {
 			if (a.state < b.state) return -1; if (a.state > b.state) return 1;
 			if (a.district < b.district) return -1; if (a.district > b.district) return 1;
 			return 0;
 		});
-	}, [filteredPriceHistory]);
+	}, [filteredPriceLatest]);
 
 	const minPrice = useMemo(() => {
-		if (!sortedAndFilteredPriceHistory || sortedAndFilteredPriceHistory.length === 0) {
+		if (!sortedAndFilteredPriceLatest || sortedAndFilteredPriceLatest.length === 0) {
 			return null;
 		}
-		return Math.min(...sortedAndFilteredPriceHistory.map(item => item.price));
-	}, [sortedAndFilteredPriceHistory]);
+		return Math.min(...sortedAndFilteredPriceLatest.map(item => item.price));
+	}, [sortedAndFilteredPriceLatest]);
 
 	const handleStateChange = (value: string) => {
 		if (!value) return;
@@ -158,9 +176,9 @@ const ItemDetailsWrapper: React.FC<ItemDetailsWrapperProps> = () => {
 	const handleBack = () => navigate('/');
 
 	const districtsForSelectedState = useMemo(() => {
-		if (isLoadingHistoryAndFilters || !selectedState) return [];
+		if (isLoadingAndFilters || !selectedState) return [];
 		return availableFilters.districtsByState[selectedState] || [];
-	}, [selectedState, availableFilters, isLoadingHistoryAndFilters]);
+	}, [selectedState, availableFilters, isLoadingAndFilters]);
 
 	const columns = useMemo<ColumnDef<ItemLatest>[]>(() => [
 		{
@@ -198,7 +216,7 @@ const ItemDetailsWrapper: React.FC<ItemDetailsWrapperProps> = () => {
 		},
 	], [minPrice]); // *** Add minPrice as a dependency for the price column ***
 
-	const isPageLoading = isLoadingMetadata || isLoadingHistoryAndFilters;
+	const isPageLoading = isLoadingMetadata || isLoadingAndFilters;
 
 	if (isPageLoading && !itemDetails) { return <div className="text-center p-6">Loading item data...</div>; }
 	if (error) {
@@ -220,14 +238,14 @@ const ItemDetailsWrapper: React.FC<ItemDetailsWrapperProps> = () => {
 			<ItemMetadataDisplay metadata={itemDetails} isLoading={isLoadingMetadata} error={error} />
 
 
-			<div className='flex flex-col gap-4 border border-otl-gray-200 p-4 rounded-md shadow-card mt-4'>
+			<div className='flex flex-col gap-2 md:gap-4 border border-otl-gray-200 p-4 rounded-md shadow-card my-4'>
 				<h3 className="text-xl text-txt-black-900 font-semibold mb-1 text-center">Latest Prices in {selectedState}{selectedDistrict ? ` - ${selectedDistrict}` : ''}</h3>
 				<div className="flex flex-col md:flex-row gap-4 items-center">
 					<Select
 						variant="outline" size="small"
 						value={selectedState}
 						onValueChange={handleStateChange}
-						disabled={isLoadingHistoryAndFilters || availableFilters.states.length === 0}
+						disabled={isLoadingAndFilters || availableFilters.states.length === 0}
 					>
 						<SelectTrigger id="state-select-trigger">
 							<SelectValue label="State:" placeholder="Select State" />
@@ -240,7 +258,7 @@ const ItemDetailsWrapper: React.FC<ItemDetailsWrapperProps> = () => {
 						variant="outline" size="small"
 						value={selectedDistrict === "" ? ALL_DISTRICTS_VALUE : selectedDistrict}
 						onValueChange={handleDistrictChange}
-						disabled={!selectedState || isLoadingHistoryAndFilters || districtsForSelectedState.length === 0}
+						disabled={!selectedState || isLoadingAndFilters || districtsForSelectedState.length === 0}
 					>
 						<SelectTrigger id="district-select-trigger">
 							<SelectValue label="District:" placeholder="All Districts" />
@@ -252,15 +270,21 @@ const ItemDetailsWrapper: React.FC<ItemDetailsWrapperProps> = () => {
 					</Select>
 				</div>
 
-				{(isLoadingHistoryAndFilters) && (<DataTable data={[]} columns={columns} loading className='' />)}
-				{!isLoadingHistoryAndFilters && sortedAndFilteredPriceHistory.length === 0 && (
-					<div className="text-center p-4 text-gray-500 border rounded-md">No price history found for the selected criteria.</div>
+				{(isLoadingAndFilters) && (<DataTable data={[]} columns={columns} loading className='' />)}
+				{!isLoadingAndFilters && sortedAndFilteredPriceLatest.length === 0 && (
+					<div className="text-center p-4 text-gray-500 border rounded-md">No latest price found for the selected criteria.</div>
 				)}
-				{!isLoadingHistoryAndFilters && sortedAndFilteredPriceHistory.length > 0 && (
-					<div className="overflow-x-auto overflow-y-auto max-h-[500px]">
-						<DataTable data={sortedAndFilteredPriceHistory} columns={columns} className='p-2 rounded-md text-xs md:text-md' />
+				{!isLoadingAndFilters && sortedAndFilteredPriceLatest.length > 0 && (
+
+					<div className="overflow-x-auto overflow-y-auto max-h-[300px] md:max-h-[500px]">
+						<DataTable data={sortedAndFilteredPriceLatest} columns={columns} className='p-2 rounded-md text-xs md:text-md' />
 					</div>
+
 				)}
+			</div>
+			<div className='flex flex-col gap-4 border border-otl-gray-200 p-4 rounded-md shadow-card my-4'>
+				<h3 className="text-xl text-txt-black-900 font-semibold mb-1 text-center">Price History</h3>
+				<PriceHistoryChart data={priceHistory} />
 			</div>
 		</div>
 	);

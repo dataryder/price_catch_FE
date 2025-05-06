@@ -115,7 +115,7 @@ const MydsSearchBar: React.FC = () => {
 
 
 	return (
-		<form onSubmit={handleFormSubmit} className="relative">
+		<form onSubmit={handleFormSubmit} className="relative z-10">
 			<SearchBar
 				size="large"
 				onBlur={handleBlur}

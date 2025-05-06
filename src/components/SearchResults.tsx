@@ -25,7 +25,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({ results, onSelectItem, is
 	}
 
 	return (
-		<div className="bg-bg-white rounded-lg overflow-hidden z-0">
+		<div className="bg-bg-white rounded-lg overflow-hidden">
 			<ul className="">
 				{results.map((item) => (
 					<li

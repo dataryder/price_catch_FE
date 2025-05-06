@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { SearchResultItem, PriceHistoryEntry, ItemDetailsInput, ItemMetadata, ItemLatest } from '../types';
+import { SearchResultItem, ItemDetailsInput, ItemMetadata, ItemLatest, ItemPriceHistory } from '../types';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/';
 const apiClient = axios.create({
@@ -38,22 +38,6 @@ export const searchItemsFull = async (query: string): Promise<SearchResultItem[]
 	}
 };
 
-export const getItemPriceHistory = async ({
-	item_code,
-}: ItemDetailsInput): Promise<PriceHistoryEntry[]> => {
-	try {
-		const params: Record<string, string> = { item_code };
-		const response = await apiClient.get<PriceHistoryEntry[]>('/api/itemdailyfull', { params });
-		return response.data;
-	} catch (error) {
-		console.error('API Client: Error fetching price history:', error);
-		if (axios.isAxiosError(error) && error.response) {
-			throw new Error(`Fetching history failed: ${error.response.data.detail || error.message}`);
-		}
-		throw new Error('An unknown error occurred while fetching history.');
-	}
-};
-
 export const getItemMetadata = async ({
 	item_code,
 }: ItemDetailsInput): Promise<ItemMetadata[]> => {
@@ -83,5 +67,21 @@ export const getItemLatest = async ({
 			throw new Error(`Fetching metadata failed: ${error.response.data.detail || error.message}`);
 		}
 		throw new Error('An unknown error occurred while fetching latest.');
+	}
+};
+
+export const getItemPriceHistory = async ({
+	item_code,
+}: ItemDetailsInput): Promise<ItemPriceHistory[]> => {
+	try {
+		const params: Record<string, string> = { item_code };
+		const response = await apiClient.get<ItemPriceHistory[]>('/api/itempricehistorymonth', { params });
+		return response.data;
+	} catch (error) {
+		console.error('API Client: Error fetching history:', error);
+		if (axios.isAxiosError(error) && error.response) {
+			throw new Error(`Fetching history failed: ${error.response.data.detail || error.message}`);
+		}
+		throw new Error('An unknown error occurred while fetching history.');
 	}
 };

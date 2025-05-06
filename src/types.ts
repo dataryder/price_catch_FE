@@ -39,6 +39,7 @@ export interface ItemMetadata {
 	minimum: number;
 	maximum: number;
 	q75: number;
+	last_updated: string;
 }
 
 export interface ItemLatest {
@@ -47,4 +48,12 @@ export interface ItemLatest {
 	state: string;
 	district: string;
 	price: number;
+}
+
+export interface ItemPriceHistory {
+	date: string;
+	average: number;
+	median: number;
+	minimum: number;
+	maximum: number;
 }
