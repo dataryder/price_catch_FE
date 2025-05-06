@@ -161,8 +161,8 @@ const MydsSearchBar: React.FC = () => {
 										<p className="line-clamp-1 flex-1 text-sm">
 											{item.item}
 										</p>
-										<Tag size='small' variant='warning' mode='default' className='hidden'>{item.item_category}</Tag>
-										<Tag size='small' variant='primary' mode='pill' className='hidden'>{item.item_group}</Tag>
+										<Tag size='small' variant='warning' mode='default' className='max-sm:hidden'>{item.item_category}</Tag>
+										<Tag size='small' variant='primary' mode='pill' className='max-sm:hidden'>{item.item_group}</Tag>
 										<ChevronRightIcon className="text-gray-400" />
 									</SearchBarResultsItem>
 								))}

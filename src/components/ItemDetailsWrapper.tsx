@@ -222,7 +222,7 @@ const ItemDetailsWrapper: React.FC<ItemDetailsWrapperProps> = () => {
 
 			<div className='flex flex-col gap-4 border border-otl-gray-200 p-4 rounded-md shadow-card mt-4'>
 				<h3 className="text-xl text-txt-black-900 font-semibold mb-1 text-center">Latest Prices in {selectedState}{selectedDistrict ? ` - ${selectedDistrict}` : ''}</h3>
-				<div className="flex flex-col 2xl:flex-row gap-4 items-center">
+				<div className="flex flex-col md:flex-row gap-4 items-center">
 					<Select
 						variant="outline" size="small"
 						value={selectedState}

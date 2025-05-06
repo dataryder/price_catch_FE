@@ -25,19 +25,19 @@ const SearchResults: React.FC<SearchResultsProps> = ({ results, onSelectItem, is
 	}
 
 	return (
-		<div className="bg-bg-white shadow-md rounded-lg overflow-hidden z-0">
-			<ul className="divide-y divide-gray-200">
+		<div className="bg-bg-white rounded-lg overflow-hidden z-0">
+			<ul className="">
 				{results.map((item) => (
 					<li
 						key={item.item}
 						onClick={() => onSelectItem(item)}
-						className="p-4 hover:bg-bg-white-hover hover:fr-primary cursor-pointer transition duration-150 ease-in-out flex justify-between items-center border border-otl-gray-200 my-2 rounded-md"
+						className="p-4 hover:bg-bg-white-hover hover:fr-primary cursor-pointer transition duration-150 ease-in-out flex justify-between items-center border border-otl-gray-200 my-2 rounded-md shadow text-xs md:text-sm"
 					>
 						<div className='flex justify-between items-center w-full'>
 							<div className='flex flex-col gap-1'>
 								<p className="font-semibold text-txt-primary">{item.item}</p>
 								<div className='flex gap-4'>
-									<Tag size='small' variant='warning' mode='default'>{item.item_category}</Tag>
+									<Tag size='small' variant='warning' mode='default' className='max-sm:hidden'>{item.item_category}</Tag>
 									<Tag size='small' variant='primary' mode='pill'>{item.item_group}</Tag>
 								</div>
 							</div>
