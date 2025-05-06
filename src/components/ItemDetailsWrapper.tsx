@@ -276,7 +276,7 @@ const ItemDetailsWrapper: React.FC<ItemDetailsWrapperProps> = () => {
 				)}
 				{!isLoadingAndFilters && sortedAndFilteredPriceLatest.length > 0 && (
 					<div>
-						<div className="overflow-x-auto ">
+						<div className="overflow-x-auto overflow-y-auto max-h-[500px]">
 							<DataTable data={sortedAndFilteredPriceLatest} columns={columns} className='p-2 rounded-md text-xs md:text-md' />
 						</div>
 
