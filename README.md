@@ -12,6 +12,8 @@ yarn
 pnpm install
 ```
 
+Create a `.env` file by using `.env.example` as a template.
+
 Then, run the development server(python dependencies will be installed automatically here):
 
 ```bash
