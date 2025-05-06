@@ -82,15 +82,13 @@ const FullSearchResultsPage: React.FC = () => {
       />
       {totalItems > ITEMS_PER_PAGE && (
         <div className="mt-6 flex justify-center">
-          {" "}
-          {/* Center pagination */}
           <AutoPagination
-            page={currentPage} // Current active page
-            limit={ITEMS_PER_PAGE} // Items per page
-            count={totalItems} // Total number of items
-            type="default" // Or other type if available
-            maxDisplay={5} // Example: show 5 page numbers directly
-            onPageChange={handlePageChange} // Callback function
+            page={currentPage}
+            limit={ITEMS_PER_PAGE}
+            count={totalItems}
+            type="default"
+            maxDisplay={5}
+            onPageChange={handlePageChange}
           />
         </div>
       )}

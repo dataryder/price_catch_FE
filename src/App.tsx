@@ -15,12 +15,12 @@ function App() {
           <NavBarHeader />
         </header>
 
-        <div className="p-4">
+        <div className="py-2 px-6 md:py-4 md:px-8">
           <MydsSearchBar />
         </div>
 
 
-        <main className="flex-grow">
+        <main className="flex-grow px-2 md:px-4">
           <Routes>
             <Route
               path="/"
