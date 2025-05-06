@@ -196,26 +196,20 @@ const ItemDetailsWrapper: React.FC<ItemDetailsWrapperProps> = () => {
 			},
 			meta: { sortable: true },
 		},
-		// { // Date Column (if available and needed)
-		// 	accessorKey: 'date', header: 'Date', id: 'date',
-		// 	cell: info => new Date(info.getValue<string>()).toLocaleDateString(),
-		// 	meta: { sortable: true },
-		// },
 	], [minPrice]); // *** Add minPrice as a dependency for the price column ***
 
-	// --- Render Logic ---
 	const isPageLoading = isLoadingMetadata || isLoadingHistoryAndFilters;
 
 	if (isPageLoading && !itemDetails) { return <div className="text-center p-6">Loading item data...</div>; }
-	if (error) { /* ... error rendering ... */
+	if (error) {
 		return (<div className="p-6 bg-white shadow-md rounded-lg"> <button onClick={handleBack} className="mb-4 text-blue-600 hover:text-blue-800 hover:underline"> ← Back to Search </button> <p className="text-red-600">{error}</p> </div>);
 	}
-	if (!itemDetails) { /* ... handle missing details ... */
+	if (!itemDetails) {
 		return (<div className="p-6 bg-white shadow-md rounded-lg"> <button onClick={handleBack} className="mb-4 text-blue-600 hover:text-blue-800 hover:underline"> ← Back to Search </button> <p className="text-orange-600">Item details could not be determined.</p> </div>);
 	}
 
 	return (
-		<div className="p-6 bg-bg-white shadow-md rounded-lg">
+		<div className="px-4 md:px-6 bg-bg-white shadow-md rounded-lg">
 			<Button variant="primary-ghost" onClick={handleBack} className="mb-4 text-txt-primary hover:text-blue-800 hover:underline">
 				<ButtonIcon>
 					<ArrowBackIcon />
@@ -227,10 +221,8 @@ const ItemDetailsWrapper: React.FC<ItemDetailsWrapperProps> = () => {
 
 
 			<div className='flex flex-col gap-4 border border-otl-gray-200 p-4 rounded-md shadow-card mt-4'>
-				{/* Filter Section - Use flex instead of grid if needed */}
-				<h3 className="text-xl text-txt-black-900 font-semibold mb-1">Latest Prices in {selectedState}{selectedDistrict ? ` - ${selectedDistrict}` : ''}</h3>
-				<div className="flex gap-4 items-center"> {/* Adjusted flex layout */}
-					{/* State Filter */}
+				<h3 className="text-xl text-txt-black-900 font-semibold mb-1 text-center">Latest Prices in {selectedState}{selectedDistrict ? ` - ${selectedDistrict}` : ''}</h3>
+				<div className="flex flex-col 2xl:flex-row gap-4 items-center">
 					<Select
 						variant="outline" size="small"
 						value={selectedState}
@@ -260,17 +252,13 @@ const ItemDetailsWrapper: React.FC<ItemDetailsWrapperProps> = () => {
 					</Select>
 				</div>
 
-				{/* Price History Table Section */}
-				{/* Title moved above filters */}
-				{/* <h3 className="text-xl font-semibold mb-3">Latest Prices in {selectedState} {selectedDistrict ? `- ${selectedDistrict}` : ''}</h3> */}
 				{(isLoadingHistoryAndFilters) && (<DataTable data={[]} columns={columns} loading className='' />)}
 				{!isLoadingHistoryAndFilters && sortedAndFilteredPriceHistory.length === 0 && (
 					<div className="text-center p-4 text-gray-500 border rounded-md">No price history found for the selected criteria.</div>
 				)}
 				{!isLoadingHistoryAndFilters && sortedAndFilteredPriceHistory.length > 0 && (
 					<div className="overflow-x-auto ">
-						{/* Pass className if needed by myds DataTable for styling */}
-						<DataTable data={sortedAndFilteredPriceHistory} columns={columns} className='p-2 rounded-md' />
+						<DataTable data={sortedAndFilteredPriceHistory} columns={columns} className='p-2 rounded-md text-xs md:text-md' />
 					</div>
 				)}
 			</div>

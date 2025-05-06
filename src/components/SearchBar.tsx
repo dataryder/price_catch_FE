@@ -1,5 +1,3 @@
-// src/components/MydsSearchBar.tsx (Debugging Item Click Navigation)
-
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import debounce from 'lodash.debounce';
@@ -12,7 +10,6 @@ import {
 	SearchBarResults,
 	SearchBarResultsList,
 	SearchBarResultsItem,
-	// SearchBarHint,
 } from "@govtechmy/myds-react/search-bar";
 
 import { ChevronRightIcon } from "@govtechmy/myds-react/icon";
@@ -31,14 +28,11 @@ const MydsSearchBar: React.FC = () => {
 	const [error, setError] = useState<string | null>(null);
 
 	const hasQuery = query.trim().length > 0;
-	// Let's simplify: show dropdown if query exists AND component has focus
 	const showResultsDropdown = hasQuery && hasFocus;
 
-	// --- Debounced API Call ---
-	// useRef to keep the debounced function stable across renders
 	const debouncedSearchRef = useRef(
 		debounce(async (searchTerm: string) => {
-			if (searchTerm.trim().length < 1) { // Optional: Minimum query length
+			if (searchTerm.trim().length < 1) {
 				setLiveResults([]);
 				setIsLoading(false);
 				setError(null);
@@ -47,8 +41,8 @@ const MydsSearchBar: React.FC = () => {
 			setIsLoading(true);
 			setError(null);
 			try {
-				const results = await searchItems(searchTerm); // Adjust API call if limit is added
-				setLiveResults(results.slice(0, 10)); // Limit to 5 suggestions
+				const results = await searchItems(searchTerm);
+				setLiveResults(results.slice(0, 10));
 			} catch (err) {
 				console.error("Live search failed:", err);
 				setError(err instanceof Error ? err.message : 'Search failed');
@@ -56,7 +50,7 @@ const MydsSearchBar: React.FC = () => {
 			} finally {
 				setIsLoading(false);
 			}
-		}, 300) // 300ms debounce delay
+		}, 300)
 	);
 
 
@@ -74,7 +68,6 @@ const MydsSearchBar: React.FC = () => {
 		};
 	}, [query, hasQuery]);
 
-	// --- Navigation Handlers ---
 	const navigateToFullResults = useCallback(() => {
 		if (query.trim()) {
 			console.log("[Navigate] To Full Results triggered for:", query);
@@ -95,7 +88,7 @@ const MydsSearchBar: React.FC = () => {
 		try {
 			navigate(targetPath);
 		} catch (e) {
-			console.error("[DEBUG] Error during navigate call:", e); // <<< Log 4 (Error)
+			console.error("[DEBUG] Error during navigate call:", e);
 		}
 	}, [navigate]);
 
@@ -124,14 +117,14 @@ const MydsSearchBar: React.FC = () => {
 
 
 	return (
-		<form onSubmit={handleFormSubmit} className="mb-6 relative">
+		<form onSubmit={handleFormSubmit} className="relative">
 			<SearchBar
 				size="large"
 				onBlur={handleBlur}
 			>
 				<SearchBarInputContainer>
 					<SearchBarInput
-						placeholder="Search for grocery items (e.g., Ayam, Roti)"
+						placeholder="Search (e.g., Ayam, Roti)"
 						value={query}
 						onValueChange={setQuery}
 						onFocus={handleFocus}
@@ -168,8 +161,8 @@ const MydsSearchBar: React.FC = () => {
 										<p className="line-clamp-1 flex-1 text-sm">
 											{item.item}
 										</p>
-										<Tag size='small' variant='warning' mode='default'>{item.item_category}</Tag>
-										<Tag size='small' variant='primary' mode='pill'>{item.item_group}</Tag>
+										<Tag size='small' variant='warning' mode='default' className='hidden'>{item.item_category}</Tag>
+										<Tag size='small' variant='primary' mode='pill' className='hidden'>{item.item_group}</Tag>
 										<ChevronRightIcon className="text-gray-400" />
 									</SearchBarResultsItem>
 								))}

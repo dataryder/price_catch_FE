@@ -9,7 +9,7 @@ import { Link } from "@govtechmy/myds-react/link";
 
 export default function FooterBar() {
 	return (
-		<Footer className="top-0 z-10 max-h-[170px] overflow-hidden">
+		<Footer className="top-0 z-10 overflow-hidden sm:py-0 md:py-4 lg:py-4 ">
 			<FooterSection className="flex justify-between w-full">
 				<SiteInfo>
 					<div className="flex justify-between items-center gap-4">
@@ -42,9 +42,9 @@ export default function FooterBar() {
 						</div>
 					</div>
 				</SiteInfo>
-				<div className="flex flex-col items-end text-txt-black-500 text-xs px-4 mt-auto">
-					<p>All Rights Reserved © {new Date().getFullYear()} DataRyder</p>
-					<p>Last updated: 5th May 2025</p>
+				<div className="flex flex-col items-end w-40 md:w-full text-end text-txt-black-500 text-xs px-4 mt-auto">
+					<p>All Rights Reserved © {new Date().getFullYear()} <p className="hidden">DataRyder</p></p>
+					<p><p className="hidden">Last updated: </p>5th May 2025</p>
 				</div>
 
 			</FooterSection>
