@@ -48,3 +48,11 @@ export interface ItemLatest {
 	district: string;
 	price: number;
 }
+
+export interface ItemPriceHistory {
+	date: string;
+	average: number;
+	median: number;
+	minimum: number;
+	maximum: number;
+}
