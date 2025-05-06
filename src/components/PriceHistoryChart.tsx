@@ -53,7 +53,7 @@ const PriceHistoryChart: React.FC<ItemPriceHistoryDataProps> = ({
 
 				<XAxis dataKey="date" tickFormatter={formatXAxis} minTickGap={20} />
 				<YAxis label={{ value: 'RM', angle: -90, position: 'insideLeft' }} domain={['auto', 'auto']} hide />
-				<Tooltip labelFormatter={formatLabel} separator=' RM' contentStyle={{ backgroundColor: colorbg, backdropFilter: 'blur(8px)', border: null }} />
+				<Tooltip labelFormatter={formatLabel} separator=' RM' contentStyle={{ backgroundColor: colorbg, backdropFilter: 'blur(8px)', border: 0 }} />
 				<Legend iconType='plainline' />
 				<Line type="stepAfter" dataKey="maximum" stroke={colorMax} dot={false} strokeWidth={3} />
 				<Line type="stepAfter" dataKey="median" stroke={colorMedian} dot={false} strokeWidth={3} />
