@@ -11,11 +11,23 @@ const apiClient = axios.create({
 
 export const searchItems = async (query: string): Promise<SearchResultItem[]> => {
 	try {
-		console.log(`API Client: Searching for "${query}" at ${API_BASE_URL}api/search`);
 		const response = await apiClient.get<SearchResultItem[]>('/api/search', {
 			params: { query }, // FastAPI expects query params
 		});
-		console.log('API Client: Search results:', response.data);
+		return response.data;
+	} catch (error) {
+		if (axios.isAxiosError(error) && error.response) {
+			throw new Error(`Search failed: ${error.response.data.detail || error.message}`);
+		}
+		throw new Error('An unknown error occurred during search.');
+	}
+};
+
+export const searchItemsFull = async (query: string): Promise<SearchResultItem[]> => {
+	try {
+		const response = await apiClient.get<SearchResultItem[]>('/api/search_full', {
+			params: { query }, // FastAPI expects query params
+		});
 		return response.data;
 	} catch (error) {
 		console.error('API Client: Error searching items:', error);
@@ -32,7 +44,6 @@ export const getItemPriceHistory = async ({
 	try {
 		const params: Record<string, string> = { item_code };
 		const response = await apiClient.get<PriceHistoryEntry[]>('/api/itemdailyfull', { params });
-		console.log('API Client: Price history results:', response.data);
 		return response.data;
 	} catch (error) {
 		console.error('API Client: Error fetching price history:', error);
@@ -49,7 +60,6 @@ export const getItemMetadata = async ({
 	try {
 		const params: Record<string, string> = { item_code };
 		const response = await apiClient.get<ItemMetadata[]>('/api/itemmetadata', { params });
-		console.log('API Client: item metadata results:', response.data);
 		return response.data;
 	} catch (error) {
 		console.error('API Client: Error fetching item metadata:', error);

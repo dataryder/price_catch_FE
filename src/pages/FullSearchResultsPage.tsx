@@ -1,64 +1,101 @@
 // src/pages/FullSearchResultsPage.tsx (New File)
 
-import React, { useState, useEffect, useMemo } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
-import SearchResults from '../components/SearchResults';
-import { searchItems } from '../services/apiClient';
-import { SearchResultItem } from '../types';
+import React, { useState, useEffect, useMemo, useCallback } from "react";
+import { useSearchParams, useNavigate } from "react-router-dom";
+import { AutoPagination } from "@govtechmy/myds-react/pagination";
 
+import SearchResults from "../components/SearchResults";
+import { searchItemsFull } from "../services/apiClient";
+import { SearchResultItem } from "../types";
+const ITEMS_PER_PAGE = 10;
 const FullSearchResultsPage: React.FC = () => {
-	const [searchParams] = useSearchParams();
-	const navigate = useNavigate();
-	const query = useMemo(() => searchParams.get('q') || '', [searchParams]);
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const query = useMemo(() => searchParams.get("q") || "", [searchParams]);
 
-	const [results, setResults] = useState<SearchResultItem[]>([]);
-	const [isLoading, setIsLoading] = useState(false);
-	const [error, setError] = useState<string | null>(null);
+  const [results, setResults] = useState<SearchResultItem[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
 
-	useEffect(() => {
-		if (!query) {
-			setResults([]);
-			setIsLoading(false);
-			setError(null);
-			return;
-		}
+  useEffect(() => {
+    if (!query) {
+      setResults([]);
+	  setTotalItems(0);
+      setIsLoading(false);
+      setError(null);
+      setCurrentPage(1);
+      return;
+    }
 
-		const fetchFullResults = async () => {
-			setIsLoading(true);
-			setError(null);
-			try {
-				const data = await searchItems(query);
-				setResults(data);
-			} catch (err) {
-				console.error("Full search failed:", err);
-				setError(err instanceof Error ? err.message : 'Failed to load search results');
-				setResults([]);
-			} finally {
-				setIsLoading(false);
-			}
-		};
+    const fetchFullResults = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const data = await searchItemsFull(query);
+        setResults(data);
+		setTotalItems(data.length);
+      } catch (err) {
+        console.error("Full search failed:", err);
+        setError(
+          err instanceof Error ? err.message : "Failed to load search results"
+        );
+        setResults([]);
+		setTotalItems(0);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-		fetchFullResults();
-	}, [query]);
+    fetchFullResults();
+  }, [query]);
 
-	const handleSelectItem = (item: SearchResultItem) => {
-		navigate(`/item/${item.item_code}`);
-	};
+  const currentItems = useMemo(() => {
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    const endIndex = startIndex + ITEMS_PER_PAGE;
+    return results.slice(startIndex, endIndex);
+  }, [results, currentPage]); // Re-calculate when data or page changes
 
-	return (
-		<div className='p-4'>
-			<h2 className="text-2xl mb-4 text-txt-black-900">
-				Search Results for: <span className="font-bold italic">{query}</span>
-			</h2>
+  // --- Pagination Handler ---
+  const handlePageChange = useCallback((newPage: number) => {
+    setCurrentPage(newPage);
+    // Optional: Scroll to top when page changes
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []); // No dependencies needed if just setting state
 
-			<SearchResults
-				results={results}
-				onSelectItem={handleSelectItem}
-				isLoading={isLoading}
-				error={error}
-			/>
-		</div>
-	);
+  const handleSelectItem = (item: SearchResultItem) => {
+    navigate(`/item/${item.item_code}`);
+  };
+
+  return (
+    <div className="p-4">
+      <h2 className="text-md md:text-xl mb-4 text-txt-black-900">
+        Search Results for: <span className="font-bold italic">{query}</span>
+      </h2>
+
+      <SearchResults
+        results={currentItems}
+        onSelectItem={handleSelectItem}
+        isLoading={isLoading}
+        error={error}
+      />
+      {totalItems > ITEMS_PER_PAGE && (
+        <div className="mt-6 flex justify-center">
+          {" "}
+          {/* Center pagination */}
+          <AutoPagination
+            page={currentPage} // Current active page
+            limit={ITEMS_PER_PAGE} // Items per page
+            count={totalItems} // Total number of items
+            type="default" // Or other type if available
+            maxDisplay={5} // Example: show 5 page numbers directly
+            onPageChange={handlePageChange} // Callback function
+          />
+        </div>
+      )}
+    </div>
+  );
 };
 
 export default FullSearchResultsPage;

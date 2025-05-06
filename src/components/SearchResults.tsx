@@ -2,6 +2,8 @@
 import React from 'react';
 import { SearchResultItem } from '../types';
 import { Tag } from '@govtechmy/myds-react/tag';
+import { AutoPagination } from "@govtechmy/myds-react/pagination";
+
 import { ChevronRightIcon } from '@govtechmy/myds-react/icon';
 
 interface SearchResultsProps {
