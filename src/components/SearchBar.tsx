@@ -70,13 +70,11 @@ const MydsSearchBar: React.FC = () => {
 
 	const navigateToFullResults = useCallback(() => {
 		if (query.trim()) {
-			console.log("[Navigate] To Full Results triggered for:", query);
 			setHasFocus(false);
 			navigate(`/search-results?q=${encodeURIComponent(query.trim())}`);
 		}
 	}, [query, navigate]);
 
-	// *** Handler for clicking on a specific result item ***
 	const handleResultItemClick = useCallback((item: SearchResultItem) => {
 		if (!item || typeof item.item_code === 'undefined') {
 			return;

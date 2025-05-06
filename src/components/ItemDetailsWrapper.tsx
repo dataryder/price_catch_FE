@@ -209,7 +209,7 @@ const ItemDetailsWrapper: React.FC<ItemDetailsWrapperProps> = () => {
 	}
 
 	return (
-		<div className="px-4 md:px-6 bg-bg-white shadow-md rounded-lg">
+		<div className="px-4 md:px-6 bg-bg-white">
 			<Button variant="primary-ghost" onClick={handleBack} className="mb-4 text-txt-primary hover:text-blue-800 hover:underline">
 				<ButtonIcon>
 					<ArrowBackIcon />

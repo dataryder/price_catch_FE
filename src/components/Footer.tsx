@@ -43,8 +43,8 @@ export default function FooterBar() {
 					</div>
 				</SiteInfo>
 				<div className="flex flex-col items-end w-40 md:w-full text-end text-txt-black-500 text-xs px-4 mt-auto">
-					<p>All Rights Reserved © {new Date().getFullYear()} <p className="max-sm:hidden">DataRyder</p></p>
-					<p><p className="max-sm:hidden inline">Last updated: </p>5th May 2025</p>
+					<div>All Rights Reserved © {new Date().getFullYear()} <p className="max-sm:hidden">DataRyder</p></div>
+					<div><p className="max-sm:hidden inline">Last updated: </p>5th May 2025</div>
 				</div>
 
 			</FooterSection>

@@ -76,7 +76,6 @@ export const getItemLatest = async ({
 	try {
 		const params: Record<string, string> = { item_code };
 		const response = await apiClient.get<ItemLatest[]>('/api/itemlatest', { params });
-		console.log('API Client: item latest results:', response.data);
 		return response.data;
 	} catch (error) {
 		console.error('API Client: Error fetching item latest:', error);
