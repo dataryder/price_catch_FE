@@ -172,7 +172,7 @@ const ItemMetadataDisplay: React.FC<ItemMetadataDisplayProps> = ({
         </div>
       </div>
       <div className="relative border border-otl-gray-200 p-4 rounded-md w-full max-sm:h-[270px] md:flex-auto md:shadow-card">
-        <h3 className="text-xl text-txt-black-900 font-semibold text-center absolute top-0 right-0 z-10 px-10 py-6">
+        <h3 className="text-xl text-txt-black-900 font-semibold text-center absolute top-0 right-0 px-10 py-6">
           Price History
         </h3>
         <div>
