@@ -177,7 +177,7 @@ const ItemMetadataDisplay: React.FC<ItemMetadataDisplayProps> = ({
         </h3>
         <div>
           <Tabs defaultValue="month" size="small" variant="pill">
-            <TabsList>
+            <TabsList className="px-4">
               <TabsTrigger value="month">1m</TabsTrigger>
               <TabsTrigger value="sixmonth">6m</TabsTrigger>
               <TabsTrigger value="year">1y</TabsTrigger>
