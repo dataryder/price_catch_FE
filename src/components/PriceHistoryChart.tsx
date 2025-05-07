@@ -5,14 +5,10 @@ import { useTheme } from "@govtechmy/myds-react/hooks";
 
 interface ItemPriceHistoryDataProps {
 	data: ItemPriceHistory[];
+	period: "month" | "year" | null;
 }
 
-function formatXAxis(tickItem: Date) {
-	return tickItem.toLocaleDateString('en-MY', {
-		month: 'short',
-		day: 'numeric',
-	});
-}
+
 
 function formatLabel(tickItem: Date) {
 	return tickItem.toLocaleDateString('en-MY', {
@@ -24,6 +20,7 @@ function formatLabel(tickItem: Date) {
 
 const PriceHistoryChart: React.FC<ItemPriceHistoryDataProps> = ({
 	data,
+	period
 }) => {
 	const { theme } = useTheme();
 	const colorAvg = theme === "dark" ? "#2563EB" : "#6394FF"
@@ -37,6 +34,20 @@ const PriceHistoryChart: React.FC<ItemPriceHistoryDataProps> = ({
 		date: new Date(item.date),
 		average: item.average.toFixed(2),
 	}));
+
+	function formatXAxis(tickItem: Date) {
+
+		if (period === "month") {
+			return tickItem.toLocaleDateString('en-MY', {
+				month: 'short',
+				day: 'numeric',
+			});
+		}
+		return tickItem.toLocaleDateString('en-MY', {
+			month: 'short',
+			year: 'numeric',
+		});
+	}
 
 
 	return (

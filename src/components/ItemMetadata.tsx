@@ -183,13 +183,13 @@ const ItemMetadataDisplay: React.FC<ItemMetadataDisplayProps> = ({
               <TabsTrigger value="twoyear">2y</TabsTrigger>
             </TabsList>
             <TabsContent value="month" className="p-1">
-              <PriceHistoryChart data={filter_data(priceHistory, "month")} />
+              <PriceHistoryChart data={filter_data(priceHistory, "month")} period="month" />
             </TabsContent>
             <TabsContent value="year">
-              <PriceHistoryChart data={filter_data(priceHistory, "year")} />
+              <PriceHistoryChart data={filter_data(priceHistory, "year")} period="year"/>
             </TabsContent>
             <TabsContent value="twoyear">
-              <PriceHistoryChart data={priceHistory} />
+              <PriceHistoryChart data={priceHistory} period="year"/>
             </TabsContent>
           </Tabs>
         </div>
