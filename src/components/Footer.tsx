@@ -7,7 +7,7 @@ import {
 import { Link } from "@govtechmy/myds-react/link";
 
 export default function FooterBar() {
-  var d = new Date();
+  const d = new Date();
   d.setDate(d.getDate() - 1);
   return (
     <Footer className="top-0 z-10 overflow-hidden py-4 md:py-6 lg:py-6 ">

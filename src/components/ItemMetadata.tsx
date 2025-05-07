@@ -38,6 +38,22 @@ function isDateValid(dateStr: string) {
   return !isNaN(new Date(dateStr).getTime());
 }
 
+function filter_data(data: ItemPriceHistory[], period: string) {
+  const end_period = new Date();
+  end_period.setDate(end_period.getDate() - 1);
+  const start_period = new Date();
+  start_period.setDate(start_period.getDate() - 1);
+  if (period === "month") {
+    start_period.setMonth(start_period.getMonth() - 1);
+  } else if (period === "year") {
+    start_period.setFullYear(start_period.getFullYear() - 1);
+  }
+  return data.filter(data => 
+     new Date(data.date).getTime() >= new Date(start_period).getTime() &&
+      new Date(data.date).getTime() <= new Date(end_period).getTime()
+  );
+}
+
 const ItemMetadataDisplay: React.FC<ItemMetadataDisplayProps> = ({
   metadata,
   priceHistory,
@@ -167,12 +183,12 @@ const ItemMetadataDisplay: React.FC<ItemMetadataDisplayProps> = ({
               <TabsTrigger value="twoyear">2y</TabsTrigger>
             </TabsList>
             <TabsContent value="month" className="p-1">
-              <PriceHistoryChart data={priceHistory} />
+              <PriceHistoryChart data={filter_data(priceHistory, "month")} />
             </TabsContent>
-			<TabsContent value="year">
-              <PriceHistoryChart data={priceHistory} />
+            <TabsContent value="year">
+              <PriceHistoryChart data={filter_data(priceHistory, "year")} />
             </TabsContent>
-			<TabsContent value="twoyear">
+            <TabsContent value="twoyear">
               <PriceHistoryChart data={priceHistory} />
             </TabsContent>
           </Tabs>
