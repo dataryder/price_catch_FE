@@ -21,7 +21,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { SearchResultItem, ItemMetadata, ItemLatest, ItemPriceHistory } from '../types';
 import { getItemMetadata, getItemLatest, getItemPriceHistory } from '../services/apiClient';
 import ItemMetadataDisplay from './ItemMetadata';
-import PriceHistoryChart from './PriceHistoryChart';
+
 
 interface ItemDetailsWrapperProps {
 	searchResults: SearchResultItem[];
@@ -220,25 +220,25 @@ const ItemDetailsWrapper: React.FC<ItemDetailsWrapperProps> = () => {
 
 	if (isPageLoading && !itemDetails) { return <div className="text-center p-6">Loading item data...</div>; }
 	if (error) {
-		return (<div className="p-6 bg-white shadow-md rounded-lg"> <button onClick={handleBack} className="mb-4 text-blue-600 hover:text-blue-800 hover:underline"> ← Back to Search </button> <p className="text-red-600">{error}</p> </div>);
+		return (<div className="p-6 bg-white md:shadow-md rounded-lg"> <button onClick={handleBack} className="mb-4 text-blue-600 hover:text-blue-800 hover:underline"> ← Back to Search </button> <p className="text-red-600">{error}</p> </div>);
 	}
 	if (!itemDetails) {
-		return (<div className="p-6 bg-white shadow-md rounded-lg"> <button onClick={handleBack} className="mb-4 text-blue-600 hover:text-blue-800 hover:underline"> ← Back to Search </button> <p className="text-orange-600">Item details could not be determined.</p> </div>);
+		return (<div className="p-6 bg-white md:shadow-md rounded-lg"> <button onClick={handleBack} className="mb-4 text-blue-600 hover:text-blue-800 hover:underline"> ← Back to Search </button> <p className="text-orange-600">Item details could not be determined.</p> </div>);
 	}
 
 	return (
 		<div className="px-4 md:px-6 bg-bg-white">
-			<Button variant="primary-ghost" onClick={handleBack} className="mb-4 text-txt-primary hover:text-blue-800 hover:underline">
+			<Button variant="primary-ghost" onClick={handleBack} className="my-2 md:mb-4 text-txt-primary hover:text-blue-800 hover:underline">
 				<ButtonIcon>
 					<ArrowBackIcon />
 				</ButtonIcon>
-				<span>Go back</span>
+				<span>Back to Homepage</span>
 			</Button >
 
-			<ItemMetadataDisplay metadata={itemDetails} isLoading={isLoadingMetadata} error={error} />
+			<ItemMetadataDisplay metadata={itemDetails} priceHistory={priceHistory} isLoading={isLoadingMetadata} error={error} />
 
 
-			<div className='flex flex-col gap-2 md:gap-4 border border-otl-gray-200 p-4 rounded-md shadow-card my-4'>
+			<div className='flex flex-col gap-2 md:gap-4 border border-otl-gray-200 p-4 rounded-md md:shadow-card my-4'>
 				<h3 className="text-xl text-txt-black-900 font-semibold mb-1 text-center">Latest Prices in {selectedState}{selectedDistrict ? ` - ${selectedDistrict}` : ''}</h3>
 				<div className="flex flex-col md:flex-row gap-4 items-center">
 					<Select
@@ -281,10 +281,6 @@ const ItemDetailsWrapper: React.FC<ItemDetailsWrapperProps> = () => {
 					</div>
 
 				)}
-			</div>
-			<div className='flex flex-col gap-4 border border-otl-gray-200 p-4 rounded-md shadow-card my-4'>
-				<h3 className="text-xl text-txt-black-900 font-semibold mb-1 text-center">Price History</h3>
-				<PriceHistoryChart data={priceHistory} />
 			</div>
 		</div>
 	);
