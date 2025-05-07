@@ -21,6 +21,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { SearchResultItem, ItemMetadata, ItemLatest, ItemPriceHistory } from '../types';
 import { getItemMetadata, getItemLatest, getItemPriceHistory } from '../services/apiClient';
 import ItemMetadataDisplay from './ItemMetadata';
+import MydsSearchBar from './SearchBar';
 
 
 interface ItemDetailsWrapperProps {
@@ -227,7 +228,10 @@ const ItemDetailsWrapper: React.FC<ItemDetailsWrapperProps> = () => {
 	}
 
 	return (
-		<div className="px-4 md:px-6 bg-bg-white">
+		<div className="p-6 md:p-8 bg-bg-white">
+			<div className="mb-4 pb-6 md:pb-8 border-b border-otl-gray-200">
+				<MydsSearchBar />
+			</div>
 			<Button variant="primary-ghost" onClick={handleBack} className="my-2 md:mb-4 text-txt-primary hover:text-blue-800 hover:underline">
 				<ButtonIcon>
 					<ArrowBackIcon />

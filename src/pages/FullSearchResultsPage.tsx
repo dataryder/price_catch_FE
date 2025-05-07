@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { AutoPagination } from "@govtechmy/myds-react/pagination";
-
+import MydsSearchBar from '../components/SearchBar';
 import SearchResults from "../components/SearchResults";
 import { searchItemsFull } from "../services/apiClient";
 import { SearchResultItem } from "../types";
@@ -22,7 +22,7 @@ const FullSearchResultsPage: React.FC = () => {
   useEffect(() => {
     if (!query) {
       setResults([]);
-	  setTotalItems(0);
+      setTotalItems(0);
       setIsLoading(false);
       setError(null);
       setCurrentPage(1);
@@ -35,14 +35,14 @@ const FullSearchResultsPage: React.FC = () => {
       try {
         const data = await searchItemsFull(query);
         setResults(data);
-		setTotalItems(data.length);
+        setTotalItems(data.length);
       } catch (err) {
         console.error("Full search failed:", err);
         setError(
           err instanceof Error ? err.message : "Failed to load search results"
         );
         setResults([]);
-		setTotalItems(0);
+        setTotalItems(0);
       } finally {
         setIsLoading(false);
       }
@@ -69,7 +69,10 @@ const FullSearchResultsPage: React.FC = () => {
   };
 
   return (
-    <div className="p-4">
+    <div className="p-6 md:p-8">
+      <div className="mb-4 pb-6 md:pb-8 border-b border-otl-gray-200">
+        <MydsSearchBar />
+      </div>
       <h2 className="text-md md:text-xl mb-4 text-txt-black-900">
         Search Results for: <span className="font-bold italic">{query}</span>
       </h2>

@@ -10,23 +10,19 @@ function App() {
 
   return (
     <div className="container mx-auto w-full min-h-screen">
-      <div className='w-md md:w-xl 2xl:w-6xl mx-auto min-h-screen border border-otl-gray-200 flex flex-col flex-grow'>
-        <header className="mb-4 md:mb-8 text-center">
+      <div className='w-md md:w-xl 2xl:w-6xl mx-auto min-h-screen md:border border-otl-gray-200 flex flex-col flex-grow'>
+        <header className="text-center">
           <NavBarHeader />
         </header>
 
-        <div className="py-2 px-6 md:py-4 md:px-8">
-          <MydsSearchBar />
-        </div>
-
-
-        <main className="flex-grow px-2 md:px-4">
+        <main className="flex-grow">
           <Routes>
             <Route
               path="/"
               element={
-                <div className="text-center text-gray-600 mt-8">
-                  Use the search bar above to find grocery items.
+                <div className="flex gap-4 md:gap-6 py-2 px-6 md:py-4 md:px-8 bg-gradient-to-b from-bg-success-700 via-bg-success-300 to-bg-bg-white min-h-[200px] justify-center flex flex-col">
+                  <h1 className='text-xl md:text-2xl text-center text-txt-white font-bold uppercase tracking-[0.2em] md:tracking-[0.4em]'>PRICES GOIN CRAZY?</h1>
+                  <MydsSearchBar />
                 </div>
               }
             />
