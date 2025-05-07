@@ -48,7 +48,32 @@ export default function FooterBar() {
             <p className="max-sm:hidden inline">DataRyder</p>
           </div>
           <div>
-            <p className="max-sm:hidden inline">Last updated: </p>{d.toLocaleDateString("en-MY")}
+            <p className="max-sm:hidden inline">Last updated: </p>
+            {d.toLocaleDateString("en-MY")}
+          </div>
+          <div className="mt-1 text-[10px]">
+            Data collected by{" "}
+            <Link
+              href="https://pricecatcher.kpdn.gov.my/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="KPDN link"
+              underline="none"
+              className="hover:text-txt-black-900 underline"
+            >
+              KPDN
+            </Link>{" "}
+            published by{" "}
+            <Link
+              href="https://data.gov.my/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="datagovmy link"
+              underline="none"
+              className="hover:text-txt-black-900 underline"
+            >
+              data.gov.my
+            </Link>
           </div>
         </div>
       </FooterSection>
