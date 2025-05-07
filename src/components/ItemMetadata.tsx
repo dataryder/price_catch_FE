@@ -45,12 +45,12 @@ function filter_data(data: ItemPriceHistory[], period: string) {
   start_period.setDate(start_period.getDate() - 1);
   if (period === "month") {
     start_period.setMonth(start_period.getMonth() - 1);
+  } else if (period === "sixmonth") {
+    start_period.setMonth(start_period.getMonth() - 6);
   } else if (period === "year") {
     start_period.setFullYear(start_period.getFullYear() - 1);
   }
-  return data.filter(data => 
-     new Date(data.date).getTime() >= new Date(start_period).getTime() &&
-      new Date(data.date).getTime() <= new Date(end_period).getTime()
+  return data.filter(data => new Date(data.date).getTime() >= new Date(start_period).getTime() && new Date(data.date).getTime() <= new Date(end_period).getTime()
   );
 }
 
@@ -178,12 +178,16 @@ const ItemMetadataDisplay: React.FC<ItemMetadataDisplayProps> = ({
         <div>
           <Tabs defaultValue="month" size="small" variant="pill">
             <TabsList>
-              <TabsTrigger value="month">month</TabsTrigger>
+              <TabsTrigger value="month">1m</TabsTrigger>
+              <TabsTrigger value="sixmonth">6m</TabsTrigger>
               <TabsTrigger value="year">1y</TabsTrigger>
               <TabsTrigger value="twoyear">2y</TabsTrigger>
             </TabsList>
             <TabsContent value="month" className="p-1">
               <PriceHistoryChart data={filter_data(priceHistory, "month")} period="month" />
+            </TabsContent>
+            <TabsContent value="sixmonth">
+              <PriceHistoryChart data={filter_data(priceHistory, "sixmonth")} period="month"/>
             </TabsContent>
             <TabsContent value="year">
               <PriceHistoryChart data={filter_data(priceHistory, "year")} period="year"/>
