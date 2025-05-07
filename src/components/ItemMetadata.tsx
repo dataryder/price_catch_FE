@@ -103,18 +103,24 @@ const ItemMetadataDisplay: React.FC<ItemMetadataDisplayProps> = ({
 
         <div className="flex flex-col gap-1 md:gap-4 items-center">
           <div className="flex gap-2">
-            <Tag size="small" variant="warning" mode="default">
+            <Tag size="small" variant="warning" mode="pill">
               {metadata.item_category}
             </Tag>
             <Tag size="small" variant="primary" mode="pill">
               {metadata.item_group}
             </Tag>
+
           </div>
           {isDateValid(metadata.last_updated) && (
-            <div className="flex items-center gap-1 max-sm:hidden">
+            <div className="flex items-center gap-1">
               <CalendarIcon className="text-txt-black-500 h-4 w-4" />
               <p className="italic text-txt-black-500 text-xs">
-                Data updated on{" "}
+                <span className="max-sm:hidden">Data updates {" "}</span>
+                <Tag size='small'
+                  variant={(metadata.frequency === "daily") ? "success" : (metadata.frequency === "weekly") ? "warning" : "danger"}
+                  mode='default'>
+                  {metadata.frequency}
+                </Tag> {" | "}
                 {new Date(metadata.last_updated).toLocaleDateString(
                   "en-MY",
                   {}
@@ -176,24 +182,24 @@ const ItemMetadataDisplay: React.FC<ItemMetadataDisplayProps> = ({
           Price History
         </h3>
         <div>
-          <Tabs defaultValue="month" size="small" variant="pill">
+          <Tabs defaultValue={!(metadata.frequency === "monthly") ? "month" : "sixmonth"} size="small" variant="pill">
             <TabsList className="px-4">
-              <TabsTrigger value="month">1m</TabsTrigger>
+              {!(metadata.frequency === "monthly") ? <TabsTrigger value="month">1m</TabsTrigger> : []}
               <TabsTrigger value="sixmonth">6m</TabsTrigger>
               <TabsTrigger value="year">1y</TabsTrigger>
               <TabsTrigger value="twoyear">2y</TabsTrigger>
             </TabsList>
-            <TabsContent value="month" className="p-1">
+            {!(metadata.frequency === "monthly") ? <TabsContent value="month" className="p-1">
               <PriceHistoryChart data={filter_data(priceHistory, "month")} period="month" />
-            </TabsContent>
+            </TabsContent> : []}
             <TabsContent value="sixmonth">
-              <PriceHistoryChart data={filter_data(priceHistory, "sixmonth")} period="month"/>
+              <PriceHistoryChart data={filter_data(priceHistory, "sixmonth")} period="month" />
             </TabsContent>
             <TabsContent value="year">
-              <PriceHistoryChart data={filter_data(priceHistory, "year")} period="year"/>
+              <PriceHistoryChart data={filter_data(priceHistory, "year")} period="year" />
             </TabsContent>
             <TabsContent value="twoyear">
-              <PriceHistoryChart data={priceHistory} period="year"/>
+              <PriceHistoryChart data={priceHistory} period="year" />
             </TabsContent>
           </Tabs>
         </div>

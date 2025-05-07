@@ -5,6 +5,7 @@ export interface SearchResultItem {
 	item_group: string;
 	item_category: string;
 	similarity_score: number;
+	frequency: string;
 }
 
 export interface PriceHistoryEntry {
@@ -40,6 +41,7 @@ export interface ItemMetadata {
 	maximum: number;
 	q75: number;
 	last_updated: string;
+	frequency: string;
 }
 
 export interface ItemLatest {
