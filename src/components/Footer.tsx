@@ -10,8 +10,8 @@ export default function FooterBar() {
   const d = new Date();
   d.setDate(d.getDate() - 1);
   return (
-    <Footer className="top-0 z-10 overflow-hidden py-4 md:py-6 lg:py-6 ">
-      <FooterSection className="flex justify-between w-full py-0 border-none">
+    <Footer className="top-0 z-10 overflow-hidden py-4 md:py-6 gap-1">
+      <FooterSection className="flex justify-between w-full py-0 md:py-0 border-none">
         <SiteInfo>
           <div className="flex justify-between items-center gap-4">
             <div className="text-txt-black-900 flex flex-col gap-4">
@@ -51,31 +51,33 @@ export default function FooterBar() {
             <p className="max-sm:hidden inline">Last updated: </p>
             {d.toLocaleDateString("en-MY")}
           </div>
-          <div className="mt-1 text-[10px]">
-            Data collected by{" "}
-            <Link
-              href="https://pricecatcher.kpdn.gov.my/"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="KPDN link"
-              underline="none"
-              className="hover:text-txt-black-900 underline"
-            >
-              KPDN
-            </Link>{" "}
-            published by{" "}
-            <Link
-              href="https://data.gov.my/"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="datagovmy link"
-              underline="none"
-              className="hover:text-txt-black-900 underline"
-            >
-              data.gov.my
-            </Link>
-          </div>
         </div>
+      </FooterSection>
+      <FooterSection className="flex justify-center py-0 md:py-0 border-none">
+        <p className="mt-1 text-[10px] text-txt-black-500 text-center">
+          Data collected by{" "}
+          <Link
+            href="https://pricecatcher.kpdn.gov.my/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="KPDN link"
+            underline="none"
+            className="hover:text-txt-black-900 underline"
+          >
+            KPDN
+          </Link>{" "}
+          published by{" "}
+          <Link
+            href="https://data.gov.my/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="datagovmy link"
+            underline="none"
+            className="hover:text-txt-black-900 underline"
+          >
+            data.gov.my
+          </Link>
+        </p>
       </FooterSection>
     </Footer>
   );
