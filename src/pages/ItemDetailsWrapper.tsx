@@ -20,8 +20,8 @@ import { ColumnDef } from "@tanstack/react-table";
 
 import { SearchResultItem, ItemMetadata, ItemLatest, ItemPriceHistory } from '../types';
 import { getItemMetadata, getItemLatest, getItemPriceHistory } from '../services/apiClient';
-import ItemMetadataDisplay from './ItemMetadata';
-import MydsSearchBar from './SearchBar';
+import ItemMetadataDisplay from '../components/ItemMetadata';
+import MydsSearchBar from '../components/SearchBar';
 
 
 interface ItemDetailsWrapperProps {
