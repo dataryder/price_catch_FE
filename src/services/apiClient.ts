@@ -12,7 +12,7 @@ const apiClient = axios.create({
 export const searchItems = async (query: string): Promise<SearchResultItem[]> => {
 	try {
 		const response = await apiClient.get<SearchResultItem[]>('/api/search', {
-			params: { query }, // FastAPI expects query params
+			params: { query },
 		});
 		return response.data;
 	} catch (error) {
@@ -26,7 +26,7 @@ export const searchItems = async (query: string): Promise<SearchResultItem[]> =>
 export const searchItemsFull = async (query: string): Promise<SearchResultItem[]> => {
 	try {
 		const response = await apiClient.get<SearchResultItem[]>('/api/search_full', {
-			params: { query }, // FastAPI expects query params
+			params: { query },
 		});
 		return response.data;
 	} catch (error) {

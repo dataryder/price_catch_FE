@@ -55,14 +55,12 @@ const FullSearchResultsPage: React.FC = () => {
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
     const endIndex = startIndex + ITEMS_PER_PAGE;
     return results.slice(startIndex, endIndex);
-  }, [results, currentPage]); // Re-calculate when data or page changes
+  }, [results, currentPage]);
 
-  // --- Pagination Handler ---
   const handlePageChange = useCallback((newPage: number) => {
     setCurrentPage(newPage);
-    // Optional: Scroll to top when page changes
     window.scrollTo({ top: 0, behavior: "smooth" });
-  }, []); // No dependencies needed if just setting state
+  }, []);
 
   const handleSelectItem = (item: SearchResultItem) => {
     navigate(`/item/${item.item_code}`);

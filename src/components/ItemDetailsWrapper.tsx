@@ -215,17 +215,7 @@ const ItemDetailsWrapper: React.FC<ItemDetailsWrapperProps> = () => {
 			},
 			meta: { sortable: true },
 		},
-	], [minPrice]); // *** Add minPrice as a dependency for the price column ***
-
-	const isPageLoading = isLoadingMetadata || isLoadingAndFilters;
-
-	if (isPageLoading && !itemDetails) { return <div className="text-center p-6">Loading item data...</div>; }
-	if (error) {
-		return (<div className="p-6 bg-white md:shadow-md rounded-lg"> <button onClick={handleBack} className="mb-4 text-blue-600 hover:text-blue-800 hover:underline"> ← Back to Search </button> <p className="text-red-600">{error}</p> </div>);
-	}
-	if (!itemDetails) {
-		return (<div className="p-6 bg-white md:shadow-md rounded-lg"> <button onClick={handleBack} className="mb-4 text-blue-600 hover:text-blue-800 hover:underline"> ← Back to Search </button> <p className="text-orange-600">Item details could not be determined.</p> </div>);
-	}
+	], [minPrice]);
 
 	return (
 		<div className="p-6 md:p-8 bg-bg-white">
