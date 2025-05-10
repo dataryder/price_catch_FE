@@ -37,8 +37,8 @@ const SearchResults: React.FC<SearchResultsProps> = ({ results, onSelectItem, is
 							<div className='flex flex-col gap-1'>
 								<p className="font-semibold text-txt-primary text-xs md:text-sm">{item.item}</p>
 								<div className='flex gap-2'>
-									<Tag size='small' variant='warning' mode='pill' className='max-sm:hidden'>{item.item_category}</Tag>
-									<Tag size='small' variant='primary' mode='pill'>{item.item_group}</Tag>
+									<Tag size='small' variant='warning' mode='pill' className='max-sm:hidden'>{item.item_group}</Tag>
+									<Tag size='small' variant='primary' mode='pill'>{item.item_category}</Tag>
 									<Tag size='small' variant={(item.frequency === "daily") ? "success" : (item.frequency === "weekly") ? "warning" : "danger"} mode='default'>{item.frequency}</Tag>
 
 								</div>

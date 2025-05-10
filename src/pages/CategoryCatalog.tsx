@@ -89,8 +89,8 @@ const CategoryPage: React.FC = () => {
 													</h4>
 
 													<div className='flex gap-2'>
-														<Tag size='small' variant='warning' mode='pill' className='max-sm:hidden'>{item.item_category}</Tag>
-														<Tag size='small' variant='primary' mode='pill'>{item.item_group}</Tag>
+														<Tag size='small' variant='warning' mode='pill' className='max-sm:hidden'>{item.item_group}</Tag>
+														<Tag size='small' variant='primary' mode='pill'>{item.item_category}</Tag>
 													</div>
 												</div>
 												<ChevronRightIcon className='text-txt-black-500' />
