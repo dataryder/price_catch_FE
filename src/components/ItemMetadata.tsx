@@ -18,6 +18,7 @@ import {
 } from "@govtechmy/myds-react/tabs";
 
 import PriceHistoryChart from "./PriceHistoryChart";
+import CategoryTag from "./CategoryTags";
 
 interface ItemMetadataDisplayProps {
   metadata: ItemMetadata | null;
@@ -102,15 +103,7 @@ const ItemMetadataDisplay: React.FC<ItemMetadataDisplayProps> = ({
         </h3>
 
         <div className="flex flex-col gap-1 md:gap-4 items-center">
-          <div className="flex gap-2">
-            <Tag size="small" variant="warning" mode="pill">
-              {metadata.item_category}
-            </Tag>
-            <Tag size="small" variant="primary" mode="pill">
-              {metadata.item_group}
-            </Tag>
-
-          </div>
+          <CategoryTag group={metadata.item_group} category={metadata.item_category} size="small" />
           {isDateValid(metadata.last_updated) && (
             <div className="flex items-center gap-1">
               <CalendarIcon className="text-txt-black-500 h-4 w-4" />
@@ -204,7 +197,7 @@ const ItemMetadataDisplay: React.FC<ItemMetadataDisplayProps> = ({
           </Tabs>
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 

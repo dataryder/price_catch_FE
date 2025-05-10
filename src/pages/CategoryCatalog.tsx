@@ -7,12 +7,6 @@ import { Button } from '@govtechmy/myds-react/button';
 import { ChevronRightIcon } from '@govtechmy/myds-react/icon';
 import { Tag } from '@govtechmy/myds-react/tag';
 
-// interface CategoryProps {
-// 	group?: string;
-// 	category?: string;
-// }
-
-
 const groups = ['MINUMAN',
 	'BARANGAN KERING',
 	'BARANGAN SEGAR',
