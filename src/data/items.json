@@ -1,0 +1,3285 @@
+[
+	{
+		"item": "UBI KENTANG IMPORT (CHINA)",
+		"item_code": 1131,
+		"unit": "1kg",
+		"item_group": "BARANGAN KERING",
+		"item_category": "UBI KENTANG"
+	},
+	{
+		"item": "UDANG KERING",
+		"item_code": 1562,
+		"unit": "100 g",
+		"item_group": "BARANGAN KERING",
+		"item_category": "HASIL LAUT KERING"
+	},
+	{
+		"item": "IKAN TILAPIA MERAH (ANTARA 2 HINGGA 5 EKOR SEKILOGRAM)",
+		"item_code": 1921,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "IKAN DARAT"
+	},
+	{
+		"item": "SOTONG (\u2265 6 EKOR SEKILOGRAM)",
+		"item_code": 845,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "BAHAN LAUT"
+	},
+	{
+		"item": "BERAS SUPER CAP RAMBUTAN 5% (IMPORT)",
+		"item_code": 904,
+		"unit": "10 kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "BERAS"
+	},
+	{
+		"item": "LAI KUNING (SAIZ M)",
+		"item_code": 31,
+		"unit": "1 biji",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "BUAH-BUAHAN"
+	},
+	{
+		"item": "IKAN PARANG (KEPINGAN)",
+		"item_code": 1917,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "BAHAN LAUT"
+	},
+	{
+		"item": "LADA BENGGALA MERAH (CAPSICUM)",
+		"item_code": 1129,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "SAYUR-SAYURAN"
+	},
+	{
+		"item": "SERBUK KARI IKAN ALAGAPPAS",
+		"item_code": 1569,
+		"unit": "250 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "REMPAH RATUS (BERBUNGKUS)"
+	},
+	{
+		"item": "SERBUK KARI DAGING ALAGAPPAS",
+		"item_code": 1571,
+		"unit": "250 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "REMPAH RATUS (BERBUNGKUS)"
+	},
+	{
+		"item": "MINYAK JAGUNG CAP VECORN",
+		"item_code": 1597,
+		"unit": "2 kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "MINYAK DAN LEMAK"
+	},
+	{
+		"item": "TEH LIPTON (UNCANG)",
+		"item_code": 1650,
+		"unit": "100 beg",
+		"item_group": "MINUMAN",
+		"item_category": "BAHAN-BAHAN MINUMAN"
+	},
+	{
+		"item": "SABUN SERBUK BREEZE (POWER CLEAN)",
+		"item_code": 1991,
+		"unit": "750 g",
+		"item_group": "PRODUK KEBERSIHAN",
+		"item_category": "PENJAGAAN RUMAH"
+	},
+	{
+		"item": "SABUN SERBUK TOP (SUPER COLOUR)",
+		"item_code": 1993,
+		"unit": "750 g",
+		"item_group": "PRODUK KEBERSIHAN",
+		"item_category": "PENJAGAAN RUMAH"
+	},
+	{
+		"item": "NESCAFE 3 IN 1 ORIGINAL (AROMATIC & BALANCED)",
+		"item_code": 2019,
+		"unit": "25 x 18g",
+		"item_group": "MINUMAN",
+		"item_category": "BAHAN-BAHAN MINUMAN"
+	},
+	{
+		"item": "NESTLE CERELAC BERAS MERAH & SUSU - TIN",
+		"item_code": 1629,
+		"unit": "350 g",
+		"item_group": "SUSU DAN BARANGAN BAYI",
+		"item_category": "MAKANAN BAYI"
+	},
+	{
+		"item": "DAGING LEMBU IMPORT (BLOCK)",
+		"item_code": 1913,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "DAGING"
+	},
+	{
+		"item": "MINYAK MASAK TULEN CAP VESAWIT",
+		"item_code": 1602,
+		"unit": "2 kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "MINYAK DAN LEMAK"
+	},
+	{
+		"item": "KRIMER MANIS BERVITAMIN CAP F&N",
+		"item_code": 883,
+		"unit": "500 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "KRIMER DAN SUSU TEPUNG"
+	},
+	{
+		"item": "YOGURT LACTEL (FAT FREE) (STRAWBERRY)",
+		"item_code": 2020,
+		"unit": "130g",
+		"item_group": "MINUMAN",
+		"item_category": "TERSEDIA MINUM"
+	},
+	{
+		"item": "KRIMER MANIS PEKAT CAP SAJI",
+		"item_code": 1953,
+		"unit": "500 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "KRIMER DAN SUSU TEPUNG"
+	},
+	{
+		"item": "SOS TIRAM MAGGI",
+		"item_code": 1138,
+		"unit": "340 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "KICAP DAN SOS"
+	},
+	{
+		"item": "SERBUK KARI DAGING (TIDAK BERBUNGKUS)",
+		"item_code": 1567,
+		"unit": "100 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "REMPAH RATUS (TIDAK BERBUNGKUS)"
+	},
+	{
+		"item": "BUNGA RAYA YIS SEGERA",
+		"item_code": 1950,
+		"unit": "11g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "ESEN DAN RAGI"
+	},
+	{
+		"item": "BROKOLI",
+		"item_code": 1479,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "SAYUR-SAYURAN"
+	},
+	{
+		"item": "ANGGUR MERAH BERBIJI",
+		"item_code": 27,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "BUAH-BUAHAN"
+	},
+	{
+		"item": "TELUR AYAM GRED A",
+		"item_code": 1109,
+		"unit": "30 biji",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "TELUR"
+	},
+	{
+		"item": "IKAN JENAHAK (KEPINGAN)",
+		"item_code": 1915,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "BAHAN LAUT"
+	},
+	{
+		"item": "IKAN PARI (KEPINGAN)",
+		"item_code": 68,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "BAHAN LAUT"
+	},
+	{
+		"item": "BERAS SUPER CAP 3A BOY (IMPORT)",
+		"item_code": 1951,
+		"unit": "10 kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "BERAS"
+	},
+	{
+		"item": "EPAL MERAH RED DELICIOUS (SAIZ M)",
+		"item_code": 1486,
+		"unit": "1 biji",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "BUAH-BUAHAN"
+	},
+	{
+		"item": "KAILAN",
+		"item_code": 1560,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "SAYUR-SAYURAN"
+	},
+	{
+		"item": "TEH BOH (SERBUK)",
+		"item_code": 1084,
+		"unit": "500 g",
+		"item_group": "MINUMAN",
+		"item_category": "BAHAN-BAHAN MINUMAN"
+	},
+	{
+		"item": "DAGING KAMBING BEBIRI IMPORT TANPA TULANG (MUTTON) (TIDAK TERMASUK PAHA - NEW ZEALAND)",
+		"item_code": 12,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "DAGING"
+	},
+	{
+		"item": "DAGING LEMBU IMPORT (BLADE)",
+		"item_code": 1371,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "DAGING"
+	},
+	{
+		"item": "MACKAREL CAP AYAM (SOS TOMATO)",
+		"item_code": 195,
+		"unit": "425 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "IKAN DALAM TIN"
+	},
+	{
+		"item": "SERBUK CILI BABAS",
+		"item_code": 364,
+		"unit": "250 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "REMPAH RATUS (BERBUNGKUS)"
+	},
+	{
+		"item": "SERBUK KURMA AYAM & DAGING ADABI",
+		"item_code": 1573,
+		"unit": "250 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "REMPAH RATUS (BERBUNGKUS)"
+	},
+	{
+		"item": "BERUS GIGI COLGATE (ZIG ZAG - SOFT)",
+		"item_code": 1524,
+		"unit": "1 batang",
+		"item_group": "PRODUK KEBERSIHAN",
+		"item_category": "PENJAGAAN DIRI"
+	},
+	{
+		"item": "CINTAN MI SEGERA PERISA AYAM",
+		"item_code": 1977,
+		"unit": "5 X 75g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "MI SEGERA"
+	},
+	{
+		"item": "KRIMER MANIS CAP JUNJUNG",
+		"item_code": 388,
+		"unit": "500 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "KRIMER DAN SUSU TEPUNG"
+	},
+	{
+		"item": "F&N OREN (BOTOL)",
+		"item_code": 230,
+		"unit": "1.5 liter",
+		"item_group": "MINUMAN",
+		"item_category": "TERSEDIA MINUM"
+	},
+	{
+		"item": "MINYAK SAPI CAP QBB",
+		"item_code": 271,
+		"unit": "400 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "MINYAK DAN LEMAK"
+	},
+	{
+		"item": "DEODORAN REXONA MEN (SPORT DEFENSE)",
+		"item_code": 1989,
+		"unit": "50 ml",
+		"item_group": "PRODUK KEBERSIHAN",
+		"item_category": "PENJAGAAN DIRI"
+	},
+	{
+		"item": "KICAP SOYA PEKAT MANIS CAP AYAM",
+		"item_code": 1828,
+		"unit": "330 ml",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "KICAP DAN SOS"
+	},
+	{
+		"item": "SERBUK KARI IKAN ALAGAPPAS",
+		"item_code": 1838,
+		"unit": "200 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "REMPAH RATUS (BERBUNGKUS)"
+	},
+	{
+		"item": "AYAM TUA HIDUP",
+		"item_code": 1364,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "AYAM"
+	},
+	{
+		"item": "TIMUN",
+		"item_code": 113,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "SAYUR-SAYURAN"
+	},
+	{
+		"item": "LADA BENGGALA HIJAU (CAPSICUM)",
+		"item_code": 1128,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "SAYUR-SAYURAN"
+	},
+	{
+		"item": "BAWANG BESAR IMPORT (CHINA)",
+		"item_code": 1441,
+		"unit": "1kg",
+		"item_group": "BARANGAN KERING",
+		"item_category": "BAWANG"
+	},
+	{
+		"item": "KUETIAU BASAH (PELBAGAI JENAMA)",
+		"item_code": 1484,
+		"unit": "+-450g",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "MEE\/KUETIAU"
+	},
+	{
+		"item": "TELUR AYAM GRED A (BERAT 65.0 GM HINGGA 69.9 GM SEBIJI)",
+		"item_code": 118,
+		"unit": "10 biji",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "TELUR"
+	},
+	{
+		"item": "KERANG (SAIZ SEDERHANA)",
+		"item_code": 1920,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "BAHAN LAUT"
+	},
+	{
+		"item": "DAGING KAMBING BEBIRI IMPORT BERTULANG (MUTTON) (AUSTRALIA - KOTAK)",
+		"item_code": 9,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "DAGING"
+	},
+	{
+		"item": "CILI API\/PADI HIJAU",
+		"item_code": 716,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "SAYUR-SAYURAN"
+	},
+	{
+		"item": "KUBIS BUNGA (CAULIFLOWER)",
+		"item_code": 1481,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "SAYUR-SAYURAN"
+	},
+	{
+		"item": "SANTAN KELAPA SEGAR (PEKAT)",
+		"item_code": 1929,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "KELAPA"
+	},
+	{
+		"item": "IKAN PARANG (ANTARA 1 HINGGA 3 EKOR SEKILOGRAM)",
+		"item_code": 66,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "BAHAN LAUT"
+	},
+	{
+		"item": "BAWANG PERAI (LEEK) TEMPATAN",
+		"item_code": 1399,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "SAYUR-SAYURAN"
+	},
+	{
+		"item": "MIRINDA OREN (BOTOL)",
+		"item_code": 232,
+		"unit": "1.5 liter",
+		"item_group": "MINUMAN",
+		"item_category": "TERSEDIA MINUM"
+	},
+	{
+		"item": "SERBUK NASI GORENG CINA ADABI",
+		"item_code": 1544,
+		"unit": "17 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "REMPAH RATUS (BERBUNGKUS)"
+	},
+	{
+		"item": "TUNA CAP AYAM (TUNA MAYONNAISE)",
+		"item_code": 1882,
+		"unit": "160 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "IKAN DALAM TIN"
+	},
+	{
+		"item": "DUMEX DUPRO 2 (RUMUSAN SUSULAN)",
+		"item_code": 2001,
+		"unit": "850g",
+		"item_group": "SUSU DAN BARANGAN BAYI",
+		"item_category": "SUSU BAYI"
+	},
+	{
+		"item": "MINYAK MASAK TULEN CAP SERI MURNI",
+		"item_code": 1100,
+		"unit": "1kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "MINYAK DAN LEMAK"
+	},
+	{
+		"item": "DAGING KERBAU IMPORT (INDIA) * (CHUCK)",
+		"item_code": 1378,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "DAGING"
+	},
+	{
+		"item": "DAGING KAMBING BEBIRI IMPORT TANPA TULANG (MUTTON) (TIDAK TERMASUK PAHA - AUSTRALIA)",
+		"item_code": 11,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "DAGING"
+	},
+	{
+		"item": "SOS TOMATO MAGGI",
+		"item_code": 217,
+		"unit": "325 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "KICAP DAN SOS"
+	},
+	{
+		"item": "MINYAK MASAK TULEN CAP BURUH",
+		"item_code": 263,
+		"unit": "5 kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "MINYAK DAN LEMAK"
+	},
+	{
+		"item": "ASAM JAWA (TIDAK BERBIJI) ADABI",
+		"item_code": 1604,
+		"unit": "200 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "REMPAH RATUS (BERBUNGKUS)"
+	},
+	{
+		"item": "BERUS GIGI COLGATE (TWISTER - SOFT)",
+		"item_code": 1630,
+		"unit": "1 batang",
+		"item_group": "PRODUK KEBERSIHAN",
+		"item_category": "PENJAGAAN DIRI"
+	},
+	{
+		"item": "MINYAK MASAK TULEN CAP ALIF",
+		"item_code": 1940,
+		"unit": "1kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "MINYAK DAN LEMAK"
+	},
+	{
+		"item": "MINYAK JAGUNG CAP MAZOLA",
+		"item_code": 1088,
+		"unit": "3 kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "MINYAK DAN LEMAK"
+	},
+	{
+		"item": "HEINZ APPLE PUREE",
+		"item_code": 1517,
+		"unit": "110 g",
+		"item_group": "SUSU DAN BARANGAN BAYI",
+		"item_category": "MAKANAN BAYI"
+	},
+	{
+		"item": "BIHUN KERING IMPORT (CAP BINTANG)",
+		"item_code": 1585,
+		"unit": "400 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "BIHUN"
+	},
+	{
+		"item": "DEODORAN NIVEA MAN (BLACK & WHITE INVISIBLE - ORIGINAL)",
+		"item_code": 1987,
+		"unit": "150 ml",
+		"item_group": "PRODUK KEBERSIHAN",
+		"item_category": "PENJAGAAN DIRI"
+	},
+	{
+		"item": "MINYAK JAGUNG CAP VECORN",
+		"item_code": 1089,
+		"unit": "3 kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "MINYAK DAN LEMAK"
+	},
+	{
+		"item": "AYAM BELANDA IMPORT",
+		"item_code": 1127,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "AYAM"
+	},
+	{
+		"item": "IKAN BAWAL HITAM (ANTARA 2 HINGGA 5 EKOR SEKILOGRAM)",
+		"item_code": 43,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "BAHAN LAUT"
+	},
+	{
+		"item": "SANTAN KELAPA SEGAR (BIASA)",
+		"item_code": 103,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "KELAPA"
+	},
+	{
+		"item": "IKAN SIAKAP (ANTARA 2 HINGGA 4 EKOR SEKILOGRAM)",
+		"item_code": 1437,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "BAHAN LAUT"
+	},
+	{
+		"item": "KETAM RENJONG\/BUNGA (ANTARA 5 HINGGA 8 EKOR SEKILOGRAM)",
+		"item_code": 847,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "BAHAN LAUT"
+	},
+	{
+		"item": "PAHA AYAM (CHICKEN DRUMSTICK)",
+		"item_code": 1550,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "AYAM"
+	},
+	{
+		"item": "BAWANG BESAR IMPORT (PAKISTAN)",
+		"item_code": 1931,
+		"unit": "1kg",
+		"item_group": "BARANGAN KERING",
+		"item_category": "BAWANG"
+	},
+	{
+		"item": "TEH BOH (UNCANG)",
+		"item_code": 180,
+		"unit": "100 beg",
+		"item_group": "MINUMAN",
+		"item_category": "BAHAN-BAHAN MINUMAN"
+	},
+	{
+		"item": "SUSU ANLENE ACTIFIT 3X PERISA ASLI",
+		"item_code": 334,
+		"unit": "600 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "KRIMER DAN SUSU TEPUNG"
+	},
+	{
+		"item": "TEH LIPTON (SERBUK)",
+		"item_code": 1647,
+		"unit": "400 g",
+		"item_group": "MINUMAN",
+		"item_category": "BAHAN-BAHAN MINUMAN"
+	},
+	{
+		"item": "HALBA",
+		"item_code": 896,
+		"unit": "100 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "REMPAH RATUS (TIDAK BERBUNGKUS)"
+	},
+	{
+		"item": "SERBUK KARI IKAN BABAS",
+		"item_code": 350,
+		"unit": "250 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "REMPAH RATUS (BERBUNGKUS)"
+	},
+	{
+		"item": "SOS CILI KIMBALL",
+		"item_code": 957,
+		"unit": "340 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "KICAP DAN SOS"
+	},
+	{
+		"item": "KRIMER SEJAT CARNATION",
+		"item_code": 1463,
+		"unit": "390g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "KRIMER DAN SUSU TEPUNG"
+	},
+	{
+		"item": "SERBUK KARI IKAN ADABI",
+		"item_code": 1568,
+		"unit": "250 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "REMPAH RATUS (BERBUNGKUS)"
+	},
+	{
+		"item": "ENFAGROW A+ MIND PRO LANGKAH 3 VANILA (KOTAK)",
+		"item_code": 2014,
+		"unit": "500 g",
+		"item_group": "SUSU DAN BARANGAN BAYI",
+		"item_category": "SUSU BAYI"
+	},
+	{
+		"item": "SUSU SEGAR DUTCH LADY",
+		"item_code": 224,
+		"unit": "1 liter",
+		"item_group": "MINUMAN",
+		"item_category": "TERSEDIA MINUM"
+	},
+	{
+		"item": "MACKAREL CAP KING CUP (SOS TOMATO)",
+		"item_code": 197,
+		"unit": "425 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "IKAN DALAM TIN"
+	},
+	{
+		"item": "TEPUNG GANDUM NGP (BERBUNGKUS, CAP  FAIZA)",
+		"item_code": 1870,
+		"unit": "1kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "TEPUNG"
+	},
+	{
+		"item": "REMPAH SUP (TIDAK BERBUNGKUS)",
+		"item_code": 347,
+		"unit": "100 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "REMPAH RATUS (TIDAK BERBUNGKUS)"
+	},
+	{
+		"item": "SERBUK KARI DAGING ALAGAPPAS",
+		"item_code": 1839,
+		"unit": "200 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "REMPAH RATUS (BERBUNGKUS)"
+	},
+	{
+		"item": "AYAM BERSIH - STANDARD",
+		"item_code": 1,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "AYAM"
+	},
+	{
+		"item": "PISANG BERANGAN",
+		"item_code": 18,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "BUAH-BUAHAN"
+	},
+	{
+		"item": "NENAS BIASA (JOSAPINE\/MORRIS\/SARAWAK)",
+		"item_code": 25,
+		"unit": "1 biji",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "BUAH-BUAHAN"
+	},
+	{
+		"item": "HALIA BASAH (TUA)",
+		"item_code": 95,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "SAYUR-SAYURAN"
+	},
+	{
+		"item": "TELUR AYAM GRED C (BERAT 55.0 GM HINGGA 59.9 GM SEBIJI)",
+		"item_code": 120,
+		"unit": "10 biji",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "TELUR"
+	},
+	{
+		"item": "BAWANG PERAI (LEEK) IMPORT",
+		"item_code": 1400,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "SAYUR-SAYURAN"
+	},
+	{
+		"item": "UBI KENTANG RUSSET",
+		"item_code": 160,
+		"unit": "1kg",
+		"item_group": "BARANGAN KERING",
+		"item_category": "UBI KENTANG"
+	},
+	{
+		"item": "IKAN KERISI (ANTARA 5 HINGGA 10 EKOR SEKILOGRAM)",
+		"item_code": 1436,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "BAHAN LAUT"
+	},
+	{
+		"item": "IKAN JENAHAK (b\t% 1 KILOGRAM SEEKOR)",
+		"item_code": 51,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "BAHAN LAUT"
+	},
+	{
+		"item": "TELUR MASIN",
+		"item_code": 1821,
+		"unit": "4 Biji",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "TELUR"
+	},
+	{
+		"item": "BERAS PREMIUM CAP UNCLE TAN",
+		"item_code": 1833,
+		"unit": "10 kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "BERAS"
+	},
+	{
+		"item": "SADERI",
+		"item_code": 1922,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "SAYUR-SAYURAN"
+	},
+	{
+		"item": "TAUGE KACANG HIJAU",
+		"item_code": 1561,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "SAYUR-SAYURAN"
+	},
+	{
+		"item": "SERI KAYA YEO'S",
+		"item_code": 202,
+		"unit": "480 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "SAPUAN (SPREADS)"
+	},
+	{
+		"item": "UBAT GIGI COLGATE (PUDINA SEGAR)",
+		"item_code": 292,
+		"unit": "250 g",
+		"item_group": "PRODUK KEBERSIHAN",
+		"item_category": "PENJAGAAN DIRI"
+	},
+	{
+		"item": "LACTOGEN 1 RUMUSAN BAYI (KOTAK)",
+		"item_code": 299,
+		"unit": "650g",
+		"item_group": "SUSU DAN BARANGAN BAYI",
+		"item_category": "SUSU BAYI"
+	},
+	{
+		"item": "100 PLUS (ORIGINAL)",
+		"item_code": 1355,
+		"unit": "1.5 liter",
+		"item_group": "MINUMAN",
+		"item_category": "TERSEDIA MINUM"
+	},
+	{
+		"item": "BIJI KETUMBAR",
+		"item_code": 870,
+		"unit": "100 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "REMPAH RATUS (TIDAK BERBUNGKUS)"
+	},
+	{
+		"item": "DUTCH LADY UHT COKLAT (KOTAK)",
+		"item_code": 1505,
+		"unit": "200 ml",
+		"item_group": "MINUMAN",
+		"item_category": "TERSEDIA MINUM"
+	},
+	{
+		"item": "ANMUM LACTA (BIASA)",
+		"item_code": 843,
+		"unit": "650g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "KRIMER DAN SUSU TEPUNG"
+	},
+	{
+		"item": "DAGING KAMBING BEBIRI IMPORT BERTULANG (LAMB) (AUSTRALIA - KOTAK) (1KG)",
+		"item_code": 1907,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "DAGING"
+	},
+	{
+		"item": "BAWANG KECIL MERAH IMPORT (MYANMAR)",
+		"item_code": 1444,
+		"unit": "1kg",
+		"item_group": "BARANGAN KERING",
+		"item_category": "BAWANG"
+	},
+	{
+		"item": "MARJERIN PLANTA",
+		"item_code": 206,
+		"unit": "480 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "SAPUAN (SPREADS)"
+	},
+	{
+		"item": "BUNGA CENGKIH",
+		"item_code": 864,
+		"unit": "100 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "REMPAH RATUS (TIDAK BERBUNGKUS)"
+	},
+	{
+		"item": "MAURIPAN YIS SEGERA",
+		"item_code": 1616,
+		"unit": "11g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "ESEN DAN RAGI"
+	},
+	{
+		"item": "MAMEX LANGKAH 1 - RUMUSAN BAYI (KOTAK)",
+		"item_code": 1512,
+		"unit": "600 g",
+		"item_group": "SUSU DAN BARANGAN BAYI",
+		"item_category": "SUSU BAYI"
+	},
+	{
+		"item": "MINYAK MASAK TULEN CAP BURUH",
+		"item_code": 1601,
+		"unit": "2 kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "MINYAK DAN LEMAK"
+	},
+	{
+		"item": "LEPAAN FARMCOWS",
+		"item_code": 1607,
+		"unit": "250 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "SAPUAN (SPREADS)"
+	},
+	{
+		"item": "PELEMBUT PAKAIAN - SOFTLAN (FLORAL FANTASY)",
+		"item_code": 1996,
+		"unit": "1 liter",
+		"item_group": "PRODUK KEBERSIHAN",
+		"item_category": "PENJAGAAN RUMAH"
+	},
+	{
+		"item": "MENTEGA ANCHOR (SALTED)",
+		"item_code": 1615,
+		"unit": "227g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "MENTEGA"
+	},
+	{
+		"item": "SERBUK KUNYIT (TIDAK BERBUNGKUS)",
+		"item_code": 154,
+		"unit": "100 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "REMPAH RATUS (TIDAK BERBUNGKUS)"
+	},
+	{
+		"item": "SABUN PENCUCI KUAT HARIMAU (LEMON)",
+		"item_code": 1539,
+		"unit": "400 g",
+		"item_group": "PRODUK KEBERSIHAN",
+		"item_category": "PENJAGAAN RUMAH"
+	},
+	{
+		"item": "ANMUM ESSENTIAL LANGKAH 4 PERISA ASLI (TANPA GULA TAMBAHAN) - TIN",
+		"item_code": 1961,
+		"unit": "1.5kg",
+		"item_group": "SUSU DAN BARANGAN BAYI",
+		"item_category": "SUSU BAYI"
+	},
+	{
+		"item": "BERAS SUPER SPECIAL TEMPATAN SABAH RICE VAGAS TOKOU",
+		"item_code": 1822,
+		"unit": "10 kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "BERAS"
+	},
+	{
+		"item": "BERAS CAP JASMINE (SST5%)",
+		"item_code": 1582,
+		"unit": "10 kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "BERAS"
+	},
+	{
+		"item": "TENOM COFFEE WANG EMAS (SERBUK)",
+		"item_code": 1851,
+		"unit": "180 g",
+		"item_group": "MINUMAN",
+		"item_category": "BAHAN-BAHAN MINUMAN"
+	},
+	{
+		"item": "BERAS CAP JATI (SST5%)",
+		"item_code": 992,
+		"unit": "10 kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "BERAS"
+	},
+	{
+		"item": "KACANG BUNCIS",
+		"item_code": 97,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "SAYUR-SAYURAN"
+	},
+	{
+		"item": "KUNYIT HIDUP",
+		"item_code": 108,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "SAYUR-SAYURAN"
+	},
+	{
+		"item": "LENGKUAS",
+		"item_code": 1819,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "SAYUR-SAYURAN"
+	},
+	{
+		"item": "IKAN CENCARU (ANTARA 4 HINGGA 6 EKOR SEKILOGRAM)",
+		"item_code": 47,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "BAHAN LAUT"
+	},
+	{
+		"item": "CILI MERAH - MINYAK",
+		"item_code": 94,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "SAYUR-SAYURAN"
+	},
+	{
+		"item": "KACANG SOYA (IMPORT)",
+		"item_code": 1944,
+		"unit": "1kg",
+		"item_group": "BARANGAN KERING",
+		"item_category": "KACANG"
+	},
+	{
+		"item": "OREN VALENCIA (SAIZ M)",
+		"item_code": 1487,
+		"unit": "1 biji",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "BUAH-BUAHAN"
+	},
+	{
+		"item": "LOBAK MERAH",
+		"item_code": 109,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "SAYUR-SAYURAN"
+	},
+	{
+		"item": "SARDIN CAP AYAM (SOS TOMATO)",
+		"item_code": 191,
+		"unit": "425 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "IKAN DALAM TIN"
+	},
+	{
+		"item": "SOS CILI LIFE",
+		"item_code": 218,
+		"unit": "340 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "KICAP DAN SOS"
+	},
+	{
+		"item": "YEO'S LAICI (KOTAK)",
+		"item_code": 226,
+		"unit": "250 ml",
+		"item_group": "MINUMAN",
+		"item_category": "TERSEDIA MINUM"
+	},
+	{
+		"item": "SUSU SEJAT PENUH KRIM CAP IDEAL",
+		"item_code": 320,
+		"unit": "390g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "KRIMER DAN SUSU TEPUNG"
+	},
+	{
+		"item": "MINYAK JAGUNG CAP VECORN",
+		"item_code": 1090,
+		"unit": "1kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "MINYAK DAN LEMAK"
+	},
+	{
+		"item": "KICAP MANIS ADABI",
+		"item_code": 1135,
+		"unit": "340ml",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "KICAP DAN SOS"
+	},
+	{
+		"item": "COCA COLA (BOTOL)",
+		"item_code": 228,
+		"unit": "1.5 liter",
+		"item_group": "MINUMAN",
+		"item_category": "TERSEDIA MINUM"
+	},
+	{
+		"item": "DUTCH LADY 456 (BIASA)",
+		"item_code": 2010,
+		"unit": "850g",
+		"item_group": "SUSU DAN BARANGAN BAYI",
+		"item_category": "SUSU BAYI"
+	},
+	{
+		"item": "DUMEX DUGRO 3 (1-3 TAHUN) PERISA ASLI (850G)",
+		"item_code": 1904,
+		"unit": "850g",
+		"item_group": "SUSU DAN BARANGAN BAYI",
+		"item_category": "SUSU BAYI"
+	},
+	{
+		"item": "AYAM HIDUP",
+		"item_code": 3,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "AYAM"
+	},
+	{
+		"item": "TEPUNG GANDUM NGP (BERBUNGKUS, CAP SAUH)",
+		"item_code": 917,
+		"unit": "1kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "TEPUNG"
+	},
+	{
+		"item": "SOS TIRAM KIMBALL",
+		"item_code": 1114,
+		"unit": "510 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "KICAP DAN SOS"
+	},
+	{
+		"item": "MARJERIN PLANTA",
+		"item_code": 1140,
+		"unit": "240 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "SAPUAN (SPREADS)"
+	},
+	{
+		"item": "TEPUNG BERAS (PELBAGAI JENAMA)",
+		"item_code": 1591,
+		"unit": "500 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "TEPUNG"
+	},
+	{
+		"item": "PERENCAH TOM YAM ADABI",
+		"item_code": 1153,
+		"unit": "40 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "REMPAH RATUS (BERBUNGKUS)"
+	},
+	{
+		"item": "SERBUK KURMA BABAS",
+		"item_code": 1575,
+		"unit": "125 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "REMPAH RATUS (BERBUNGKUS)"
+	},
+	{
+		"item": "RAGI BULAT\/RAGI TAPAI",
+		"item_code": 1948,
+		"unit": "1 biji",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "ESEN DAN RAGI"
+	},
+	{
+		"item": "MINYAK MASAK TULEN CAP ALIF",
+		"item_code": 1942,
+		"unit": "5 kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "MINYAK DAN LEMAK"
+	},
+	{
+		"item": "SABUN PENCUCI SUNLIGHT (LEMON)",
+		"item_code": 2018,
+		"unit": "900ml",
+		"item_group": "PRODUK KEBERSIHAN",
+		"item_category": "PENJAGAAN RUMAH"
+	},
+	{
+		"item": "MINYAK MASAK TULEN CAP SAJI",
+		"item_code": 1937,
+		"unit": "1kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "MINYAK DAN LEMAK"
+	},
+	{
+		"item": "SUSTAGEN KID 3+ (VANILLA) - KOTAK",
+		"item_code": 1513,
+		"unit": "600 g",
+		"item_group": "SUSU DAN BARANGAN BAYI",
+		"item_category": "SUSU BAYI"
+	},
+	{
+		"item": "MINYAK MASAK SEBATIAN CAP ADELA GOLD",
+		"item_code": 1934,
+		"unit": "1kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "MINYAK DAN LEMAK"
+	},
+	{
+		"item": "ROTI WHOLEMEAL (PELBAGAI JENAMA)",
+		"item_code": 1949,
+		"unit": "400 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "ROTI"
+	},
+	{
+		"item": "TERUNG BULAT",
+		"item_code": 1923,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "SAYUR-SAYURAN"
+	},
+	{
+		"item": "LIMAU KASTURI",
+		"item_code": 1928,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "SAYUR-SAYURAN"
+	},
+	{
+		"item": "TAUHU (JENIS KERAS)",
+		"item_code": 1945,
+		"unit": "sekeping",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "TAUHU DAN TEMPE"
+	},
+	{
+		"item": "PISANG EMAS",
+		"item_code": 19,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "BUAH-BUAHAN"
+	},
+	{
+		"item": "LIMAU NIPIS",
+		"item_code": 1132,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "BUAH-BUAHAN"
+	},
+	{
+		"item": "KANGKUNG",
+		"item_code": 1559,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "SAYUR-SAYURAN"
+	},
+	{
+		"item": "TELUR PUYUH",
+		"item_code": 124,
+		"unit": "15 Biji",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "TELUR"
+	},
+	{
+		"item": "BAYAM MERAH",
+		"item_code": 1557,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "SAYUR-SAYURAN"
+	},
+	{
+		"item": "IKAN KEMBUNG KECIL\/PELALING (ANTARA 10 HINGGA 18 EKOR SEKILOGRAM)",
+		"item_code": 55,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "BAHAN LAUT"
+	},
+	{
+		"item": "IKAN SENANGIN (ANTARA 2 HINGGA 8 EKOR SEKILOGRAM)",
+		"item_code": 73,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "BAHAN LAUT"
+	},
+	{
+		"item": "SUSU TEPUNG ISIAN KURANG LEMAK 'OMEGA PLUS'",
+		"item_code": 345,
+		"unit": "600 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "KRIMER DAN SUSU TEPUNG"
+	},
+	{
+		"item": "MILO (PAKET)",
+		"item_code": 1637,
+		"unit": "1kg",
+		"item_group": "MINUMAN",
+		"item_category": "BAHAN-BAHAN MINUMAN"
+	},
+	{
+		"item": "MAINLAND CHESDALE CHEDDAR CHEESE SPREAD 12 CHEDDAR",
+		"item_code": 203,
+		"unit": "250 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "SAPUAN (SPREADS)"
+	},
+	{
+		"item": "MINYAK MASAK SEBATIAN CAP PISAU",
+		"item_code": 1093,
+		"unit": "1kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "MINYAK DAN LEMAK"
+	},
+	{
+		"item": "PELUNTUR CLOROX (ORIGINAL)",
+		"item_code": 2002,
+		"unit": "1 liter",
+		"item_group": "PRODUK KEBERSIHAN",
+		"item_category": "PENJAGAAN RUMAH"
+	},
+	{
+		"item": "DAGING LEMBU IMPORT (KNUCKLE)",
+		"item_code": 1373,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "DAGING"
+	},
+	{
+		"item": "DAGING LEMBU IMPORT (CHUCKTENDER)",
+		"item_code": 1372,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "DAGING"
+	},
+	{
+		"item": "ANGGUR HIJAU BERBIJI",
+		"item_code": 26,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "BUAH-BUAHAN"
+	},
+	{
+		"item": "BUNGA LAWANG",
+		"item_code": 865,
+		"unit": "100 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "REMPAH RATUS (TIDAK BERBUNGKUS)"
+	},
+	{
+		"item": "MENTEGA KACANG HALUS LADY'S CHOICE",
+		"item_code": 1144,
+		"unit": "340 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "SAPUAN (SPREADS)"
+	},
+	{
+		"item": "ROTI GARDENIA BREAKTHRU - ROTI GANDUM PENUH",
+		"item_code": 1494,
+		"unit": "400 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "ROTI"
+	},
+	{
+		"item": "GULA PUTIH BERTAPIS HALUS (PELBAGAI JENAMA)",
+		"item_code": 1590,
+		"unit": "1kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "GULA"
+	},
+	{
+		"item": "PEPSI COLA (TIN)",
+		"item_code": 1547,
+		"unit": "320 ml",
+		"item_group": "MINUMAN",
+		"item_category": "TERSEDIA MINUM"
+	},
+	{
+		"item": "BUAH PALA",
+		"item_code": 868,
+		"unit": "100 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "REMPAH RATUS (TIDAK BERBUNGKUS)"
+	},
+	{
+		"item": "MINYAK JAGUNG CAP MAZOLA",
+		"item_code": 1596,
+		"unit": "2 kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "MINYAK DAN LEMAK"
+	},
+	{
+		"item": "MINYAK MASAK SEBATIAN CAP NEPTUNE",
+		"item_code": 1599,
+		"unit": "2 kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "MINYAK DAN LEMAK"
+	},
+	{
+		"item": "SANTAN KELAPA JENAMA HARMUNI",
+		"item_code": 1612,
+		"unit": "200 ml",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "SANTAN (KOTAK)"
+	},
+	{
+		"item": "UBAT GIGI FRESH & WHITE (PUDINA SEGAR)",
+		"item_code": 295,
+		"unit": "160 g",
+		"item_group": "PRODUK KEBERSIHAN",
+		"item_category": "PENJAGAAN DIRI"
+	},
+	{
+		"item": "SERBUK PENAIK ROYAL (TIN)",
+		"item_code": 1947,
+		"unit": "113g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "ESEN DAN RAGI"
+	},
+	{
+		"item": "SOS TIRAM NONA",
+		"item_code": 1116,
+		"unit": "510 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "KICAP DAN SOS"
+	},
+	{
+		"item": "SUSU ANLENE GOLD 5X",
+		"item_code": 335,
+		"unit": "600 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "KRIMER DAN SUSU TEPUNG"
+	},
+	{
+		"item": "BERUS GIGI ORAL B (COMPLETE EASY CLEAN - SOFT)",
+		"item_code": 1525,
+		"unit": "1 batang",
+		"item_group": "PRODUK KEBERSIHAN",
+		"item_category": "PENJAGAAN DIRI"
+	},
+	{
+		"item": "DYNAMO POWER GEL (PERFECT CLEAN)",
+		"item_code": 2017,
+		"unit": "2.6kg",
+		"item_group": "PRODUK KEBERSIHAN",
+		"item_category": "PENJAGAAN RUMAH"
+	},
+	{
+		"item": "JUS OREN SUNKIST",
+		"item_code": 236,
+		"unit": "1 liter",
+		"item_group": "MINUMAN",
+		"item_category": "TERSEDIA MINUM"
+	},
+	{
+		"item": "BERAS SUPER SPECIAL CAP FAMILI 5%",
+		"item_code": 2004,
+		"unit": "10 kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "BERAS"
+	},
+	{
+		"item": "THIGH AYAM",
+		"item_code": 1552,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "AYAM"
+	},
+	{
+		"item": "IKAN SELAR PELATA (\u2264 7 EKOR SEKILOGRAM)",
+		"item_code": 70,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "BAHAN LAUT"
+	},
+	{
+		"item": "IKAN TERUBOK (b\t$ 4 EKOR SEKILOGRAM)",
+		"item_code": 1918,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "BAHAN LAUT"
+	},
+	{
+		"item": "CILI AKAR MERAH",
+		"item_code": 1927,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "SAYUR-SAYURAN"
+	},
+	{
+		"item": "DAGING BABI (PERUT \/ BELLY)",
+		"item_code": 1379,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "DAGING"
+	},
+	{
+		"item": "DAGING KERBAU IMPORT (INDIA) * (SILVERSIDE)",
+		"item_code": 1375,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "DAGING"
+	},
+	{
+		"item": "IKAN MERAH (KEPINGAN)",
+		"item_code": 1554,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "BAHAN LAUT"
+	},
+	{
+		"item": "KACANG PANJANG",
+		"item_code": 98,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "SAYUR-SAYURAN"
+	},
+	{
+		"item": "SOS TIRAM ADABI",
+		"item_code": 1117,
+		"unit": "510 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "KICAP DAN SOS"
+	},
+	{
+		"item": "DUTCH LADY UHT FULL CREAM (KOTAK)",
+		"item_code": 1506,
+		"unit": "200 ml",
+		"item_group": "MINUMAN",
+		"item_category": "TERSEDIA MINUM"
+	},
+	{
+		"item": "NESTLE CERELAC GANDUM DAN MADU - KOTAK",
+		"item_code": 1628,
+		"unit": "225g",
+		"item_group": "SUSU DAN BARANGAN BAYI",
+		"item_category": "MAKANAN BAYI"
+	},
+	{
+		"item": "YEO'S SOYA (KOTAK)",
+		"item_code": 1651,
+		"unit": "250 ml",
+		"item_group": "MINUMAN",
+		"item_category": "TERSEDIA MINUM"
+	},
+	{
+		"item": "MINYAK MASAK TULEN CAP SAJI",
+		"item_code": 1939,
+		"unit": "5 kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "MINYAK DAN LEMAK"
+	},
+	{
+		"item": "JUS OREN PEEL FRESH (MARIGOLD)",
+		"item_code": 235,
+		"unit": "1 liter",
+		"item_group": "MINUMAN",
+		"item_category": "TERSEDIA MINUM"
+	},
+	{
+		"item": "BAWANG KECIL MERAH IMPORT (CHINA)",
+		"item_code": 1443,
+		"unit": "1kg",
+		"item_group": "BARANGAN KERING",
+		"item_category": "BAWANG"
+	},
+	{
+		"item": "MINYAK MASAK SEBATIAN CAP PISAU",
+		"item_code": 260,
+		"unit": "5 kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "MINYAK DAN LEMAK"
+	},
+	{
+		"item": "ROTI SANDWICH GARDENIA ORIGINAL CLASSIC",
+		"item_code": 272,
+		"unit": "400 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "ROTI"
+	},
+	{
+		"item": "KULIT KAYU MANIS",
+		"item_code": 343,
+		"unit": "100 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "REMPAH RATUS (TIDAK BERBUNGKUS)"
+	},
+	{
+		"item": "ESEN STAR BRAND 'PELBAGAI PERISA'",
+		"item_code": 1613,
+		"unit": "25 ml",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "ESEN DAN RAGI"
+	},
+	{
+		"item": "GULA PUTIH BERTAPIS KASAR (PELBAGAI JENAMA)",
+		"item_code": 1589,
+		"unit": "1kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "GULA"
+	},
+	{
+		"item": "GARAM HALUS BIASA (PELBAGAI JENAMA)",
+		"item_code": 1605,
+		"unit": "+-350g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "REMPAH RATUS (BERBUNGKUS)"
+	},
+	{
+		"item": "COCA COLA (TIN)",
+		"item_code": 1507,
+		"unit": "320 ml",
+		"item_group": "MINUMAN",
+		"item_category": "TERSEDIA MINUM"
+	},
+	{
+		"item": "PEDIASURE (VANILA)",
+		"item_code": 1965,
+		"unit": "600 g",
+		"item_group": "SUSU DAN BARANGAN BAYI",
+		"item_category": "SUSU BAYI"
+	},
+	{
+		"item": "DEODORAN NIVEA (EXTRA BRIGHTENING)",
+		"item_code": 1988,
+		"unit": "150 ml",
+		"item_group": "PRODUK KEBERSIHAN",
+		"item_category": "PENJAGAAN DIRI"
+	},
+	{
+		"item": "MINYAK MASAK SEBATIAN CAP NEPTUNE",
+		"item_code": 257,
+		"unit": "5 kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "MINYAK DAN LEMAK"
+	},
+	{
+		"item": "SEVEN UP LEMON & LIME (TIN)",
+		"item_code": 1879,
+		"unit": "320ml",
+		"item_group": "MINUMAN",
+		"item_category": "TERSEDIA MINUM"
+	},
+	{
+		"item": "KICAP TAMIN (DARK SOY SAUCE)",
+		"item_code": 2012,
+		"unit": "350ml",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "KICAP DAN SOS"
+	},
+	{
+		"item": "REMPAH KURMA (TIDAK BERBUNGKUS)",
+		"item_code": 346,
+		"unit": "100 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "REMPAH RATUS (TIDAK BERBUNGKUS)"
+	},
+	{
+		"item": "SERBUK KARI IKAN (TIDAK BERBUNGKUS)",
+		"item_code": 1566,
+		"unit": "100 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "REMPAH RATUS (TIDAK BERBUNGKUS)"
+	},
+	{
+		"item": "SERBUK CILI KIJANG",
+		"item_code": 1125,
+		"unit": "250 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "REMPAH RATUS (BERBUNGKUS)"
+	},
+	{
+		"item": "MINYAK MASAK SEBATIAN CAP ADELA GOLD",
+		"item_code": 1936,
+		"unit": "5 kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "MINYAK DAN LEMAK"
+	},
+	{
+		"item": "TOMATO",
+		"item_code": 114,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "SAYUR-SAYURAN"
+	},
+	{
+		"item": "KACANG TANAH (IMPORT)",
+		"item_code": 368,
+		"unit": "1kg",
+		"item_group": "BARANGAN KERING",
+		"item_category": "KACANG"
+	},
+	{
+		"item": "TELUR MASIN",
+		"item_code": 1820,
+		"unit": "1 biji",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "TELUR"
+	},
+	{
+		"item": "KEPALA IKAN MERAH",
+		"item_code": 64,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "BAHAN LAUT"
+	},
+	{
+		"item": "DRAGON FRUIT MERAH",
+		"item_code": 22,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "BUAH-BUAHAN"
+	},
+	{
+		"item": "UBI KENTANG HOLLAND",
+		"item_code": 861,
+		"unit": "1kg",
+		"item_group": "BARANGAN KERING",
+		"item_category": "UBI KENTANG"
+	},
+	{
+		"item": "UDANG HARIMAU (ANTARA 20 HINGGA 30 EKOR SEKILOGRAM)",
+		"item_code": 850,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "BAHAN LAUT"
+	},
+	{
+		"item": "KACANG DAL BIASA (INDIA)",
+		"item_code": 1419,
+		"unit": "1kg",
+		"item_group": "BARANGAN KERING",
+		"item_category": "KACANG"
+	},
+	{
+		"item": "KEPAK AYAM (CHICKEN WING) (1KG)",
+		"item_code": 1804,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "AYAM"
+	},
+	{
+		"item": "LACTOGEN 2 RUMUSAN SUSULAN (KOTAK)",
+		"item_code": 300,
+		"unit": "650g",
+		"item_group": "SUSU DAN BARANGAN BAYI",
+		"item_category": "SUSU BAYI"
+	},
+	{
+		"item": "KICAP LEMAK MASIN CAP KIPAS UDANG",
+		"item_code": 1115,
+		"unit": "345ml",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "KICAP DAN SOS"
+	},
+	{
+		"item": "MINYAK MASAK TULEN CAP SERI MURNI",
+		"item_code": 266,
+		"unit": "5 kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "MINYAK DAN LEMAK"
+	},
+	{
+		"item": "BERAS BASMATHI - FAIZA (KASHMIR)",
+		"item_code": 1474,
+		"unit": "5 kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "BERAS"
+	},
+	{
+		"item": "SABUN MANDIAN DETTOL ANTIBACTERIAL (FRESH)",
+		"item_code": 1980,
+		"unit": "500 ml",
+		"item_group": "PRODUK KEBERSIHAN",
+		"item_category": "PENJAGAAN DIRI"
+	},
+	{
+		"item": "SUSU TEPUNG PENUH KRIM DUTCHLADY",
+		"item_code": 919,
+		"unit": "600 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "KRIMER DAN SUSU TEPUNG"
+	},
+	{
+		"item": "CILI API\/PADI MERAH",
+		"item_code": 1925,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "SAYUR-SAYURAN"
+	},
+	{
+		"item": "SERBUK KARI AYAM DAN DAGING ADABI",
+		"item_code": 1570,
+		"unit": "250 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "REMPAH RATUS (BERBUNGKUS)"
+	},
+	{
+		"item": "SERBUK CILI  (TIDAK BERBUNGKUS)",
+		"item_code": 155,
+		"unit": "100 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "REMPAH RATUS (TIDAK BERBUNGKUS)"
+	},
+	{
+		"item": "TUNA CAP TC BOY (SANDWICH DELITE)",
+		"item_code": 199,
+		"unit": "150 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "IKAN DALAM TIN"
+	},
+	{
+		"item": "MAMYPOKO EXTRA DRY",
+		"item_code": 1972,
+		"unit": "M54",
+		"item_group": "SUSU DAN BARANGAN BAYI",
+		"item_category": "LAMPIN PAKAI BUANG"
+	},
+	{
+		"item": "SANTAN KELAPA JENAMA M&S",
+		"item_code": 1610,
+		"unit": "500 ml",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "SANTAN (KOTAK)"
+	},
+	{
+		"item": "MINYAK MASAK SEBATIAN CAP NEPTUNE",
+		"item_code": 1092,
+		"unit": "1kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "MINYAK DAN LEMAK"
+	},
+	{
+		"item": "BUTTERLITE (LEPA SUSU ISTIMEWA)",
+		"item_code": 1829,
+		"unit": "250 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "SAPUAN (SPREADS)"
+	},
+	{
+		"item": "KICAP TONG NAM (DARK SOY SAUCE)",
+		"item_code": 1837,
+		"unit": "330 ml",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "KICAP DAN SOS"
+	},
+	{
+		"item": "BIHUN KERING IMPORT (PELBAGAI JENAMA)",
+		"item_code": 2003,
+		"unit": "400 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "BIHUN"
+	},
+	{
+		"item": "BERAS TQR SABAH CAP TKC 5%",
+		"item_code": 1823,
+		"unit": "10 kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "BERAS"
+	},
+	{
+		"item": "BERAS SUPER HUMA CAP KELISA EMAS (SABAH)",
+		"item_code": 1824,
+		"unit": "10 kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "BERAS"
+	},
+	{
+		"item": "BAWANG KECIL MERAH IMPORT (HOLLAND)",
+		"item_code": 1933,
+		"unit": "1kg",
+		"item_group": "BARANGAN KERING",
+		"item_category": "BAWANG"
+	},
+	{
+		"item": "KORDIAL F&N SUN VALLEY (GRENADINE)",
+		"item_code": 1854,
+		"unit": "2 liter",
+		"item_group": "MINUMAN",
+		"item_category": "BAHAN-BAHAN MINUMAN"
+	},
+	{
+		"item": "BERAS CAP FAIZA EMAS (SST5%)",
+		"item_code": 1445,
+		"unit": "10 kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "BERAS"
+	},
+	{
+		"item": "CILI HIJAU",
+		"item_code": 92,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "SAYUR-SAYURAN"
+	},
+	{
+		"item": "TERUNG PANJANG",
+		"item_code": 112,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "SAYUR-SAYURAN"
+	},
+	{
+		"item": "BAWANG KECIL MERAH IMPORT (THAILAND)",
+		"item_code": 132,
+		"unit": "1kg",
+		"item_group": "BARANGAN KERING",
+		"item_category": "BAWANG"
+	},
+	{
+		"item": "DAGING LEMBU TEMPATAN (BAHAGIAN 2 DAGING PEJAL (KECUALI BATANG PINANG - TENDERLOIN)",
+		"item_code": 1432,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "DAGING"
+	},
+	{
+		"item": "IKAN DEMUDUK\/CUPAK\/CERMIN (b\t$ 3 EKOR SEKILOGRAM)",
+		"item_code": 1916,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "BAHAN LAUT"
+	},
+	{
+		"item": "KUBIS PANJANG (TEMPATAN)",
+		"item_code": 1482,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "SAYUR-SAYURAN"
+	},
+	{
+		"item": "TELUR AYAM GRED B (BERAT 60.0 GM HINGGA 64.9 GM)",
+		"item_code": 119,
+		"unit": "10 biji",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "TELUR"
+	},
+	{
+		"item": "IKAN TENGGIRI BATANG (KEPINGAN)",
+		"item_code": 1438,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "BAHAN LAUT"
+	},
+	{
+		"item": "DAGING KERBAU IMPORT (INDIA) * (RUMP)",
+		"item_code": 1376,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "DAGING"
+	},
+	{
+		"item": "DAGING KERBAU IMPORT (INDIA) * (BLADE)",
+		"item_code": 1377,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "DAGING"
+	},
+	{
+		"item": "AYAM BERSIH - SUPER",
+		"item_code": 2,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "AYAM"
+	},
+	{
+		"item": "TEMBIKAI SUSU",
+		"item_code": 24,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "BUAH-BUAHAN"
+	},
+	{
+		"item": "UDANG PUTIH BESAR\/BANANA PRAWN (BERAT ANTARA 41 EKOR HINGGA 60 EKOR SEKILOGRAM)",
+		"item_code": 1391,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "BAHAN LAUT"
+	},
+	{
+		"item": "IKAN TENGGIRI PAPAN (ANTARA 1 HINGGA 2 EKOR SEKILOGRAM)",
+		"item_code": 79,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "BAHAN LAUT"
+	},
+	{
+		"item": "IKAN KERAPU (ANTARA 2 HINGGA 5 EKOR SEKILOGRAM)",
+		"item_code": 65,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "BAHAN LAUT"
+	},
+	{
+		"item": "KELAPA PARUT",
+		"item_code": 102,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "KELAPA"
+	},
+	{
+		"item": "KUBIS BULAT IMPORT (BEIJING)",
+		"item_code": 1458,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "SAYUR-SAYURAN"
+	},
+	{
+		"item": "KACANG BOTOL",
+		"item_code": 1818,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "SAYUR-SAYURAN"
+	},
+	{
+		"item": "IKAN HARUAN (ANTARA 2 HINGGA 5 EKOR SEKILOGRAM)",
+		"item_code": 87,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "IKAN DARAT"
+	},
+	{
+		"item": "KORDIAL F&N (SIRAP ROS)",
+		"item_code": 910,
+		"unit": "2 liter",
+		"item_group": "MINUMAN",
+		"item_category": "BAHAN-BAHAN MINUMAN"
+	},
+	{
+		"item": "MACKAREL CAP AYAM (SOS TOMATO)",
+		"item_code": 1082,
+		"unit": "155 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "IKAN DALAM TIN"
+	},
+	{
+		"item": "MILO (PAKET)",
+		"item_code": 1636,
+		"unit": "400 g",
+		"item_group": "MINUMAN",
+		"item_category": "BAHAN-BAHAN MINUMAN"
+	},
+	{
+		"item": "SUSU ANLENE ACTIFIT 3X COKLAT",
+		"item_code": 1105,
+		"unit": "600 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "KRIMER DAN SUSU TEPUNG"
+	},
+	{
+		"item": "DAGING PAHA KAMBING BEBIRI IMPORT BERTULANG (MUTTON) (NEW ZEALAND)",
+		"item_code": 1368,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "DAGING"
+	},
+	{
+		"item": "SUP BUNJUT ADABI",
+		"item_code": 360,
+		"unit": "8 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "REMPAH RATUS (BERBUNGKUS)"
+	},
+	{
+		"item": "SOS CILI MAGGI",
+		"item_code": 1070,
+		"unit": "340 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "KICAP DAN SOS"
+	},
+	{
+		"item": "ROTI SANDWICH MASSIMO DENGAN GERMA GANDUM",
+		"item_code": 1586,
+		"unit": "400 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "ROTI"
+	},
+	{
+		"item": "TEPUNG NAIK SENDIRI CAP 'BLUE KEY'",
+		"item_code": 1849,
+		"unit": "1kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "TEPUNG"
+	},
+	{
+		"item": "MAGGI MI SEGERA PERISA KARI",
+		"item_code": 1976,
+		"unit": "5 X 79g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "MI SEGERA"
+	},
+	{
+		"item": "KICAP MASIN ADABI",
+		"item_code": 1136,
+		"unit": "340ml",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "KICAP DAN SOS"
+	},
+	{
+		"item": "PELEMBUT PAKAIAN - DOWNY (PREMIUM PARFUM PASSION)",
+		"item_code": 1876,
+		"unit": "800ml",
+		"item_group": "PRODUK KEBERSIHAN",
+		"item_category": "PENJAGAAN RUMAH"
+	},
+	{
+		"item": "BUAH PELAGA",
+		"item_code": 866,
+		"unit": "100 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "REMPAH RATUS (TIDAK BERBUNGKUS)"
+	},
+	{
+		"item": "SUP PUNJUT MAK SITI",
+		"item_code": 361,
+		"unit": "10 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "REMPAH RATUS (BERBUNGKUS)"
+	},
+	{
+		"item": "YOGURT MARIGOLD (LOW FAT) (STRAWBERRY)",
+		"item_code": 1955,
+		"unit": "130g",
+		"item_group": "MINUMAN",
+		"item_category": "TERSEDIA MINUM"
+	},
+	{
+		"item": "LIVITA WITH HONEY (BOTOL)",
+		"item_code": 240,
+		"unit": "150 ml",
+		"item_group": "MINUMAN",
+		"item_category": "TERSEDIA MINUM"
+	},
+	{
+		"item": "SUSU ISIAN PEKAT MANIS CAP F & N",
+		"item_code": 1618,
+		"unit": "500 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "KRIMER DAN SUSU TEPUNG"
+	},
+	{
+		"item": "DEODORAN REXONA (POWDER DRY BRIGHTENING)",
+		"item_code": 1990,
+		"unit": "50 ml",
+		"item_group": "PRODUK KEBERSIHAN",
+		"item_category": "PENJAGAAN DIRI"
+	},
+	{
+		"item": "BABI HIDUP (\u00b1100KG \/ SEEKOR)",
+		"item_code": 1384,
+		"unit": "\u00b1100kg\/seekor",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "DAGING"
+	},
+	{
+		"item": "TELUR AYAM KAMPUNG",
+		"item_code": 1930,
+		"unit": "10 biji",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "TELUR"
+	},
+	{
+		"item": "CILI MERAH - KULAI",
+		"item_code": 93,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "SAYUR-SAYURAN"
+	},
+	{
+		"item": "TELUR AYAM GRED C",
+		"item_code": 1111,
+		"unit": "30 biji",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "TELUR"
+	},
+	{
+		"item": "DAGING LEMBU TEMPATAN (BAHAGIAN 1 DAGING PAHA (KECUALI BATANG PINANG - TENDERLOIN)",
+		"item_code": 1431,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "DAGING"
+	},
+	{
+		"item": "IKAN BILIS GRED B (KOPEK)",
+		"item_code": 148,
+		"unit": "1kg",
+		"item_group": "BARANGAN KERING",
+		"item_category": "HASIL LAUT KERING"
+	},
+	{
+		"item": "BERAS SUPER CAP JATI TWR  5% (IMPORT)",
+		"item_code": 1583,
+		"unit": "10 kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "BERAS"
+	},
+	{
+		"item": "DAGING KERBAU IMPORT (INDIA) (BLOCK)",
+		"item_code": 1914,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "DAGING"
+	},
+	{
+		"item": "DAGING BABI (ISI DAGING \/ PURE LEAN)",
+		"item_code": 1381,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "DAGING"
+	},
+	{
+		"item": "DAGING PAHA KAMBING BEBIRI IMPORT BERTULANG  (MUTTON) (AUSTRALIA)",
+		"item_code": 1367,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "DAGING"
+	},
+	{
+		"item": "IKAN TENGGIRI BATANG (ANTARA 1 HINGGA 2 EKOR SEKILOGRAM)",
+		"item_code": 82,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "BAHAN LAUT"
+	},
+	{
+		"item": "DAGING PAHA KAMBING BEBIRI IMPORT BERTULANG (LAMB) (NEW ZEALAND)",
+		"item_code": 1912,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "DAGING"
+	},
+	{
+		"item": "KUBIS BULAT IMPORT (INDONESIA)",
+		"item_code": 1396,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "SAYUR-SAYURAN"
+	},
+	{
+		"item": "DAGING BABI (RUSUK DENGAN DAGING\/ RIBS WITH MEAT)",
+		"item_code": 1383,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "DAGING"
+	},
+	{
+		"item": "JEM STRAWBERI LADY'S CHOICE",
+		"item_code": 201,
+		"unit": "400 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "SAPUAN (SPREADS)"
+	},
+	{
+		"item": "MARJERIN DAISY",
+		"item_code": 205,
+		"unit": "480 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "SAPUAN (SPREADS)"
+	},
+	{
+		"item": "KIUB SUP TOM YAM (MAGGI)",
+		"item_code": 2011,
+		"unit": "6 X 10g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "REMPAH RATUS (BERBUNGKUS)"
+	},
+	{
+		"item": "UBAT GIGI DARLIE DOUBLE ACTION (PUDINA ASLI)",
+		"item_code": 293,
+		"unit": "250 g",
+		"item_group": "PRODUK KEBERSIHAN",
+		"item_category": "PENJAGAAN DIRI"
+	},
+	{
+		"item": "MINYAK MASAK TULEN CAP SERI MURNI",
+		"item_code": 1101,
+		"unit": "2 kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "MINYAK DAN LEMAK"
+	},
+	{
+		"item": "DAGING KAMBING BEBIRI IMPORT TANPA TULANG (LAMB) (TIDAK TERMASUK PAHA - AUSTRALIA)",
+		"item_code": 1909,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "DAGING"
+	},
+	{
+		"item": "DAGING KAMBING BEBIRI IMPORT BERTULANG (LAMB) (NEW ZEALAND - KOTAK)",
+		"item_code": 1908,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "DAGING"
+	},
+	{
+		"item": "SERBUK KUNYIT BABAS",
+		"item_code": 367,
+		"unit": "250 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "REMPAH RATUS (BERBUNGKUS)"
+	},
+	{
+		"item": "MINYAK MASAK SEBATIAN CAP HELANG",
+		"item_code": 1598,
+		"unit": "2 kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "MINYAK DAN LEMAK"
+	},
+	{
+		"item": "BERAS PULUT THAILAND (SUSU) PELBAGAI JENAMA",
+		"item_code": 1491,
+		"unit": "1kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "BERAS"
+	},
+	{
+		"item": "MINYAK MASAK TULEN CAP ALIF",
+		"item_code": 1941,
+		"unit": "2 kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "MINYAK DAN LEMAK"
+	},
+	{
+		"item": "SYAMPU HEAD & SHOULDERS (SMOOTH & SILKY)",
+		"item_code": 1984,
+		"unit": "330 ml",
+		"item_group": "PRODUK KEBERSIHAN",
+		"item_category": "PENJAGAAN DIRI"
+	},
+	{
+		"item": "PENCUCI PELBAGAI GUNA MR MUSCLE (LAVENDER)",
+		"item_code": 1999,
+		"unit": "2 liter",
+		"item_group": "PRODUK KEBERSIHAN",
+		"item_category": "PENJAGAAN RUMAH"
+	},
+	{
+		"item": "RED BULL (BOTOL)",
+		"item_code": 239,
+		"unit": "150 ml",
+		"item_group": "MINUMAN",
+		"item_category": "TERSEDIA MINUM"
+	},
+	{
+		"item": "JINTAN MANIS (KASAR)",
+		"item_code": 863,
+		"unit": "100 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "REMPAH RATUS (TIDAK BERBUNGKUS)"
+	},
+	{
+		"item": "NESTLE COFFEE-MATE",
+		"item_code": 1635,
+		"unit": "450 g",
+		"item_group": "MINUMAN",
+		"item_category": "BAHAN-BAHAN MINUMAN"
+	},
+	{
+		"item": "SERBUK KOPI HANG TUAH ROBUSTA",
+		"item_code": 1646,
+		"unit": "200 g",
+		"item_group": "MINUMAN",
+		"item_category": "BAHAN-BAHAN MINUMAN"
+	},
+	{
+		"item": "SABUN MANDIAN LUX (MAGICAL SPELL)",
+		"item_code": 1981,
+		"unit": "220 ml",
+		"item_group": "PRODUK KEBERSIHAN",
+		"item_category": "PENJAGAAN DIRI"
+	},
+	{
+		"item": "TEMBIKAI MERAH TANPA BIJI",
+		"item_code": 21,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "BUAH-BUAHAN"
+	},
+	{
+		"item": "KUBIS BULAT (TEMPATAN)",
+		"item_code": 105,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "SAYUR-SAYURAN"
+	},
+	{
+		"item": "MEE KUNING BASAH (PELBAGAI JENAMA)",
+		"item_code": 1483,
+		"unit": "+-450g",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "MEE\/KUETIAU"
+	},
+	{
+		"item": "IKAN TILAPIA HITAM (ANTARA 2 HINGGA 5 EKOR SEKILOGRAM)",
+		"item_code": 89,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "IKAN DARAT"
+	},
+	{
+		"item": "TELUR AYAM GRED B",
+		"item_code": 1110,
+		"unit": "30 biji",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "TELUR"
+	},
+	{
+		"item": "KACANG MERAH (IMPORT)",
+		"item_code": 1943,
+		"unit": "1kg",
+		"item_group": "BARANGAN KERING",
+		"item_category": "KACANG"
+	},
+	{
+		"item": "DAGING KERBAU IMPORT (INDIA) * (TOP SIDE)",
+		"item_code": 14,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "DAGING"
+	},
+	{
+		"item": "DAGING KAMBING TEMPATAN BERTULANG",
+		"item_code": 1369,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "DAGING"
+	},
+	{
+		"item": "IKAN BAWAL PUTIH (ANTARA 2 HINGGA 5 EKOR SEKILOGRAM)",
+		"item_code": 1475,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "BAHAN LAUT"
+	},
+	{
+		"item": "CILI KERING LEPER (BERTANGKAI\/TIDAK BERTANGKAI)",
+		"item_code": 1900,
+		"unit": "1kg",
+		"item_group": "BARANGAN KERING",
+		"item_category": "CILI KERING"
+	},
+	{
+		"item": "DAGING BABI (DAGING & LEMAK \/ LEAN & FAT)",
+		"item_code": 1380,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "DAGING"
+	},
+	{
+		"item": "SOTONG KERING (SAIZ SERDAHANA)",
+		"item_code": 1563,
+		"unit": "1kg",
+		"item_group": "BARANGAN KERING",
+		"item_category": "HASIL LAUT KERING"
+	},
+	{
+		"item": "KICAP LEMAK MANIS CAP JALEN",
+		"item_code": 215,
+		"unit": "650 ml",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "KICAP DAN SOS"
+	},
+	{
+		"item": "KRIMER MANIS CAP GOLD COIN",
+		"item_code": 884,
+		"unit": "500 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "KRIMER DAN SUSU TEPUNG"
+	},
+	{
+		"item": "SOS TOMATO LIFE",
+		"item_code": 1139,
+		"unit": "330 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "KICAP DAN SOS"
+	},
+	{
+		"item": "MINYAK SAPI CAP WINDMILL GHEEBLEND",
+		"item_code": 1603,
+		"unit": "400 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "MINYAK DAN LEMAK"
+	},
+	{
+		"item": "SANTAN KELAPA JENAMA KARA",
+		"item_code": 1611,
+		"unit": "200 ml",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "SANTAN (KOTAK)"
+	},
+	{
+		"item": "MINYAK JAGUNG CAP MAZOLA",
+		"item_code": 246,
+		"unit": "1kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "MINYAK DAN LEMAK"
+	},
+	{
+		"item": "SUSU TEPUNG SEGERA DUTCHLADY (BIASA )",
+		"item_code": 1619,
+		"unit": "600 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "KRIMER DAN SUSU TEPUNG"
+	},
+	{
+		"item": "DAGING KERBAU TEMPATAN",
+		"item_code": 1374,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "DAGING"
+	},
+	{
+		"item": "MINYAK MASAK SEBATIAN CAP HELANG",
+		"item_code": 254,
+		"unit": "5 kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "MINYAK DAN LEMAK"
+	},
+	{
+		"item": "SOS CILI MAGGI",
+		"item_code": 1097,
+		"unit": "500 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "KICAP DAN SOS"
+	},
+	{
+		"item": "ASAM JAWA (BERBIJI) PELBAGAI JENAMA",
+		"item_code": 1489,
+		"unit": "200 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "REMPAH RATUS (BERBUNGKUS)"
+	},
+	{
+		"item": "TEPUNG JAGUNG (PELBAGAI JENAMA)",
+		"item_code": 1498,
+		"unit": "400 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "TEPUNG"
+	},
+	{
+		"item": "SERBUK KARI DAGING BABAS",
+		"item_code": 1572,
+		"unit": "250 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "REMPAH RATUS (BERBUNGKUS)"
+	},
+	{
+		"item": "MAYONIS SEBENAR LADY'S CHOICE",
+		"item_code": 1872,
+		"unit": "220ml",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "SAPUAN (SPREADS)"
+	},
+	{
+		"item": "MINYAK MASAK SEBATIAN CAP PISAU",
+		"item_code": 1600,
+		"unit": "2 kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "MINYAK DAN LEMAK"
+	},
+	{
+		"item": "HEINZ FARLEY RUSKS (ORIGINAL)",
+		"item_code": 1515,
+		"unit": "120 g",
+		"item_group": "SUSU DAN BARANGAN BAYI",
+		"item_category": "MAKANAN BAYI"
+	},
+	{
+		"item": "REFILL ANMUM ESSENTIAL LANGKAH 4 PERISA ASLI (TANPA GULA TAMBAHAN) - KOTAK",
+		"item_code": 1963,
+		"unit": "550 g",
+		"item_group": "SUSU DAN BARANGAN BAYI",
+		"item_category": "SUSU BAYI"
+	},
+	{
+		"item": "MACKAREL CAP KING CUP (SOS TOMATO)",
+		"item_code": 1081,
+		"unit": "155 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "IKAN DALAM TIN"
+	},
+	{
+		"item": "MINYAK MASAK TULEN CAP VESAWIT",
+		"item_code": 1095,
+		"unit": "5 kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "MINYAK DAN LEMAK"
+	},
+	{
+		"item": "SERBUK REMPAH SUP MAK SITI",
+		"item_code": 1578,
+		"unit": "250 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "REMPAH RATUS (BERBUNGKUS)"
+	},
+	{
+		"item": "PERENCAH NASI GORENG IKAN BILIS SERI AJI",
+		"item_code": 1545,
+		"unit": "26G",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "REMPAH RATUS (BERBUNGKUS)"
+	},
+	{
+		"item": "NANKID OPTIPRO LANGKAH 3 RUMUSAN UNTUK KANAK-KANAK",
+		"item_code": 1958,
+		"unit": "600 g",
+		"item_group": "SUSU DAN BARANGAN BAYI",
+		"item_category": "SUSU BAYI"
+	},
+	{
+		"item": "SERBUK KUNYIT ALAGAPPAS",
+		"item_code": 1924,
+		"unit": "230g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "REMPAH RATUS (BERBUNGKUS)"
+	},
+	{
+		"item": "TEPUNG GANDUM NGP (BERBUNGKUS, CAP MUHIBAH)",
+		"item_code": 1827,
+		"unit": "1kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "TEPUNG"
+	},
+	{
+		"item": "DADA AYAM (CHICKEN KEEL) (1KG)",
+		"item_code": 1551,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "AYAM"
+	},
+	{
+		"item": "KEPALA IKAN JENAHAK",
+		"item_code": 52,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "BAHAN LAUT"
+	},
+	{
+		"item": "TELUR ITIK",
+		"item_code": 125,
+		"unit": "10 biji",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "TELUR"
+	},
+	{
+		"item": "UDANG PUTIH BESAR (ANTARA 20 HINGGA 30 EKOR SEKILOGRAM)",
+		"item_code": 1919,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "BAHAN LAUT"
+	},
+	{
+		"item": "KELAPA BIJI",
+		"item_code": 101,
+		"unit": "1 biji",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "KELAPA"
+	},
+	{
+		"item": "IKAN SELAR KUNING (b\t% 11 EKOR SEKILOGRAM)",
+		"item_code": 69,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "BAHAN LAUT"
+	},
+	{
+		"item": "KACANG HIJAU (IMPORT)",
+		"item_code": 152,
+		"unit": "1kg",
+		"item_group": "BARANGAN KERING",
+		"item_category": "KACANG"
+	},
+	{
+		"item": "SARDIN CAP KING CUP (SOS TOMATO)",
+		"item_code": 193,
+		"unit": "425 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "IKAN DALAM TIN"
+	},
+	{
+		"item": "NESTLE CERELAC BERAS - TIN",
+		"item_code": 1145,
+		"unit": "500 g",
+		"item_group": "SUSU DAN BARANGAN BAYI",
+		"item_category": "MAKANAN BAYI"
+	},
+	{
+		"item": "GULA HALUS CASTOR (PELBAGAI JENAMA)",
+		"item_code": 1587,
+		"unit": "+- 500g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "GULA"
+	},
+	{
+		"item": "NESCAFE CLASSIC (PAKET)",
+		"item_code": 929,
+		"unit": "200 g",
+		"item_group": "MINUMAN",
+		"item_category": "BAHAN-BAHAN MINUMAN"
+	},
+	{
+		"item": "MINYAK JAGUNG CAP DAISY",
+		"item_code": 1087,
+		"unit": "3 kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "MINYAK DAN LEMAK"
+	},
+	{
+		"item": "KICAP LEMAK MANIS CAP KIPAS UDANG",
+		"item_code": 214,
+		"unit": "345ml",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "KICAP DAN SOS"
+	},
+	{
+		"item": "SUSU SEGAR KURMA FARM FRESH",
+		"item_code": 1960,
+		"unit": "700 g",
+		"item_group": "MINUMAN",
+		"item_category": "TERSEDIA MINUM"
+	},
+	{
+		"item": "F&N OREN (TIN)",
+		"item_code": 229,
+		"unit": "325 ml",
+		"item_group": "MINUMAN",
+		"item_category": "TERSEDIA MINUM"
+	},
+	{
+		"item": "LADA HITAM",
+		"item_code": 871,
+		"unit": "100 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "REMPAH RATUS (TIDAK BERBUNGKUS)"
+	},
+	{
+		"item": "LADA PUTIH",
+		"item_code": 873,
+		"unit": "100 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "REMPAH RATUS (TIDAK BERBUNGKUS)"
+	},
+	{
+		"item": "PENCUCI PELBAGAI GUNA DETTOL (LAVENDER)",
+		"item_code": 1998,
+		"unit": "2.5 liter",
+		"item_group": "PRODUK KEBERSIHAN",
+		"item_category": "PENJAGAAN RUMAH"
+	},
+	{
+		"item": "QUAKER OATS INSTANT OATMEALS",
+		"item_code": 1964,
+		"unit": "1kg",
+		"item_group": "MINUMAN",
+		"item_category": "BAHAN-BAHAN MINUMAN"
+	},
+	{
+		"item": "TEPUNG GANDUM GP (BERBUNGKUS) PELBAGAI JENAMA",
+		"item_code": 1593,
+		"unit": "1kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "TEPUNG"
+	},
+	{
+		"item": "BERAS CAP GOLDEN SARAWAK (SST5%)",
+		"item_code": 1832,
+		"unit": "10 kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "BERAS"
+	},
+	{
+		"item": "SERBUK KOPIMAS COFFEE (BOLD TRADITIONS)",
+		"item_code": 1856,
+		"unit": "200 g",
+		"item_group": "MINUMAN",
+		"item_category": "BAHAN-BAHAN MINUMAN"
+	},
+	{
+		"item": "SERBUK PENAIK ROYAL (TIN)",
+		"item_code": 1080,
+		"unit": "226g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "ESEN DAN RAGI"
+	},
+	{
+		"item": "CILI AKAR HIJAU",
+		"item_code": 1926,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "SAYUR-SAYURAN"
+	},
+	{
+		"item": "BETIK BIASA",
+		"item_code": 16,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "BUAH-BUAHAN"
+	},
+	{
+		"item": "BAWANG BESAR KUNING\/HOLLAND",
+		"item_code": 129,
+		"unit": "1kg",
+		"item_group": "BARANGAN KERING",
+		"item_category": "BAWANG"
+	},
+	{
+		"item": "KUBIS PANJANG CHINA - BESAR",
+		"item_code": 1412,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "SAYUR-SAYURAN"
+	},
+	{
+		"item": "WHOLE LEG AYAM",
+		"item_code": 1553,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "AYAM"
+	},
+	{
+		"item": "BAWANG KECIL MERAH ROSE IMPORT (INDIA)",
+		"item_code": 131,
+		"unit": "1kg",
+		"item_group": "BARANGAN KERING",
+		"item_category": "BAWANG"
+	},
+	{
+		"item": "DAGING PAHA KAMBING BEBIRI IMPORT BERTULANG (LAMB) (AUSTRALIA)",
+		"item_code": 1911,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "DAGING"
+	},
+	{
+		"item": "IKAN MERAH (b\t% 1 KILOGRAM SEEKOR)",
+		"item_code": 60,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "BAHAN LAUT"
+	},
+	{
+		"item": "BAWANG BESAR IMPORT (INDIA)",
+		"item_code": 1440,
+		"unit": "1kg",
+		"item_group": "BARANGAN KERING",
+		"item_category": "BAWANG"
+	},
+	{
+		"item": "UDANG PUTIH\/VANNAMEI (TERNAK) (ANTARA 41 HINGGA 60 EKOR SEKILOGRAM)",
+		"item_code": 1555,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "BAHAN LAUT"
+	},
+	{
+		"item": "SARDIN CAP AYAM (SOS TOMATO)",
+		"item_code": 190,
+		"unit": "155 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "IKAN DALAM TIN"
+	},
+	{
+		"item": "MINYAK JAGUNG CAP DAISY",
+		"item_code": 1086,
+		"unit": "1kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "MINYAK DAN LEMAK"
+	},
+	{
+		"item": "DUTCH LADY 123 (BIASA)",
+		"item_code": 2009,
+		"unit": "850g",
+		"item_group": "SUSU DAN BARANGAN BAYI",
+		"item_category": "SUSU BAYI"
+	},
+	{
+		"item": "SUSU TEPUNG SEGERA FERNLEAF (INSTANT)",
+		"item_code": 332,
+		"unit": "550 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "KRIMER DAN SUSU TEPUNG"
+	},
+	{
+		"item": "SOS CILI THAI LIFE",
+		"item_code": 1137,
+		"unit": "360g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "KICAP DAN SOS"
+	},
+	{
+		"item": "MILNA BISKUT RUSK (ASLI)",
+		"item_code": 1966,
+		"unit": "130g",
+		"item_group": "SUSU DAN BARANGAN BAYI",
+		"item_category": "MAKANAN BAYI"
+	},
+	{
+		"item": "MI SEDAP MI GORENG PERISA ASLI",
+		"item_code": 1978,
+		"unit": "5 X 90g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "MI SEGERA"
+	},
+	{
+		"item": "DAGING LEMBU IMPORT (TOPSIDE)",
+		"item_code": 1370,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "DAGING"
+	},
+	{
+		"item": "BERAS SUPER CAP RODA SAZARICE 5% (IMPORT THAILAND)",
+		"item_code": 1826,
+		"unit": "10 kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "BERAS"
+	},
+	{
+		"item": "BUAH KERAS",
+		"item_code": 867,
+		"unit": "100 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "REMPAH RATUS (TIDAK BERBUNGKUS)"
+	},
+	{
+		"item": "TEPUNG PULUT (PELBAGAI JENAMA)",
+		"item_code": 1594,
+		"unit": "500 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "TEPUNG"
+	},
+	{
+		"item": "SERBUK PERENCAH SUP ADABI",
+		"item_code": 1577,
+		"unit": "250 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "REMPAH RATUS (BERBUNGKUS)"
+	},
+	{
+		"item": "MENTEGA KACANG HALUS LADY'S CHOICE",
+		"item_code": 1606,
+		"unit": "500 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "SAPUAN (SPREADS)"
+	},
+	{
+		"item": "SABUN SERBUK ATTACK (AROMA FRESH + COLOUR)",
+		"item_code": 1992,
+		"unit": "800 g",
+		"item_group": "PRODUK KEBERSIHAN",
+		"item_category": "PENJAGAAN RUMAH"
+	},
+	{
+		"item": "KRIMER SEJAT CAIR SAJI",
+		"item_code": 1871,
+		"unit": "390g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "KRIMER DAN SUSU TEPUNG"
+	},
+	{
+		"item": "SUSTAGEN JUNIOR 1+ (VANILLA ) - KOTAK",
+		"item_code": 1514,
+		"unit": "600 g",
+		"item_group": "SUSU DAN BARANGAN BAYI",
+		"item_category": "SUSU BAYI"
+	},
+	{
+		"item": "DRINHO SOYA (KOTAK)",
+		"item_code": 221,
+		"unit": "250 ml",
+		"item_group": "MINUMAN",
+		"item_category": "TERSEDIA MINUM"
+	},
+	{
+		"item": "DESA FRESH MILK (KOTAK)",
+		"item_code": 1852,
+		"unit": "1 liter",
+		"item_group": "MINUMAN",
+		"item_category": "TERSEDIA MINUM"
+	},
+	{
+		"item": "DAGING KAMBING BEBIRI IMPORT TANPA TULANG (LAMB) (TIDAK TERMASUK PAHA - NEW ZEALAND)",
+		"item_code": 1910,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "DAGING"
+	},
+	{
+		"item": "IKAN KELI (ANTARA 2 HINGGA 5 EKOR SEKILOGRAM)",
+		"item_code": 88,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "IKAN DARAT"
+	},
+	{
+		"item": "KACANG BENDI",
+		"item_code": 96,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "SAYUR-SAYURAN"
+	},
+	{
+		"item": "UDANG PUTIH KECIL (b\t% 61 EKOR SEKILOGRAM)",
+		"item_code": 849,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "BAHAN LAUT"
+	},
+	{
+		"item": "IKAN KEMBUNG (ANTARA 8 HINGGA 12 EKOR SEKILOGRAM)",
+		"item_code": 1476,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "BAHAN LAUT"
+	},
+	{
+		"item": "SAWI HIJAU",
+		"item_code": 1558,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "SAYUR-SAYURAN"
+	},
+	{
+		"item": "IKAN GELAMA (ANTARA 5 HINGGA 10 EKOR SEKILOGRAM)",
+		"item_code": 49,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "BAHAN LAUT"
+	},
+	{
+		"item": "LADA BENGGALA KUNING (CAPSICUM)",
+		"item_code": 1130,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "SAYUR-SAYURAN"
+	},
+	{
+		"item": "JAMBU BATU TANPA BIJI",
+		"item_code": 39,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "BUAH-BUAHAN"
+	},
+	{
+		"item": "BAWANG KECIL MERAH BIASA IMPORT (INDIA)",
+		"item_code": 1442,
+		"unit": "1kg",
+		"item_group": "BARANGAN KERING",
+		"item_category": "BAWANG"
+	},
+	{
+		"item": "IKAN TAMBAN BELURU (ANTARA 10 HINGGA 19 EKOR SEKILOGRAM)",
+		"item_code": 78,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "BAHAN LAUT"
+	},
+	{
+		"item": "SARDIN CAP KING CUP (SOS TOMATO)",
+		"item_code": 192,
+		"unit": "155 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "IKAN DALAM TIN"
+	},
+	{
+		"item": "MARJERIN DAISY",
+		"item_code": 1141,
+		"unit": "240 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "SAPUAN (SPREADS)"
+	},
+	{
+		"item": "SANTAN KELAPA JENAMA AYAM BRAND",
+		"item_code": 1151,
+		"unit": "1 liter",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "SANTAN (KOTAK)"
+	},
+	{
+		"item": "SERBUK KARI KURMA ALAGAPPAS",
+		"item_code": 1576,
+		"unit": "200 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "REMPAH RATUS (BERBUNGKUS)"
+	},
+	{
+		"item": "MINYAK MASAK TULEN CAP SAJI",
+		"item_code": 1938,
+		"unit": "2 kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "MINYAK DAN LEMAK"
+	},
+	{
+		"item": "KRIMER SEJAT CAP F&N",
+		"item_code": 1952,
+		"unit": "390g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "KRIMER DAN SUSU TEPUNG"
+	},
+	{
+		"item": "TUALA WANITA LIBRESSE (MAXI - NON WING)",
+		"item_code": 1986,
+		"unit": "10 PAD",
+		"item_group": "PRODUK KEBERSIHAN",
+		"item_category": "PENJAGAAN DIRI"
+	},
+	{
+		"item": "MINYAK MASAK TULEN CAP VESAWIT",
+		"item_code": 267,
+		"unit": "1kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "MINYAK DAN LEMAK"
+	},
+	{
+		"item": "ANMUM MATERNA (BIASA\/COKLAT)",
+		"item_code": 336,
+		"unit": "650g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "KRIMER DAN SUSU TEPUNG"
+	},
+	{
+		"item": "BERAS PULUT THAILAND (BIASA) PELBAGAI JENAMA",
+		"item_code": 1492,
+		"unit": "1kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "BERAS"
+	},
+	{
+		"item": "MINYAK MASAK PAKET (PELBAGAI JENAMA)",
+		"item_code": 918,
+		"unit": "1kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "MINYAK DAN LEMAK"
+	},
+	{
+		"item": "GULA MERAH LEMBUT (PELBAGAI JENAMA)",
+		"item_code": 1588,
+		"unit": "+- 500g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "GULA"
+	},
+	{
+		"item": "SERBUK KUNYIT CAMPURAN (SEBATIAN) ADABI",
+		"item_code": 365,
+		"unit": "250 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "REMPAH RATUS (BERBUNGKUS)"
+	},
+	{
+		"item": "MINYAK JAGUNG CAP DAISY",
+		"item_code": 1595,
+		"unit": "2 kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "MINYAK DAN LEMAK"
+	},
+	{
+		"item": "TUALA WANITA KOTEX SOFT & SMOOTH (MAXI - NON WING)",
+		"item_code": 1985,
+		"unit": "10 PAD",
+		"item_group": "PRODUK KEBERSIHAN",
+		"item_category": "PENJAGAAN DIRI"
+	},
+	{
+		"item": "MINYAK MASAK SEBATIAN CAP HELANG",
+		"item_code": 1091,
+		"unit": "1kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "MINYAK DAN LEMAK"
+	},
+	{
+		"item": "MILO 3 IN 1 (PAKET) - ORIGINAL",
+		"item_code": 1638,
+		"unit": "30x33g",
+		"item_group": "MINUMAN",
+		"item_category": "BAHAN-BAHAN MINUMAN"
+	},
+	{
+		"item": "KRIMER MANIS CAP TEAPOT",
+		"item_code": 1873,
+		"unit": "500 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "KRIMER DAN SUSU TEPUNG"
+	},
+	{
+		"item": "SERBUK CABAI ALAGAPPAS",
+		"item_code": 1881,
+		"unit": "230g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "REMPAH RATUS (BERBUNGKUS)"
+	},
+	{
+		"item": "MINYAK MASAK SEBATIAN CAP ADELA GOLD",
+		"item_code": 1935,
+		"unit": "2 kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "MINYAK DAN LEMAK"
+	},
+	{
+		"item": "TEMPE (BUNGKUSAN PLASTIK)",
+		"item_code": 1946,
+		"unit": "sekeping",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "TAUHU DAN TEMPE"
+	},
+	{
+		"item": "IKAN MABUNG (ANTARA 6 HINGGA 10 EKOR SEKILOGRAM)",
+		"item_code": 1477,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "BAHAN LAUT"
+	},
+	{
+		"item": "BAYAM HIJAU",
+		"item_code": 1556,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "SAYUR-SAYURAN"
+	},
+	{
+		"item": "BAWANG PUTIH IMPORT (CHINA)",
+		"item_code": 1564,
+		"unit": "1kg",
+		"item_group": "BARANGAN KERING",
+		"item_category": "BAWANG"
+	},
+	{
+		"item": "CILI KERING KERINTING (BERTANGKAI\/TIDAK BERTANGKAI)",
+		"item_code": 1899,
+		"unit": "1kg",
+		"item_group": "BARANGAN KERING",
+		"item_category": "CILI KERING"
+	},
+	{
+		"item": "KUBIS BULAT IMPORT (CHINA)",
+		"item_code": 104,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "SAYUR-SAYURAN"
+	},
+	{
+		"item": "KACANG DAL MALAVI (INDIA)",
+		"item_code": 1420,
+		"unit": "1kg",
+		"item_group": "BARANGAN KERING",
+		"item_category": "KACANG"
+	},
+	{
+		"item": "KACANG DAL (AUSTRALIA)",
+		"item_code": 1422,
+		"unit": "1kg",
+		"item_group": "BARANGAN KERING",
+		"item_category": "KACANG"
+	},
+	{
+		"item": "JAMBU BATU BERBIJI",
+		"item_code": 38,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "BUAH-BUAHAN"
+	},
+	{
+		"item": "EPAL HIJAU GRANNY SMITH (SAIZ M)",
+		"item_code": 1485,
+		"unit": "1 biji",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "BUAH-BUAHAN"
+	},
+	{
+		"item": "TEMBIKAI MERAH BERBIJI",
+		"item_code": 20,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "BUAH-BUAHAN"
+	},
+	{
+		"item": "SUSU TEPUNG ISIAN KURANG LEMAK 'OMEGA PLUS'",
+		"item_code": 327,
+		"unit": "1kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "KRIMER DAN SUSU TEPUNG"
+	},
+	{
+		"item": "SERBUK SUP FAIZA",
+		"item_code": 1579,
+		"unit": "220 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "REMPAH RATUS (BERBUNGKUS)"
+	},
+	{
+		"item": "SERBUK KOPI CAP KAPAL API (KASAR) (BERBUNGKUS)",
+		"item_code": 1645,
+		"unit": "180 g",
+		"item_group": "MINUMAN",
+		"item_category": "BAHAN-BAHAN MINUMAN"
+	},
+	{
+		"item": "MINYAK MASAK TULEN CAP BURUH",
+		"item_code": 1094,
+		"unit": "1kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "MINYAK DAN LEMAK"
+	},
+	{
+		"item": "SARDIN CAP ADABI (SOS TOMATO DENGAN CILI)",
+		"item_code": 1142,
+		"unit": "425 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "IKAN DALAM TIN"
+	},
+	{
+		"item": "DAGING KAMBING BEBIRI IMPORT BERTULANG (MUTTON) (NEW ZEALAND - KOTAK)",
+		"item_code": 10,
+		"unit": "1kg",
+		"item_group": "BARANGAN SEGAR",
+		"item_category": "DAGING"
+	},
+	{
+		"item": "BERAS SUPER CAP ANGGUR SAZARICE 5% (IMPORT THAILAND)",
+		"item_code": 1825,
+		"unit": "10 kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "BERAS"
+	},
+	{
+		"item": "BIJI SAWI",
+		"item_code": 869,
+		"unit": "100 g",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "REMPAH RATUS (TIDAK BERBUNGKUS)"
+	},
+	{
+		"item": "PENCUCI PELBAGAI GUNA AJAX FABULOSO (LAVENDER)",
+		"item_code": 2000,
+		"unit": "2 liter",
+		"item_group": "PRODUK KEBERSIHAN",
+		"item_category": "PENJAGAAN RUMAH"
+	},
+	{
+		"item": "BERAS CAP RAMBUTAN (SST5%)",
+		"item_code": 1581,
+		"unit": "10 kg",
+		"item_group": "BARANGAN BERBUNGKUS",
+		"item_category": "BERAS"
+	}
+]
