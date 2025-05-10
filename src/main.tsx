@@ -6,11 +6,11 @@ import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from "@govtechmy/myds-react/hooks";
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <ThemeProvider>
-    <React.StrictMode>
-      <BrowserRouter>
+  <React.StrictMode>
+    <BrowserRouter>
+      <ThemeProvider>
         <App />
-      </BrowserRouter>
-    </React.StrictMode>
-  </ThemeProvider>
+      </ThemeProvider>
+    </BrowserRouter>
+  </React.StrictMode>
 )

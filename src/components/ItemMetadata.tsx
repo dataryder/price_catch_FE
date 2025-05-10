@@ -114,7 +114,7 @@ const ItemMetadataDisplay: React.FC<ItemMetadataDisplayProps> = ({
           {isDateValid(metadata.last_updated) && (
             <div className="flex items-center gap-1">
               <CalendarIcon className="text-txt-black-500 h-4 w-4" />
-              <p className="italic text-txt-black-500 text-xs">
+              <div className="italic text-txt-black-500 text-xs">
                 <span className="max-sm:hidden">Data updates {" "}</span>
                 <Tag size='small'
                   variant={(metadata.frequency === "daily") ? "success" : (metadata.frequency === "weekly") ? "warning" : "danger"}
@@ -125,7 +125,7 @@ const ItemMetadataDisplay: React.FC<ItemMetadataDisplayProps> = ({
                   "en-MY",
                   {}
                 )}
-              </p>
+              </div>
             </div>
           )}
           {!isDateValid(metadata.last_updated) && (
