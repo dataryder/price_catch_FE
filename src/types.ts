@@ -59,3 +59,16 @@ export interface ItemPriceHistory {
 	minimum: number;
 	maximum: number;
 }
+
+export interface CategoryItemData {
+	item_code: number;
+	item: string;
+	unit: string;
+	item_group: string;
+	item_category: string;
+}
+
+export interface CategoryData {
+	item_group: string;
+	item_category: string
+}
