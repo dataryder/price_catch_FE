@@ -21,9 +21,9 @@ const CategoryPage: React.FC = () => {
 
 	return (
 		<div className='grid'>
-			<div className='grid gap-4 border-b border-otl-gray-200 p-4'>
+			<div className='grid gap-4 border-b border-otl-gray-200 p-4 max-sm:p-2'>
 				<h2 className='font-semibold text-lg text-center text-txt-black-900'>Groups</h2>
-				<div className='flex flex-wrap gap-4 justify-center'>
+				<div className='flex flex-wrap gap-4 max-sm:gap-2 justify-center'>
 
 					{
 						groups.map((category_item) => (
@@ -49,7 +49,7 @@ const CategoryPage: React.FC = () => {
 				(group) ?
 					<div className='grid gap-4 border-b border-otl-gray-200 p-4'>
 						<h2 className='font-semibold text-lg text-center text-txt-black-900'>Categories</h2>
-						<div className='flex flex-wrap gap-4 justify-center'>
+						<div className='flex flex-wrap gap-4 max-sm:gap-2 justify-center'>
 							{
 								typedCategoriesData.map((category_item) => (
 									category_item.item_group === group && (

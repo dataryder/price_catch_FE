@@ -34,8 +34,12 @@ const SearchResults: React.FC<SearchResultsProps> = ({ results, onSelectItem, is
 						className="p-4 hover:bg-bg-white-hover hover:fr-primary cursor-pointer transition duration-150 ease-in-out flex justify-between items-center border border-otl-gray-200 my-2 rounded-md shadow"
 					>
 						<div className='flex justify-between items-center w-full'>
-							<div className='flex flex-col gap-1'>
-								<p className="font-semibold text-txt-primary text-xs md:text-sm">{item.item}</p>
+							<div className='flex flex-col grow gap-1 overflow-auto mr-3'>
+								<p className="font-semibold text-txt-primary text-xs md:text-sm">{item.item}
+									<sup className="px-1 text-[10px] inline">
+										per {item.unit}
+									</sup>
+								</p>
 								<div className='flex gap-2'>
 									<Tag size='small' variant='warning' mode='pill' className='max-sm:hidden'>{item.item_group}</Tag>
 									<Tag size='small' variant='primary' mode='pill'>{item.item_category}</Tag>
