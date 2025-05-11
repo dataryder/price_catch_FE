@@ -23,8 +23,8 @@ export default function NavBarHeader() {
 				</span>
 			</div>
 			<NavbarMenu>
-				<Button onClick={() => navigate("/")} variant={"default-ghost"} >Home</Button>
-				<Button onClick={() => navigate("/category")} variant={"default-ghost"} >Category</Button>
+				<Button onClick={() => navigate("/")} variant={"default-ghost"} className="max-sm:w-full max-sm:my-1">Home</Button>
+				<Button onClick={() => navigate("/category")} variant={"default-ghost"} className="max-sm:w-full max-sm:my-1">Category</Button>
 			</NavbarMenu>
 			<NavbarAction className="md:hidden">
 				<ThemeSwitch as="toggle" />
