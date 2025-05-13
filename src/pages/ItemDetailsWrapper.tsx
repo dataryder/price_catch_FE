@@ -218,7 +218,7 @@ const ItemDetailsWrapper: React.FC<ItemDetailsWrapperProps> = () => {
 	], [minPrice]);
 
 	return (
-		<div className="p-6 md:p-8 bg-bg-white">
+		<div className="container mx-auto p-6 md:p-8 bg-bg-white 2xl:px-40">
 			<div className="mb-4 pb-6 md:pb-8 border-b border-otl-gray-200">
 				<MydsSearchBar />
 			</div>

@@ -67,7 +67,7 @@ const FullSearchResultsPage: React.FC = () => {
   };
 
   return (
-    <div className="p-6 md:p-8">
+    <div className="max-sm:p-6 container mx-auto py-8 px-4 2xl:px-40">
       <div className="mb-4 pb-6 md:pb-8 border-b border-otl-gray-200">
         <MydsSearchBar />
       </div>

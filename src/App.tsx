@@ -10,9 +10,9 @@ import CategoryPage from './pages/CategoryCatalog';
 function App() {
 
   return (
-    <div className="container mx-auto w-full min-h-screen">
-      <div className='w-md md:w-xl 2xl:w-6xl mx-auto min-h-screen md:border border-otl-gray-200 flex flex-col flex-grow'>
-        <header >
+    <div className="mx-auto w-md md:w-xl lg:w-6xl min-h-screen">
+      <div className='mx-auto min-h-screen flex flex-col flex-grow'>
+        <header>
           <NavBarHeader />
         </header>
 

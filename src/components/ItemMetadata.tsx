@@ -171,16 +171,14 @@ const ItemMetadataDisplay: React.FC<ItemMetadataDisplayProps> = ({
         </div>
       </div>
       <div className="relative border border-otl-gray-200 p-4 rounded-md w-full max-sm:h-[270px] md:flex-auto md:shadow-card">
-        <h3 className="md:text-xl text-txt-black-900 font-semibold text-center absolute top-0 right-0 px-10 py-6 max-sm:hidden">
-          Price History
-        </h3>
         <div>
           <Tabs defaultValue={!(metadata.frequency === "monthly") ? "month" : "sixmonth"} size="small" variant="pill">
-            <TabsList className="px-4">
+            <TabsList className="px-4" width="full">
               {!(metadata.frequency === "monthly") ? <TabsTrigger value="month">1m</TabsTrigger> : []}
               <TabsTrigger value="sixmonth">6m</TabsTrigger>
               <TabsTrigger value="year">1y</TabsTrigger>
               <TabsTrigger value="twoyear">2y</TabsTrigger>
+              <h3 className="md:text-xl text-txt-black-900 font-semibold text-center max-sm:hidden grow text-end">Price History</h3>
             </TabsList>
             {!(metadata.frequency === "monthly") ? <TabsContent value="month" className="p-1">
               <PriceHistoryChart data={filter_data(priceHistory, "month")} period="month" />
