@@ -28,7 +28,7 @@ const CategoryPage: React.FC = () => {
 					{
 						groups.map((category_item) => (
 							(category_item === group || !group) ? (
-								< Button key={category_item} variant="primary-fill" size="small" className="capitalize bg-bg-warning-400 border-none hover:bg-bg-warning-500" onClick={() => navigate(`/category/${category_item}`)} >
+								< Button key={category_item} variant="primary-fill" size="small" className="capitalize bg-bg-warning-500 border-none hover:bg-bg-warning-600" onClick={() => navigate(`/category/${category_item}`)} >
 									{category_item.toLowerCase()}
 								</Button>
 							)
