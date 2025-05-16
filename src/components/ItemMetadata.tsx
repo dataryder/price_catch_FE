@@ -55,6 +55,58 @@ function filter_data(data: ItemPriceHistory[], period: string) {
   );
 }
 
+const SkeletonIcon = ({ className = "h-4 w-4" }) => (
+  <div className={`bg-bg-black-300 rounded-full animate-pulse ${className}`}></div>
+);
+
+const ProductCardSkeleton = () => {
+  return (
+    <div className="grid grid-cols-1 grid-rows-2 md:grid-cols-2 md:grid-rows-1 items-center md:items-stretch justify-between gap-2 md:gap-4 min-h-[400px] md:min-h-[300px]">
+      <div className="flex flex-col gap-2 md:gap-4 items-center md:border md:border-otl-gray-200 p-4 rounded-md md:shadow-md">
+        <div className="h-6 md:h-7 bg-bg-black-300 rounded w-3/4 animate-pulse mb-1"></div>
+        <div className="h-6 md:h-7 mx-5 bg-bg-black-300 rounded w-3/4 animate-pulse mb-1"></div>
+        <div className="h-6 md:h-7 bg-bg-black-300 rounded w-3/4 animate-pulse mb-1"></div>
+
+        <div className="grid grid-cols-2 gap-4 w-100">
+          <div className="flex flex-col border border-otl-gray-200 rounded-md p-3 md:p-4 space-y-2">
+            <div className="flex justify-between items-center">
+              <div className="h-4 bg-bg-black-300 rounded w-8 animate-pulse"></div>
+              <SkeletonIcon className="h-4 w-4" />
+            </div>
+            <div className="h-8 bg-bg-black-300 rounded w-3/4 mx-auto animate-pulse my-2"></div>
+            <div className="h-4 bg-bg-black-300 rounded w-full mx-auto animate-pulse mt-2 pt-2 border-t border-otl-gray-300"></div>
+          </div>
+          <div className="flex flex-col border border-otl-gray-200 rounded-md p-3 md:p-4 space-y-2">
+            <div className="flex justify-between items-center">
+              <div className="h-4 bg-bg-black-300 rounded w-8 animate-pulse"></div>
+              <SkeletonIcon className="h-4 w-4" />
+            </div>
+            <div className="h-8 bg-bg-black-300 rounded w-3/4 mx-auto animate-pulse my-2"></div>
+            <div className="h-4 bg-bg-black-300 rounded w-full mx-auto animate-pulse mt-2 pt-2 border-t border-otl-gray-300"></div>
+          </div>
+        </div>
+      </div>
+
+      <div className="relative border border-otl-gray-200 p-4 rounded-md w-full max-sm:h-[270px] md:flex-auto md:shadow-md flex flex-col">
+        <div className="mb-4">
+          <div className="flex items-center justify-between pb-2 px-1 md:px-4">
+            <div className="flex space-x-1 md:space-x-2">
+              <div className="h-7 md:h-8 w-10 md:w-12 bg-bg-black-300 rounded-md animate-pulse"></div>
+              <div className="h-7 md:h-8 w-10 md:w-12 bg-bg-black-300 rounded-md animate-pulse"></div>
+              <div className="h-7 md:h-8 w-10 md:w-12 bg-bg-black-300 rounded-md animate-pulse"></div>
+              <div className="h-7 md:h-8 w-10 md:w-12 bg-bg-black-300 rounded-md animate-pulse"></div>
+            </div>
+            <div className="h-5 md:h-6 bg-bg-black-300 rounded w-24 md:w-32 animate-pulse max-sm:hidden"></div>
+          </div>
+        </div>
+
+        <div className="flex-grow bg-bg-black-300 rounded animate-pulse w-full min-h-[180px] md:min-h-0">
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const ItemMetadataDisplay: React.FC<ItemMetadataDisplayProps> = ({
   metadata,
   priceHistory,
@@ -63,16 +115,7 @@ const ItemMetadataDisplay: React.FC<ItemMetadataDisplayProps> = ({
 }) => {
   if (isLoading) {
     return (
-      <div className="p-4 bg-bg-white shadow rounded-lg animate-pulse mb-6">
-        <div className="h-6 bg-bg-black-200 rounded w-3/4 mb-4"></div>
-        <div className="space-y-2">
-          <div className="h-4 bg-bg-black-200 rounded w-1/2"></div>
-          <div className="h-4 bg-bg-black-200 rounded w-1/3"></div>
-          <div className="h-4 bg-bg-black-200 rounded w-1/2"></div>
-          <div className="h-4 bg-bg-black-200 rounded w-1/4"></div>
-          <div className="h-4 bg-bg-black-200 rounded w-1/3"></div>
-        </div>
-      </div>
+      <ProductCardSkeleton />
     );
   }
 
