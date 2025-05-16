@@ -32,7 +32,7 @@ function App() {
 
             <Route
               path="/item/:itemCode"
-              element={<ItemDetailsWrapper searchResults={[]} />}
+              element={<ItemDetailsWrapper />}
             />
             <Route
               path="/category"
