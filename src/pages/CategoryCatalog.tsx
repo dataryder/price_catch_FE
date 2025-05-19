@@ -28,13 +28,13 @@ const CategoryPage: React.FC = () => {
 					{
 						groups.map((category_item) => (
 							(category_item === group || !group) ? (
-								< Button key={category_item} variant="primary-fill" size="small" className="capitalize bg-bg-warning-500 border-none hover:bg-bg-warning-600" onClick={() => navigate(`/category/${category_item}`)} >
+								< Button key={category_item} variant="primary-fill" size="small" className="capitalize bg-bg-warning-500 border-none hover:bg-bg-warning-600 focus:ring-otl-warning-disabled" onClick={() => navigate(`/category/${category_item}`)} >
 									{category_item.toLowerCase()}
 								</Button>
 							)
 								:
 								(
-									< Button key={category_item} variant="primary-ghost" size="small" className="capitalize text-txt-warning-disabled hover:bg-bg-warning-500 hover:text-txt-white" onClick={() => navigate(`/category/${category_item}`)}>
+									< Button key={category_item} variant="primary-ghost" size="small" className="capitalize text-txt-warning-disabled hover:bg-bg-warning-500 hover:text-txt-white focus:ring-otl-warning-disabled" onClick={() => navigate(`/category/${category_item}`)}>
 										{category_item.toLowerCase()}
 									</Button>
 								)
@@ -78,11 +78,11 @@ const CategoryPage: React.FC = () => {
 							{
 								itemsData.map((item) => (
 									item.item_group === group && item.item_category === category.replace(" | ", "\/") && (
-										<li key={item.item_code} className="p-4 hover:bg-bg-white-hover hover:fr-primary cursor-pointer transition duration-150 ease-in-out flex justify-between items-center border border-otl-gray-200 my-2 rounded-md shadow"
+										<li key={item.item_code} tabIndex={0} className="p-4 hover:bg-bg-white-hover hover:ring-otl-success-300/40 cursor-pointer transition duration-150 ease-in-out flex justify-between items-center border border-otl-gray-200 my-2 rounded-md shadow focus:ring focus:ring-otl-success-300/40 focus:outline-none"
 											onClick={() => navigate(`/item/${item.item_code}`)}>
 											<div className='flex justify-between items-center w-full'>
 												<div className='flex flex-col gap-1'>
-													<h4 className="font-semibold text-txt-primary text-xs md:text-sm">{item.item}
+													<h4 className="font-semibold text-txt-black-900 text-xs md:text-sm">{item.item}
 														<sup className="px-1 text-[10px] inline-block">
 															per {item.unit}
 														</sup>

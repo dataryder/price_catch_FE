@@ -20,7 +20,7 @@ const fuseOptions: object = {
     { name: 'item_group_eng', weight: 0.05 },
     { name: 'item_category_eng', weight: 0.05 },
   ],
-  threshold: 0.4,
+  threshold: 0.2,
   ignoreLocation: true
 };
 

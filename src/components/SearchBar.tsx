@@ -29,7 +29,8 @@ const fuseOptions: object = {
 		{ name: 'item_group_eng', weight: 0.05 },
 		{ name: 'item_category_eng', weight: 0.05 },
 	],
-	threshold: 0.4,
+	threshold: 0.2,
+	ignoreLocation: true
 };
 
 const MydsSearchBar: React.FC = () => {
@@ -129,7 +130,7 @@ const MydsSearchBar: React.FC = () => {
 	} else if (liveResults.length > 0) {
 		resultsContent = (
 			<>
-				<SearchBarResultsList className="max-h-[300px] overflow-y-auto">
+				<SearchBarResultsList className="max-h-[300px] overflow-y-auto px-1">
 					{liveResults.map((item) => (
 						<SearchBarResultsItem
 							key={`${item.item_code}-${item.item}`}
@@ -137,7 +138,7 @@ const MydsSearchBar: React.FC = () => {
 							onSelect={() => handleResultItemClick(item)}
 							role="button"
 							tabIndex={0}
-							className="cursor-pointer flex gap-3 items-center"
+							className="cursor-pointer flex gap-3 items-center focus:ring focus:ring-otl-success-300/40 focus:outline-none my-1"
 						>
 							<p className="line-clamp-1 flex-1 text-sm">
 								{item.item}
@@ -151,7 +152,7 @@ const MydsSearchBar: React.FC = () => {
 				</SearchBarResultsList>
 				<Button variant="default-ghost" onClick={navigateToFullResults} asChild>
 					<div
-						className="p-3 text-center cursor-pointer w-full"
+						className="p-3 text-center cursor-pointer w-full focus:ring-otl-success-300/40"
 						role="button"
 						tabIndex={0}
 						onKeyDown={(e) => e.key === 'Enter' && navigateToFullResults()}
@@ -169,7 +170,7 @@ const MydsSearchBar: React.FC = () => {
 				size="large"
 				onBlur={handleBlur}
 			>
-				<SearchBarInputContainer>
+				<SearchBarInputContainer className='has-[input:focus]:ring-otl-success-200/40 has-[input:focus]:border-otl-success-300'>
 					<SearchBarInput
 						placeholder="Search (e.g., Ayam, Roti)"
 						value={query}
@@ -178,7 +179,7 @@ const MydsSearchBar: React.FC = () => {
 						disabled={!fuseInstance}
 					/>
 					{query && <SearchBarClearButton onClick={handleClear} />}
-					<SearchBarSearchButton type="submit" disabled={!fuseInstance} />
+					<SearchBarSearchButton type="submit" disabled={!fuseInstance} className='"border-bg-success-600 from-bg-success-400 to-bg-success-600 rounded-full border-otl-success-300 bg-gradient-to-b p-1' />
 				</SearchBarInputContainer>
 
 				<SearchBarResults open={showResultsDropdown}>
