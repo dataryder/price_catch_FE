@@ -11,7 +11,7 @@ import { useTheme } from "@govtechmy/myds-react/hooks";
 
 
 function App() {
-  const { theme, setTheme } = useTheme();
+  const { setTheme } = useTheme();
   setTheme(localStorage.getItem("theme") || "light")
   return (
     <div className="mx-auto w-md md:w-xl lg:w-6xl min-h-screen">
