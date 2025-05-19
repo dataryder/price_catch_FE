@@ -21,6 +21,7 @@ const fuseOptions: object = {
     { name: 'item_category_eng', weight: 0.05 },
   ],
   threshold: 0.4,
+  ignoreLocation: true
 };
 
 const FullSearchResultsPage: React.FC = () => {
@@ -63,7 +64,7 @@ const FullSearchResultsPage: React.FC = () => {
 
     const searchResults = fuseInstance.search(query);
     const items = searchResults.map(result => result.item);
-
+    setAllFilteredResults([]);
     setAllFilteredResults(items);
     setCurrentPage(1);
     setIsLoading(false);
@@ -115,7 +116,7 @@ const FullSearchResultsPage: React.FC = () => {
 
 
       <SearchResults
-        results={currentItems as SearchResultInput[]}
+        results={currentItems}
         onSelectItem={handleSelectItem}
         isLoading={isLoading}
         error={null}
