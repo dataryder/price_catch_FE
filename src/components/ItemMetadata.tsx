@@ -62,14 +62,14 @@ const SkeletonIcon = ({ className = "h-4 w-4" }) => (
 const ProductCardSkeleton = () => {
   return (
     <div className="grid grid-cols-1 grid-rows-2 md:grid-cols-2 md:grid-rows-1 items-center md:items-stretch justify-between gap-2 md:gap-4 min-h-[400px] md:min-h-[300px]">
-      <div className="flex flex-col gap-2 md:gap-4 items-center md:border md:border-otl-gray-200 p-4 rounded-md md:shadow-md">
+      <div className="flex flex-col gap-2 md:gap-4 items-center md:border md:border-otl-gray-200 p-4 rounded-md shadow-card">
         <div className="h-6 md:h-7 bg-bg-black-300 rounded w-3/4 animate-pulse mb-1"></div>
         <div className="h-6 md:h-7 mx-5 bg-bg-black-300 rounded w-3/4 animate-pulse mb-1"></div>
         <div className="h-6 md:h-7 bg-bg-black-300 rounded w-3/4 animate-pulse mb-1"></div>
 
         <div className="grid grid-cols-2 gap-4 w-100">
           <div className="flex flex-col border border-otl-gray-200 rounded-md p-3 md:p-4 space-y-2">
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center gap-4">
               <div className="h-4 bg-bg-black-300 rounded w-8 animate-pulse"></div>
               <SkeletonIcon className="h-4 w-4" />
             </div>
@@ -77,7 +77,7 @@ const ProductCardSkeleton = () => {
             <div className="h-4 bg-bg-black-300 rounded w-full mx-auto animate-pulse mt-2 pt-2 border-t border-otl-gray-300"></div>
           </div>
           <div className="flex flex-col border border-otl-gray-200 rounded-md p-3 md:p-4 space-y-2">
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center gap-4">
               <div className="h-4 bg-bg-black-300 rounded w-8 animate-pulse"></div>
               <SkeletonIcon className="h-4 w-4" />
             </div>
@@ -87,7 +87,7 @@ const ProductCardSkeleton = () => {
         </div>
       </div>
 
-      <div className="relative border border-otl-gray-200 p-4 rounded-md w-full max-sm:h-[270px] md:flex-auto md:shadow-md flex flex-col">
+      <div className="relative border border-otl-gray-200 p-4 rounded-md w-full max-sm:h-[270px] md:flex-auto shadow-card flex flex-col">
         <div className="mb-4">
           <div className="flex items-center justify-between pb-2 px-1 md:px-4">
             <div className="flex space-x-1 md:space-x-2">

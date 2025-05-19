@@ -19,10 +19,10 @@ const CategoryTag: React.FC<TagProps> = ({
 	const navigate = useNavigate();
 	return (
 		<div className="flex gap-2">
-			<Tag size={size} variant="warning" mode="pill" onClick={() => navigate(`/category/${group}`)} className={(frequency) ? 'max-sm:hidden cursor-pointer' : "cursor-pointer"}>
+			<Tag size={size} variant="warning" mode="pill" onClick={() => navigate(`/category/${group}`)} className={(frequency) ? 'max-sm:hidden cursor-pointer' : "cursor-pointer"} tabIndex={0}>
 				{group}
 			</Tag>
-			<Tag size={size} variant="primary" mode="pill" onClick={() => navigate(`/category/${group}/${category}`)} className="cursor-pointer">
+			<Tag size={size} variant="primary" mode="pill" onClick={() => navigate(`/category/${group}/${category.replace("\/", " | ")}`)} className="cursor-pointer">
 				{category}
 			</Tag>
 			{

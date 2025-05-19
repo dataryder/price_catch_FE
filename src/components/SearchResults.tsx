@@ -1,12 +1,12 @@
 import React from 'react';
-import { SearchResultItem } from '../types';
+import { SearchResultInput } from '../types';
 import { Tag } from '@govtechmy/myds-react/tag';
 
 import { ChevronRightIcon } from '@govtechmy/myds-react/icon';
 
 interface SearchResultsProps {
-	results: SearchResultItem[];
-	onSelectItem: (item: SearchResultItem) => void;
+	results: SearchResultInput[];
+	onSelectItem: (item: SearchResultInput) => void;
 	isLoading: boolean;
 	error: string | null;
 }
@@ -29,7 +29,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({ results, onSelectItem, is
 			<ul className="">
 				{results.map((item) => (
 					<li
-						key={item.item}
+						key={item.item_code}
 						onClick={() => onSelectItem(item)}
 						className="p-4 hover:bg-bg-white-hover hover:fr-primary cursor-pointer transition duration-150 ease-in-out flex justify-between items-center border border-otl-gray-200 my-2 rounded-md shadow"
 					>

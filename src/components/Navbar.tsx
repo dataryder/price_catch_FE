@@ -4,7 +4,7 @@ import {
 	NavbarAction,
 	NavbarMenu,
 } from "@govtechmy/myds-react/navbar";
-import { ThemeSwitch } from "@govtechmy/myds-react/theme-switch";
+import { ThemeSwitch } from "../components/ThemeSwitch";
 import { Button } from "@govtechmy/myds-react/button";
 
 export default function NavBarHeader() {
@@ -23,10 +23,10 @@ export default function NavBarHeader() {
 				</span>
 			</div>
 			<NavbarMenu>
-				<Button onClick={() => navigate("/")} variant={"default-ghost"} className="w-full my-1 xl:w-auto xl:my-0">Home</Button>
-				<Button onClick={() => navigate("/category")} variant={"default-ghost"} className="w-full my-1 xl:w-auto xl:my-0">Category</Button>
+				<Button onClick={() => navigate("/")} variant={"default-ghost"} className="w-full my-1 xl:w-auto xl:my-0 focus:ring-otl-success-200/40">Home</Button>
+				<Button onClick={() => navigate("/category")} variant={"default-ghost"} className="w-full my-1 xl:w-auto xl:my-0 focus:ring-otl-success-200/40">Category</Button>
 			</NavbarMenu>
-			<NavbarAction className="xl:hidden">
+			<NavbarAction className="xl:hidden focus:ring-otl-success-200/40">
 				<ThemeSwitch as="toggle" />
 			</NavbarAction>
 		</Navbar>
