@@ -278,7 +278,7 @@ const ItemDetailsWrapper: React.FC = () => {
 			<div className="mb-4 pb-6 md:pb-8 border-b border-otl-gray-200">
 				<MydsSearchBar />
 			</div>
-			<Button variant="primary-ghost" onClick={handleBack} className="my-2 md:mb-4 text-txt-success hover:bg-bg-success-50">
+			<Button variant="primary-ghost" onClick={handleBack} className="my-2 md:mb-4 text-txt-success hover:bg-bg-success-50 focus:ring-otl-success-200/40">
 				<ButtonIcon><ArrowBackIcon /></ButtonIcon>
 				<span>Back to Homepage</span>
 			</Button >
