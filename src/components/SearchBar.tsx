@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import debounce from 'lodash.debounce';
+import Fuse from 'fuse.js';
 import {
 	SearchBar,
 	SearchBarInput,
@@ -11,62 +12,66 @@ import {
 	SearchBarResultsList,
 	SearchBarResultsItem,
 } from "@govtechmy/myds-react/search-bar";
-
 import { ChevronRightIcon } from "@govtechmy/myds-react/icon";
-
-import { searchItems } from '../services/apiClient';
-import { SearchResultItem } from '../types';
 import { Tag } from '@govtechmy/myds-react/tag';
 import { Button } from '@govtechmy/myds-react/button';
+import { SearchResultInput } from '../types';
+import itemsDataFromFile from '../data/items.json';
+
+const allSearchableItems: SearchResultInput[] = itemsDataFromFile as SearchResultInput[];
+
+const fuseOptions: object = {
+	keys: [
+		{ name: 'item', weight: 0.4 },
+		{ name: 'item_group', weight: 0.05 },
+		{ name: 'item_category', weight: 0.05 },
+		{ name: 'item_eng', weight: 0.4 },
+		{ name: 'item_group_eng', weight: 0.05 },
+		{ name: 'item_category_eng', weight: 0.05 },
+	],
+	threshold: 0.4,
+};
 
 const MydsSearchBar: React.FC = () => {
 	const navigate = useNavigate();
 	const [query, setQuery] = useState('');
 	const [hasFocus, setHasFocus] = useState(false);
-	const [liveResults, setLiveResults] = useState<SearchResultItem[]>([]);
-	const [isLoading, setIsLoading] = useState(false);
-	const [error, setError] = useState<string | null>(null);
+	const [liveResults, setLiveResults] = useState<SearchResultInput[]>([]);
+
+	const [fuseInstance, _setFuseInstance] = useState<Fuse<SearchResultInput> | null>(() => {
+		if (allSearchableItems && allSearchableItems.length > 0) {
+			return new Fuse(allSearchableItems, fuseOptions);
+		}
+		console.warn("Search items data is empty or not available.");
+		return null;
+	});
 
 	const hasQuery = query.trim().length > 0;
-	const showResultsDropdown = hasQuery && hasFocus;
+	const showResultsDropdown = hasQuery && hasFocus && !!fuseInstance;
 
-	const debouncedSearchRef = useRef(
-		debounce(async (searchTerm: string) => {
-			if (searchTerm.trim().length < 1) {
+	const debouncedSearch = useRef(
+		debounce((searchTerm: string, currentFuse: Fuse<SearchResultInput> | null) => {
+			if (!currentFuse || searchTerm.trim().length === 0) {
 				setLiveResults([]);
-				setIsLoading(false);
-				setError(null);
 				return;
 			}
-			setIsLoading(true);
-			setError(null);
-			try {
-				const results = await searchItems(searchTerm);
-				setLiveResults(results.slice(0, 10));
-			} catch (err) {
-				console.error("Live search failed:", err);
-				setError(err instanceof Error ? err.message : 'Search failed');
-				setLiveResults([]);
-			} finally {
-				setIsLoading(false);
-			}
+			const results = currentFuse.search(searchTerm.trim());
+			setLiveResults(results.map(result => result.item).slice(0, 10));
 		}, 300)
-	);
+	).current;
 
+	const handleQueryChange = (newQuery: string) => {
+		setQuery(newQuery);
 
-	useEffect(() => {
-		if (hasQuery) {
-			debouncedSearchRef.current(query);
+		if (newQuery.trim().length > 0 && fuseInstance) {
+			debouncedSearch(newQuery, fuseInstance);
 		} else {
 			setLiveResults([]);
-			setIsLoading(false);
-			setError(null);
-			debouncedSearchRef.current.cancel();
+			if (typeof debouncedSearch.cancel === 'function') {
+				debouncedSearch.cancel();
+			}
 		}
-		return () => {
-			debouncedSearchRef.current.cancel();
-		};
-	}, [query, hasQuery]);
+	};
 
 	const navigateToFullResults = useCallback(() => {
 		if (query.trim()) {
@@ -75,20 +80,21 @@ const MydsSearchBar: React.FC = () => {
 		}
 	}, [query, navigate]);
 
-	const handleResultItemClick = useCallback((item: SearchResultItem) => {
+	const handleResultItemClick = useCallback((item: SearchResultInput) => {
 		if (!item || typeof item.item_code === 'undefined') {
 			return;
 		}
 		const targetPath = `/item/${item.item_code}`;
 		setHasFocus(false);
 		setQuery('');
+		setLiveResults([]);
 
 		try {
 			navigate(targetPath);
 		} catch (e) {
 			console.error("[DEBUG] Error during navigate call:", e);
 		}
-	}, [navigate]);
+	}, [navigate, debouncedSearch]);
 
 	const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
@@ -97,22 +103,65 @@ const MydsSearchBar: React.FC = () => {
 
 	const handleClear = () => {
 		setQuery('');
+		setLiveResults([]);
+		if (typeof debouncedSearch.cancel === 'function') {
+			debouncedSearch.cancel();
+		}
 	};
 
 	const handleFocus = () => {
 		setHasFocus(true);
-	}
+	};
 
 	const handleBlur = (e: React.FocusEvent<HTMLDivElement>) => {
-
-		const blurredToChild = e.currentTarget.contains(e.relatedTarget);
+		const blurredToChild = e.currentTarget.contains(e.relatedTarget as Node);
 		if (blurredToChild) {
 			return;
 		}
-
 		setHasFocus(false);
-	}
+	};
 
+	let resultsContent;
+	if (!fuseInstance) {
+		resultsContent = <p className="text-txt-black-500 text-center p-4">Search is currently unavailable.</p>;
+	} else if (hasQuery && liveResults.length === 0) {
+		resultsContent = <p className="text-txt-black-900 text-center p-4">No results found for "{query}"</p>;
+	} else if (liveResults.length > 0) {
+		resultsContent = (
+			<>
+				<SearchBarResultsList className="max-h-[300px] overflow-y-auto">
+					{liveResults.map((item) => (
+						<SearchBarResultsItem
+							key={`${item.item_code}-${item.item}`}
+							value={item.item_code.toString()}
+							onSelect={() => handleResultItemClick(item)}
+							role="button"
+							tabIndex={0}
+							className="cursor-pointer flex gap-3 items-center"
+						>
+							<p className="line-clamp-1 flex-1 text-sm">
+								{item.item}
+							</p>
+							<Tag size='small' variant='warning' mode='pill' className='max-sm:hidden'>{item.item_group}</Tag>
+							<Tag size='small' variant='primary' mode='pill' className='max-sm:hidden'>{item.item_category}</Tag>
+							<Tag size='small' variant={(item.frequency === "daily") ? "success" : (item.frequency === "weekly") ? "warning" : "danger"} mode='default' className='max-sm:hidden'>{item.frequency}</Tag>
+							<ChevronRightIcon className="text-gray-400" />
+						</SearchBarResultsItem>
+					))}
+				</SearchBarResultsList>
+				<Button variant="default-ghost" onClick={navigateToFullResults} asChild>
+					<div
+						className="p-3 text-center cursor-pointer w-full"
+						role="button"
+						tabIndex={0}
+						onKeyDown={(e) => e.key === 'Enter' && navigateToFullResults()}
+					>
+						See all results for "{query}"
+					</div>
+				</Button>
+			</>
+		);
+	}
 
 	return (
 		<form onSubmit={handleFormSubmit} className="relative z-10">
@@ -124,57 +173,16 @@ const MydsSearchBar: React.FC = () => {
 					<SearchBarInput
 						placeholder="Search (e.g., Ayam, Roti)"
 						value={query}
-						onValueChange={setQuery}
+						onValueChange={handleQueryChange}
 						onFocus={handleFocus}
+						disabled={!fuseInstance}
 					/>
 					{query && <SearchBarClearButton onClick={handleClear} />}
-					<SearchBarSearchButton type="submit" />
+					<SearchBarSearchButton type="submit" disabled={!fuseInstance} />
 				</SearchBarInputContainer>
 
 				<SearchBarResults open={showResultsDropdown}>
-					{isLoading && (
-						<p className="text-txt-black-500 text-center p-4">Loading...</p>
-					)}
-					{error && !isLoading && (
-						<p className="text-danger-500 text-center p-4">Error: {error}</p>
-					)}
-					{!isLoading && !error && hasQuery && !liveResults.length && (
-						<p className="text-txt-black-900 text-center p-4">No results found</p>
-					)}
-					{!isLoading && !error && liveResults.length > 0 && (
-						<>
-							<SearchBarResultsList className="max-h-[300px] overflow-y-auto">
-								{liveResults.map((item) => (
-									<SearchBarResultsItem
-										key={item.item}
-										value={item.item_code.toString()}
-										// *** Attach the click handler ***
-										onSelect={() => {
-											handleResultItemClick(item);
-										}}
-										role="button"
-										tabIndex={0}
-										className="cursor-pointer flex gap-3 items-center"
-									>
-										<p className="line-clamp-1 flex-1 text-sm">
-											{item.item}
-										</p>
-										<Tag size='small' variant='warning' mode='pill' className='max-sm:hidden'>{item.item_group}</Tag>
-										<Tag size='small' variant='primary' mode='pill' className='max-sm:hidden'>{item.item_category}</Tag>
-										<Tag size='small' variant={(item.frequency === "daily") ? "success" : (item.frequency === "weekly") ? "warning" : "danger"} mode='default' className='max-sm:hidden'>{item.frequency}</Tag>
-										<ChevronRightIcon className="text-gray-400" />
-									</SearchBarResultsItem>
-								))}
-							</SearchBarResultsList>
-							<Button variant="default-ghost" onClick={navigateToFullResults} asChild>
-								<div
-									className="p-3 text-center cursor-pointer w-full"
-								>
-									See all results for "{query}"
-								</div>
-							</Button>
-						</>
-					)}
+					{resultsContent}
 				</SearchBarResults>
 			</SearchBar>
 		</form>

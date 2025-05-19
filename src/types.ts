@@ -1,3 +1,15 @@
+export interface SearchResultInput {
+	item_code: number;
+	item: string;
+	unit: string;
+	item_group: string;
+	item_category: string;
+	item_eng: string;
+	item_group_eng: string;
+	item_category_eng: string;
+	frequency: string;
+}
+
 export interface SearchResultItem {
 	item_code: number;
 	item: string;

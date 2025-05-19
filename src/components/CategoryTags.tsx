@@ -22,7 +22,7 @@ const CategoryTag: React.FC<TagProps> = ({
 			<Tag size={size} variant="warning" mode="pill" onClick={() => navigate(`/category/${group}`)} className={(frequency) ? 'max-sm:hidden cursor-pointer' : "cursor-pointer"}>
 				{group}
 			</Tag>
-			<Tag size={size} variant="primary" mode="pill" onClick={() => navigate(`/category/${group}/${category}`)} className="cursor-pointer">
+			<Tag size={size} variant="primary" mode="pill" onClick={() => navigate(`/category/${group}/${category.replace("\/", " | ")}`)} className="cursor-pointer">
 				{category}
 			</Tag>
 			{

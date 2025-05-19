@@ -1,12 +1,12 @@
 import React from 'react';
-import { SearchResultItem } from '../types';
+import { SearchResultInput } from '../types';
 import { Tag } from '@govtechmy/myds-react/tag';
 
 import { ChevronRightIcon } from '@govtechmy/myds-react/icon';
 
 interface SearchResultsProps {
-	results: SearchResultItem[];
-	onSelectItem: (item: SearchResultItem) => void;
+	results: SearchResultInput[];
+	onSelectItem: (item: SearchResultInput) => void;
 	isLoading: boolean;
 	error: string | null;
 }
