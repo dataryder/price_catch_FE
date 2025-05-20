@@ -35,7 +35,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({ results, onSelectItem, is
 					>
 						<div className='flex justify-between items-center w-full'>
 							<div className='flex flex-col grow gap-1 overflow-auto mr-3'>
-								<p className="font-semibold text-txt-primary text-xs md:text-sm">{item.item}
+								<p className="font-semibold text-txt-black-900 text-xs md:text-sm">{item.item}
 									<sup className="px-1 text-[10px] inline">
 										per {item.unit}
 									</sup>
