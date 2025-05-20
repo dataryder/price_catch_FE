@@ -16,9 +16,7 @@ function App() {
   return (
     <div className="mx-auto w-md md:w-xl lg:w-6xl min-h-screen">
       <div className='mx-auto min-h-screen flex flex-col flex-grow'>
-        <header>
-          <NavBarHeader />
-        </header>
+        <NavBarHeader />
 
         <main className="flex-grow">
           <Routes>

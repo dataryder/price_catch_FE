@@ -10,7 +10,7 @@ import { Button } from "@govtechmy/myds-react/button";
 export default function NavBarHeader() {
 	const navigate = useNavigate();
 	return (
-		<Navbar>
+		<Navbar className="h-16">
 			<div className="flex h-full w-auto items-center gap-2.5 cursor-pointer" onClick={() => navigate("/")}>
 				<img src="/icon.png"
 					alt="Money Logo"
