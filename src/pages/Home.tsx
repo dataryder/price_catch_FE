@@ -1,6 +1,7 @@
 import React from 'react';
 import MydsSearchBar from '../components/SearchBar';
 import HeroPattern from '../components/HeroPattern';
+import HomeDashboard from '../components/DashboardHome';
 
 const HomePage: React.FC = () => {
 	return (
@@ -14,7 +15,9 @@ const HomePage: React.FC = () => {
 					<MydsSearchBar />
 				</div>
 			</div>
-			{/* <div className='bg-bg-white'></div> */}
+			<div className='bg-bg-white'>
+				<HomeDashboard />
+			</div>
 		</div>
 	);
 };
