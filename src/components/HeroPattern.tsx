@@ -1,15 +1,11 @@
-import { useTheme } from "@govtechmy/myds-react/hooks";
-
 export default function HeroPattern({ ...props }) {
-	const { theme } = useTheme();
-	const colorfill = theme === "dark" ? "#18181B" : "#FFFFFF"
 	return (
 		<svg width="1600" height="300" viewBox="0 0 1600 300" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
 
 			<defs>
 				<path id="sparkle-shape-template"
 					d="M 0 -4 L 1.5 -1.5 L 4 0 L 1.5 1.5 L 0 4 L -1.5 1.5 L -4 0 L -1.5 -1.5 Z"
-					fill={colorfill} />
+					fill="rgb(var(--bg-white))" />
 			</defs>
 
 			<g><use xlinkHref="#sparkle-shape-template" transform="scale(0.9)" /><animateTransform attributeName="transform" type="translate" from="100 -50" to="100 950" dur="10s" begin="0s" repeatCount="indefinite" /><animate attributeName="opacity" values="0; 1; 1; 0" keyTimes="0; 0.05; 0.95; 1" dur="10s" begin="0s" repeatCount="indefinite" /></g>

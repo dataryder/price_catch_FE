@@ -1,8 +1,6 @@
 import React from 'react';
 import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { ItemPriceHistory } from '../types';
-import { useTheme } from "@govtechmy/myds-react/hooks";
-
 interface ItemPriceHistoryDataProps {
 	data: ItemPriceHistory[];
 	period: "month" | "year" | null;
@@ -22,13 +20,6 @@ const PriceHistoryChart: React.FC<ItemPriceHistoryDataProps> = ({
 	data,
 	period
 }) => {
-	const { theme } = useTheme();
-	const colorAvg = theme === "dark" ? "#2563EB" : "#6394FF"
-	const colorMedian = theme === "dark" ? "#E4E4E7" : "#27272A"
-	const colorMin = theme === "dark" ? "#4ADE80" : "#16A34A"
-	const colorMax = theme === "dark" ? "#F87171" : "#DC2626"
-	const colorbg = theme === "dark" ? "#1D1D2190" : "#FFFFFF90"
-
 	const formattedData = data.map(item => ({
 		...item,
 		date: new Date(item.date),
@@ -64,12 +55,12 @@ const PriceHistoryChart: React.FC<ItemPriceHistoryDataProps> = ({
 
 				<XAxis dataKey="date" tickFormatter={formatXAxis} minTickGap={20} />
 				<YAxis label={{ value: 'RM', angle: -90, position: 'insideLeft' }} domain={['auto', 'auto']} hide />
-				<Tooltip labelFormatter={formatLabel} separator=' RM' contentStyle={{ backgroundColor: colorbg, backdropFilter: 'blur(8px)', border: 0 }} />
+				<Tooltip labelFormatter={formatLabel} separator=' RM' contentStyle={{ backgroundColor: "rgba(var(--bg-white) /0.9)", backdropFilter: 'blur(8px)', border: 0 }} />
 				<Legend iconType='plainline' />
-				<Line type="stepAfter" dataKey="maximum" stroke={colorMax} dot={false} strokeWidth={3} />
-				<Line type="stepAfter" dataKey="median" stroke={colorMedian} dot={false} strokeWidth={3} />
-				<Line type="stepAfter" dataKey="average" stroke={colorAvg} dot={false} strokeWidth={3} />
-				<Line type="stepAfter" dataKey="minimum" stroke={colorMin} dot={false} strokeWidth={3} />
+				<Line type="stepAfter" dataKey="maximum" stroke="rgb(var(--txt-danger))" dot={false} strokeWidth={3} />
+				<Line type="stepAfter" dataKey="median" stroke="rgb(var(--txt-black-900))" dot={false} strokeWidth={3} />
+				<Line type="stepAfter" dataKey="average" stroke="rgb(var(--txt-primary))" dot={false} strokeWidth={3} />
+				<Line type="stepAfter" dataKey="minimum" stroke="rgb(var(--txt-success))" dot={false} strokeWidth={3} />
 			</LineChart>
 		</ResponsiveContainer>
 	);
