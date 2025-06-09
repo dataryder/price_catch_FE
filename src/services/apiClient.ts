@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { SearchResultItem, ItemDetailsInput, ItemMetadata, ItemLatest, ItemPriceHistory } from '../types';
+import { ItemDetailsInput, ItemMetadata, ItemLatest, ItemPriceHistory } from '../types';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/';
 const apiClient = axios.create({
