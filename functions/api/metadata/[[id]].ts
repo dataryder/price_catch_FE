@@ -1,10 +1,10 @@
 interface Env {
-        PRICECATCHER_DB: D1Database;
+  PRICECATCHER_DB: D1Database;
 }
 
 export const onRequest: PagesFunction<Env> = async (context) => {
-        const id = context.params.id;
-        const ps = context.env.PRICECATCHER_DB.prepare(`WITH latest_ranked_prices AS (
+  const id = context.params.id;
+  const ps = context.env.PRICECATCHER_DB.prepare(`WITH latest_ranked_prices AS (
   SELECT
     item_code,
     price,
@@ -13,11 +13,11 @@ export const onRequest: PagesFunction<Env> = async (context) => {
     COUNT(*) OVER () AS total_count
   FROM pricecatcher
   WHERE
-    item_code = 2
+    item_code = ?1
     AND date = (
       SELECT MAX(date)
       FROM pricecatcher
-      WHERE item_code = 2
+      WHERE item_code = ?1
     )
 )
 SELECT
@@ -45,9 +45,9 @@ FROM (
 ) AS ps
 INNER JOIN lookup_item AS im ON ps.item_code = im.item_code
 INNER JOIN item_freq AS ifq ON ps.item_code = ifq.item_code;`)
-                .bind(Number(id));
+    .bind(Number(id));
 
-        const data = await ps.run();
-        return Response.json(data["results"]);
+  const data = await ps.run();
+  return Response.json(data["results"]);
 };
 
