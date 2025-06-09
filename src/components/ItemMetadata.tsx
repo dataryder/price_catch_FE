@@ -23,11 +23,10 @@ import CategoryTag from "./CategoryTags";
 interface ItemMetadataDisplayProps {
   metadata: ItemMetadata | null;
   priceHistory: ItemPriceHistory[];
-  isLoading: boolean; // Combined loading state for metadata/stats
-  error?: string | null; // Any relevant error message
+  isLoading: boolean;
+  error?: string | null;
 }
 
-// Helper to format price or show placeholder
 const formatPrice = (price: number | null): string => {
   if (price === null || typeof price === "undefined") {
     return "N/A";
