@@ -1,14 +1,6 @@
 import axios from 'axios';
 import { ItemDetailsInput, ItemMetadata, ItemLatest, ItemPriceHistory } from '../types';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/';
-const apiClient = axios.create({
-	baseURL: API_BASE_URL,
-	headers: {
-		'Content-Type': 'application/json',
-	},
-});
-
 export const getItemMetadata = async ({
 	item_code,
 }: ItemDetailsInput): Promise<ItemMetadata[]> => {
@@ -46,9 +38,9 @@ export const getItemPriceHistory = async ({
 	item_code,
 }: ItemDetailsInput): Promise<ItemPriceHistory[]> => {
 	try {
-		const params: Record<string, string> = { item_code };
-		const response = await apiClient.get<ItemPriceHistory[]>('/api/itempricehistorymonth', { params });
-		return response.data;
+		const response = await fetch(`/api/pricehistory/${item_code}`);
+		const postResp = await response.json();
+		return postResp;
 	} catch (error) {
 		console.error('API Client: Error fetching history:', error);
 		if (axios.isAxiosError(error) && error.response) {
