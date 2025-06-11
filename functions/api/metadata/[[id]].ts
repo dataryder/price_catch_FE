@@ -50,4 +50,3 @@ INNER JOIN item_freq AS ifq ON ps.item_code = ifq.item_code;`)
   const data = await ps.run();
   return Response.json(data["results"]);
 };
-
