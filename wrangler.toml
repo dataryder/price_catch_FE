@@ -1,0 +1,11 @@
+name = "pricecatcher_fe"
+compatibility_date = "2022-04-05"
+
+[[d1_databases]]
+binding = "PRICECATCHER_DB"
+database_name = "pricecatcher"
+database_id = "22133bf2-9fb6-40e3-a332-926ddb5167af"
+preview_database_id = "PRICECATCHER_DB"
+
+[vars]
+VITE_API_BASE_URL="https://price-catch-be.onrender.com/"
