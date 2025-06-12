@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ItemDetailsInput, ItemMetadata, ItemLatest, ItemPriceHistory, ItemGroupData, IndexData } from '../types';
+import { ItemDetailsInput, ItemMetadata, ItemLatest, ItemPriceHistory, IndexData } from '../types';
 
 export const getItemMetadata = async ({
 	item_code,
