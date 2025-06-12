@@ -130,7 +130,7 @@ const MydsSearchBar: React.FC = () => {
 	} else if (liveResults.length > 0) {
 		resultsContent = (
 			<>
-				<SearchBarResultsList className="max-h-[300px] overflow-y-auto px-1">
+				<SearchBarResultsList className="max-h-[300px] overflow-y-auto px-1 scrollbar dark:darkscrollbar">
 					{liveResults.map((item) => (
 						<SearchBarResultsItem
 							key={`${item.item_code}-${item.item}`}
