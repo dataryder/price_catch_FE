@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ItemDetailsInput, ItemMetadata, ItemLatest, ItemPriceHistory } from '../types';
+import { ItemDetailsInput, ItemMetadata, ItemLatest, ItemPriceHistory, ItemGroupData, IndexData } from '../types';
 
 export const getItemMetadata = async ({
 	item_code,
@@ -49,3 +49,33 @@ export const getItemPriceHistory = async ({
 		throw new Error('An unknown error occurred while fetching history.');
 	}
 };
+
+export const getWeeklyIndexGroup = async (): Promise<any> => {
+	try {
+		const response = await fetch(`/api/weekly_index/item_group`);
+		const postResp = await response.json();
+		return postResp;
+	} catch (error) {
+		console.error('API Client: Error fetching history:', error);
+		if (axios.isAxiosError(error) && error.response) {
+			throw new Error(`Fetching history failed: ${error.response.data.detail || error.message}`);
+		}
+		throw new Error('An unknown error occurred while fetching history.');
+	}
+};
+
+
+export const getWeeklyIndexCategory = async (): Promise<IndexData> => {
+	try {
+		const response = await fetch(`/api/weekly_index/item_category`);
+		const postResp = await response.json();
+		return postResp;
+	} catch (error) {
+		console.error('API Client: Error fetching history:', error);
+		if (axios.isAxiosError(error) && error.response) {
+			throw new Error(`Fetching history failed: ${error.response.data.detail || error.message}`);
+		}
+		throw new Error('An unknown error occurred while fetching history.');
+	}
+};
+

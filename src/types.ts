@@ -84,3 +84,22 @@ export interface CategoryData {
 	item_group: string;
 	item_category: string
 }
+
+export interface RawDataRow {
+	date: string;
+	cat_price_index: number;
+}
+
+export interface ProcessedDataRow {
+	date: Date;
+	cat_price_index: number;
+}
+
+export interface IndexData {
+	[itemGroupName: string]: RawDataRow[];
+}
+export interface IndexChartProps {
+	item_group: string;
+	period: "month" | "year" | null;
+	data: IndexData
+}

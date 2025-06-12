@@ -7,5 +7,9 @@ database_name = "pricecatcher"
 database_id = "22133bf2-9fb6-40e3-a332-926ddb5167af"
 preview_database_id = "PRICECATCHER_DB"
 
+[[r2_buckets]]
+binding = 'index_bucket'
+bucket_name = 'pricecatcher'
+
 [vars]
 VITE_API_BASE_URL="https://price-catch-be.onrender.com/"

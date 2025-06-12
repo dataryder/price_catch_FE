@@ -1,28 +1,12 @@
 import React from "react";
-import indexdata from "../data/indexdata.json"
+// import indexdata from "../data/indexdata.json"
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, TooltipProps } from 'recharts';
+import { IndexData, ProcessedDataRow, RawDataRow } from "../types";
 
 interface IndexChartProps {
 	item_group: string;
 	period: "month" | "year" | null;
-}
-
-interface RawDataRow {
-	date: string;
-	cat_price_index: number;
-}
-
-interface ProcessedDataRow {
-	date: Date;
-	cat_price_index: number;
-}
-
-interface ItemGroupData {
-	data: RawDataRow[];
-}
-
-interface IndexData {
-	[itemGroupName: string]: ItemGroupData;
+	data: IndexData;
 }
 
 function formatLabel(tickItem: Date) {
@@ -54,10 +38,10 @@ const CustomTooltip: React.FC<TooltipProps<number, string>> = ({ active, payload
 	return null;
 };
 
-const IndexChart: React.FC<IndexChartProps> = ({ item_group, period }) => {
-	const indexdatats: IndexData = indexdata;
-	const group_data: ItemGroupData = indexdatats[item_group];
-	const filtered_data: ProcessedDataRow[] = group_data["data"].map((row: RawDataRow): ProcessedDataRow => {
+const IndexChart: React.FC<IndexChartProps> = ({ item_group, period, data }) => {
+	const indexdatats: IndexData = data;
+	const group_data: RawDataRow[] = indexdatats[item_group];
+	const filtered_data: ProcessedDataRow[] = group_data.map((row: RawDataRow): ProcessedDataRow => {
 		const dateObject = new Date(row.date);
 		return {
 			...row,
