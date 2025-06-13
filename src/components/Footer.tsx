@@ -42,13 +42,14 @@ export default function FooterBar() {
             </div>
           </div>
         </SiteInfo>
-        <div className="flex flex-col items-end w-40 md:w-full text-end text-txt-black-500 text-xs px-4 mt-auto">
+        <div className="flex flex-col items-end w-40 md:w-full text-end text-txt-black-500 text-[10px] md:text-xs px-4 mt-auto">
           <div>
-            All Rights Reserved © {new Date().getFullYear()}{" "}
-            <p className="max-sm:hidden inline">DataRyder</p>
+            <span className="max-sm:hidden">All Rights Reserved </span>
+            © {new Date().getFullYear()}{" "}
+            <p className="inline">DataRyder</p>
           </div>
           <div>
-            <p className="max-sm:hidden inline">Last updated: </p>
+            <p className="inline">Last updated: </p>
             {d.toLocaleDateString("en-MY")}
           </div>
         </div>
@@ -65,8 +66,8 @@ export default function FooterBar() {
             className="hover:text-txt-black-900 underline"
           >
             KPDN
-          </Link>{" "}
-          published by{" "}
+          </Link>{" and "}
+          published on{" "}
           <Link
             href="https://data.gov.my/"
             target="_blank"
