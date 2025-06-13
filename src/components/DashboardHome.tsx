@@ -34,7 +34,7 @@ const HomeDashboard = () => {
 	const listitemcategory = cardData ? Object.keys(cardData) : [];
 
 	return (
-		<div className="flex flex-col container mx-auto gap-10">
+		<div className="flex flex-col container mx-auto gap-2 md:gap-10">
 			<div className="mx-4 lg:mx-20">
 				<h2 className="text-center py-2 md:py-4 font-semibold text-txt-black-900 md:text-xl">Weekly Indexes</h2>
 				<Carousel opts={{ align: "start" }} className="w-full">
@@ -54,9 +54,9 @@ const HomeDashboard = () => {
 					<CarouselDots className="max-sm:hidden" />
 				</Carousel>
 			</div>
-			<div className="mx-4 lg:mx-20 p-8 border-t" >
+			<div className="mx-4 lg:mx-20 p-4 md:p-8 border-t " >
 				<h2 className="text-center py-2 md:py-4 font-semibold text-txt-black-900 md:text-xl">Monthly Index</h2>
-				<div className="h-[400px] px-10">
+				<div className="h-[300px] md:h-[400px] px-2 md:px-10">
 					<IndexChart data={chartData} />
 				</div>
 			</div>

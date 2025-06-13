@@ -62,7 +62,7 @@ const IndexChart: React.FC<IndexChartProps> = ({ data }) => {
 				margin={{
 					top: 5,
 					right: 0,
-					left: 0,
+					left: -30,
 					bottom: 0,
 				}}
 
