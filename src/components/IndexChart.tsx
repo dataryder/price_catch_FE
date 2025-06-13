@@ -74,8 +74,8 @@ const IndexChart: React.FC<IndexChartProps> = ({ data }) => {
 				))}
 				{/* <Line type="monotone" dataKey="MINUMAN" dot={false} strokeWidth={2} /> */}
 				{/* <Area type="monotone" dataKey="cat_price_index" stroke="rgb(var(--txt-success))" fillOpacity={1} fill="rgba(var(--bg-success-100)  / 0.7)" dot={false} strokeWidth={2} /> */}
-				<Tooltip contentStyle={{ backgroundColor: "rgba(var(--bg-dialog))", borderRadius: "10px" }} />
-				<Legend verticalAlign="bottom" height={36} />
+				<Tooltip contentStyle={{ backgroundColor: "rgba(var(--bg-dialog))", borderRadius: "10px", }} />
+				<Legend verticalAlign="bottom" height={36} wrapperStyle={{ padding: "10px" }} />
 
 			</LineChart >
 		</ResponsiveContainer >
