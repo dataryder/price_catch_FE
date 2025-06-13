@@ -1,6 +1,6 @@
 import React from "react";
 // import indexdata from "../data/indexdata.json"
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { IndexChartAgg } from "../types";
 
 interface IndexChartProps {
@@ -38,12 +38,12 @@ interface IndexChartProps {
 
 const IndexChart: React.FC<IndexChartProps> = ({ data }) => {
 	const listitemgroup = {
-		'BARANGAN BERBUNGKUS': "rgb(var(--bg-warning-600))",
-		'BARANGAN KERING': "rgb(var(--bg-primary-300))",
-		'BARANGAN SEGAR': "rgb(var(--bg-success-400))",
+		'BARANGAN BERBUNGKUS': "rgb(var(--bg-warning-700))",
+		'BARANGAN KERING': "rgb(var(--bg-primary-500))",
+		'BARANGAN SEGAR': "rgb(var(--bg-success-500))",
 		'MINUMAN': "rgb(var(--bg-primary-700))",
-		'PRODUK KEBERSIHAN': "rgb(var(--bg-success-900))",
-		'SUSU DAN BARANGAN BAYI': "rgb(var(--bg-warning-300))"
+		'PRODUK KEBERSIHAN': "rgb(var(--bg-success-700))",
+		'SUSU DAN BARANGAN BAYI': "rgb(var(--bg-warning-500))"
 	};
 	const indexdatats: IndexChartAgg[] = data;
 
@@ -74,7 +74,8 @@ const IndexChart: React.FC<IndexChartProps> = ({ data }) => {
 				))}
 				{/* <Line type="monotone" dataKey="MINUMAN" dot={false} strokeWidth={2} /> */}
 				{/* <Area type="monotone" dataKey="cat_price_index" stroke="rgb(var(--txt-success))" fillOpacity={1} fill="rgba(var(--bg-success-100)  / 0.7)" dot={false} strokeWidth={2} /> */}
-				<Tooltip />
+				<Tooltip contentStyle={{ backgroundColor: "rgba(var(--bg-dialog))", borderRadius: "10px" }} />
+				<Legend verticalAlign="bottom" height={36} />
 
 			</LineChart >
 		</ResponsiveContainer >
