@@ -193,7 +193,7 @@ function CarouselDots({ className, ...props }: React.ComponentProps<"div">) {
 					aria-controls="carousel-item"
 					aria-label={`Slide ${index + 1}`}
 					className={cn(
-						"w-2 h-2 md:w-3 md:h-3 p-0 rounded-full border border-otl-gray-200 cursor-pointer",
+						"w-2 h-2 md:w-2 md:h-2 p-0 rounded-full border border-otl-gray-200 cursor-pointer",
 						index === selectedIndex ? "bg-bg-black-500 hover:bg-bg-black-500" : "bg-bg-black-300 hover:bg-bg-black-500"
 					)}
 					onClick={() => scrollTo(index)}

@@ -103,3 +103,13 @@ export interface IndexChartProps {
 	period: "month" | "year" | null;
 	data: IndexData
 }
+
+export interface IndexChartAgg {
+	date: Date;
+	'BARANGAN BERBUNGKUS': number | null;
+	'BARANGAN KERING': number | null;
+	'BARANGAN SEGAR': number | null;
+	'MINUMAN': number | null;
+	'PRODUK KEBERSIHAN': number | null;
+	'SUSU DAN BARANGAN BAYI': number | null;
+}

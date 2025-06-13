@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ItemDetailsInput, ItemMetadata, ItemLatest, ItemPriceHistory, IndexData } from '../types';
+import { ItemDetailsInput, ItemMetadata, ItemLatest, ItemPriceHistory, IndexData, IndexChartAgg } from '../types';
 
 export const getItemMetadata = async ({
 	item_code,
@@ -50,7 +50,7 @@ export const getItemPriceHistory = async ({
 	}
 };
 
-export const getWeeklyIndexGroup = async (): Promise<any> => {
+export const getWeeklyIndexGroup = async (): Promise<IndexChartAgg[]> => {
 	try {
 		const response = await fetch(`/api/weekly_index/item_group`);
 		const postResp = await response.json();

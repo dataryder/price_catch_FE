@@ -3,7 +3,7 @@ import React from "react";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, TooltipProps } from 'recharts';
 import { IndexData, ProcessedDataRow, RawDataRow } from "../types";
 
-interface IndexChartProps {
+interface IndexCardProps {
 	item_group: string;
 	period: "month" | "year" | null;
 	data: IndexData;
@@ -38,7 +38,7 @@ const CustomTooltip: React.FC<TooltipProps<number, string>> = ({ active, payload
 	return null;
 };
 
-const IndexChart: React.FC<IndexChartProps> = ({ item_group, period, data }) => {
+const IndexCard: React.FC<IndexCardProps> = ({ item_group, period, data }) => {
 	const indexdatats: IndexData = data;
 	const group_data: RawDataRow[] = indexdatats[item_group];
 	const filtered_data: ProcessedDataRow[] = group_data.map((row: RawDataRow): ProcessedDataRow => {
@@ -48,7 +48,7 @@ const IndexChart: React.FC<IndexChartProps> = ({ item_group, period, data }) => 
 			date: dateObject
 		};
 	})
-	console.log(filtered_data)
+
 	function formatXAxis(tickItem: Date) {
 		if (period === "month") {
 			return tickItem.toLocaleDateString('en-MY', {
@@ -84,4 +84,4 @@ const IndexChart: React.FC<IndexChartProps> = ({ item_group, period, data }) => 
 	);
 };
 
-export default IndexChart;
+export default IndexCard;
