@@ -56,7 +56,7 @@ const HomeDashboard = () => {
 			</div>
 			<div className="mx-4 lg:mx-20 p-4 lg:p-8 border-t " >
 				<h2 className="text-center py-2 lg:py-4 font-semibold text-txt-black-900 lg:text-xl">Monthly Index</h2>
-				<div className="h-[300px] md:h-[400px] px-2 lg:px-10">
+				<div className="h-[300px] md:h-[400px] px-2 lg:px-10 pb-10">
 					<IndexChart data={chartData} />
 				</div>
 			</div>
