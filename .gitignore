@@ -24,4 +24,4 @@ dist-ssr
 *.sw?
 .env
 public/favi (1).svg
-.wrangler/*
+.wrangler
