@@ -7,14 +7,14 @@ import {
 	CarouselPrevious,
 	CarouselDots
 } from "../components/Carousel";
-import { getWeeklyIndexCategory, getWeeklyIndexGroup } from "../services/apiClient"; // Assuming this returns Promise<IndexData>
-import { IndexData } from "../types"; // Import the IndexData type
+import { getWeeklyIndexCategory, } from "../services/apiClient";
+import { IndexData } from "../types";
 import { useEffect, useState } from "react";
-import IndexChart from "./IndexChart";
+// import IndexChart from "./IndexChart";
 
 const HomeDashboard = () => {
 	const [cardData, setCardData] = useState<IndexData | null>(null);
-	const [chartData, setChartData] = useState<any | null>(null);
+	// const [chartData, setChartData] = useState<any | null>(null);
 
 	useEffect(() => {
 		const fetchCardData = async () => {
@@ -23,13 +23,13 @@ const HomeDashboard = () => {
 		};
 		fetchCardData();
 	}, []);
-	useEffect(() => {
-		const fetchData = async () => {
-			const chart_data = await getWeeklyIndexGroup();
-			setChartData(chart_data);
-		};
-		fetchData();
-	}, []);
+	// useEffect(() => {
+	// 	const fetchData = async () => {
+	// 		const chart_data = await getWeeklyIndexGroup();
+	// 		setChartData(chart_data);
+	// 	};
+	// 	fetchData();
+	// }, []);
 
 	const listitemcategory = cardData ? Object.keys(cardData) : [];
 
@@ -54,11 +54,13 @@ const HomeDashboard = () => {
 					<CarouselDots className="max-sm:hidden" />
 				</Carousel>
 			</div>
-			<div className="mx-4 lg:mx-20 p-4 lg:p-8 border-t " >
-				<h2 className="text-center py-2 lg:py-4 font-semibold text-txt-black-900 lg:text-xl">Monthly Index</h2>
+			<div className="mx-4 lg:mx-20 p-4 lg:p-8 border-t border-otl-gray-200" >
+				<h2 className="text-center py-2 lg:py-4 font-semibold text-txt-black-900 lg:text-xl">More to come!</h2>
+				<div className="h-[300px] md:h-[400px] px-2 lg:px-10 pb-10" />
+				{/* <h2 className="text-center py-2 lg:py-4 font-semibold text-txt-black-900 lg:text-xl">Monthly Index</h2>
 				<div className="h-[300px] md:h-[400px] px-2 lg:px-10 pb-10">
 					<IndexChart data={chartData} />
-				</div>
+				</div> */}
 			</div>
 		</div >
 	);
