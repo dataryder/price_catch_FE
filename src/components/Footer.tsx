@@ -42,14 +42,13 @@ export default function FooterBar() {
             </div>
           </div>
         </SiteInfo>
-        <div className="flex flex-col items-end w-40 md:w-full text-end text-txt-black-500 text-xs px-4 mt-auto">
+        <div className="flex flex-col items-end w-40 md:w-full text-end text-txt-black-500 text-xs mt-auto gap-2">
           <div>
             All Rights Reserved © {new Date().getFullYear()}{" "}
             <p className="max-sm:hidden inline">DataRyder</p>
           </div>
-          <div>
-            <p className="max-sm:hidden inline">Last updated: </p>
-            {d.toLocaleDateString("en-MY")}
+          <div >
+            <p> {`Data refreshed on: ` + d.toLocaleDateString("en-MY")}</p>
           </div>
         </div>
       </FooterSection>

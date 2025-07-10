@@ -28,13 +28,13 @@ const CategoryPage: React.FC = () => {
 					{
 						groups.map((category_item) => (
 							(category_item === group || !group) ? (
-								< Button key={category_item} variant="primary-fill" size="small" className="capitalize bg-bg-warning-500 border-none hover:bg-bg-warning-600 focus:ring-otl-warning-disabled" onClick={() => navigate(`/category/${category_item}`)} >
+								< Button key={category_item} variant="primary-fill" size="small" className="capitalize bg-bg-success-500 border-none hover:bg-bg-success-400 focus:ring-otl-success-disabled" onClick={() => navigate(`/category/${category_item}`)} >
 									{category_item.toLowerCase()}
 								</Button>
 							)
 								:
 								(
-									< Button key={category_item} variant="primary-ghost" size="small" className="capitalize text-txt-warning-disabled hover:bg-bg-warning-500 hover:text-txt-white focus:ring-otl-warning-disabled" onClick={() => navigate(`/category/${category_item}`)}>
+									< Button key={category_item} variant="primary-ghost" size="small" className="capitalize text-txt-success-disabled hover:bg-bg-success-200 hover:text-txt-black-900 focus:ring-otl-success-disabled" onClick={() => navigate(`/category/${category_item}`)}>
 										{category_item.toLowerCase()}
 									</Button>
 								)
@@ -59,7 +59,7 @@ const CategoryPage: React.FC = () => {
 											</Button>
 										) :
 											(
-												<Button key={category_item.item_category} variant="primary-ghost" size="small" className="capitalize text-txt-primary-disabled" onClick={() => navigate(`/category/${group}/${category_item.item_category}`)}>
+												<Button key={category_item.item_category} variant="primary-ghost" size="small" className="capitalize text-txt-primary-disabled hover:text-txt-black-900" onClick={() => navigate(`/category/${group}/${category_item.item_category}`)}>
 													{category_item.item_category.toLowerCase()}
 												</Button>
 											)
