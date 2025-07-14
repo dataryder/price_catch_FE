@@ -7,6 +7,7 @@ import HomePage from './pages/Home';
 import FooterBar from './components/Footer';
 import CategoryPage from './pages/CategoryCatalog';
 import { useTheme } from "@govtechmy/myds-react/hooks";
+import PageNotFound from './pages/PageNotFound';
 
 
 
@@ -51,6 +52,7 @@ function App() {
 
               </Route>
             </Route>
+            <Route path="*" element={<PageNotFound />} />
           </Routes>
         </main>
 
