@@ -3,9 +3,9 @@ export default function HeroPattern({ ...props }) {
 		<svg width="1600" height="300" viewBox="0 0 1600 300" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
 
 			<defs>
-				<path id="sparkle-shape-template"
-					d="M 0 -4 L 1.5 -1.5 L 4 0 L 1.5 1.5 L 0 4 L -1.5 1.5 L -4 0 L -1.5 -1.5 Z"
-					fill="rgb(var(--bg-white))" />
+				<g id="sparkle-shape-template" fill="rgb(var(--bg-white))" transform="rotate(45)">
+					<path d="M 0 0 C 10 10 10 10 15 5 C 10 10 10 10 15 15 C 10 10 10 10 5 15 C 10 10 10 10 0 0" />
+				</g>
 			</defs>
 
 			<g><use xlinkHref="#sparkle-shape-template" transform="scale(0.9)" /><animateTransform attributeName="transform" type="translate" from="100 -50" to="100 950" dur="10s" begin="0s" repeatCount="indefinite" /><animate attributeName="opacity" values="0; 1; 1; 0" keyTimes="0; 0.05; 0.95; 1" dur="10s" begin="0s" repeatCount="indefinite" /></g>
