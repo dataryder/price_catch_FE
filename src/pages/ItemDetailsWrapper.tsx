@@ -334,7 +334,7 @@ const ItemDetailsWrapper: React.FC = () => {
 					<div className="text-center p-4 text-txt-black-500 border rounded-md border-otl-gray-200">No latest price found for the selected criteria.</div>
 				)}
 				{!isLoadingLatest && !latestError && sortedAndFilteredPriceLatest.length > 0 && (
-					<div className="overflow-x-auto overflow-y-auto max-h-[300px] md:max-h-[500px]">
+					<div className="overflow-x-auto overflow-y-auto max-h-[300px] md:max-h-[500px] scrollbar dark:darkscrollbar">
 						<DataTable data={sortedAndFilteredPriceLatest} columns={columns} className='p-2 rounded-md text-xs md:text-md' />
 					</div>
 				)}
