@@ -25,3 +25,4 @@ dist-ssr
 .env
 public/favi (1).svg
 .wrangler
+.dev.vars
