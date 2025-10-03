@@ -19,7 +19,7 @@ export default function NavBarHeader() {
 					className="aspect-auto h-full max-h-8 w-auto select-none"
 				/>
 				<span className="font-semibold max-w-[200px] font-heading text-txt-black-900 text-body-lg">
-					Price Tracking
+					OpenPriceCatcher
 				</span>
 			</div>
 			<NavbarMenu>
