@@ -1,4 +1,4 @@
-# Price Catcher Front End
+# OpenPriceCatcher Front End
 
 ## Getting Started
 
