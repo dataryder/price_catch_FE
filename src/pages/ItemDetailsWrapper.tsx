@@ -1,346 +1,477 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import React, { useState, useEffect, useMemo } from "react";
+import { useParams } from "react-router-dom";
+import { useDuckDB } from "../contexts/DuckDBContext";
 import { DataTable } from "@govtechmy/myds-react/data-table";
 import {
-	Select,
-	SelectValue,
-	SelectTrigger,
-	SelectContent,
-	SelectItem,
+  Select,
+  SelectValue,
+  SelectTrigger,
+  SelectContent,
+  SelectItem,
 } from "@govtechmy/myds-react/select";
 import { Tag } from "@govtechmy/myds-react/tag";
+import { Button, ButtonIcon } from "@govtechmy/myds-react/button";
+import { DownloadIcon } from "@govtechmy/myds-react/icon";
+import { DatePicker } from "@govtechmy/myds-react/date-picker";
 import {
-	Button,
-	ButtonIcon,
-} from "@govtechmy/myds-react/button";
+  DateRangePicker,
+  DateRange,
+} from "@govtechmy/myds-react/daterange-picker";
 import {
-	ArrowBackIcon,
-} from "@govtechmy/myds-react/icon";
+  Dropdown,
+  DropdownTrigger,
+  DropdownContent,
+} from "@govtechmy/myds-react/dropdown";
 import { ColumnDef } from "@tanstack/react-table";
+import { format } from "date-fns";
 
-import { ItemMetadata, ItemLatest, ItemPriceHistory } from '../types';
-import { getItemMetadata, getItemLatest, getItemPriceHistory } from '../services/apiClient';
-import ItemMetadataDisplay from '../components/ItemMetadata';
-import MydsSearchBar from '../components/SearchBar';
-
+import { ItemMetadata, ItemLatest, ItemPriceHistory } from "../types";
+import {
+  getItemMetadata,
+  getItemPrices,
+  getItemPriceHistory,
+} from "../services/apiClient";
+import ItemMetadataDisplay from "../components/ItemMetadata";
+import LocalityAnalysis from "../components/LocalityAnalysis";
 
 const DEFAULT_STATE = "Selangor";
 const ALL_DISTRICTS_VALUE = "__ALL_DISTRICTS__";
 
-const getFilterOptionsFromLatest = (data: ItemLatest[]) => {
-	const states = new Set<string>();
-	const districtsByState: Record<string, Set<string>> = {};
-	data.forEach(entry => {
-		states.add(entry.state);
-		if (!districtsByState[entry.state]) { districtsByState[entry.state] = new Set<string>(); }
-		districtsByState[entry.state].add(entry.district);
-	});
-	const sortedStates = Array.from(states).sort();
-	const sortedDistrictsByState: Record<string, string[]> = {};
-	for (const state of sortedStates) {
-		if (districtsByState[state]) {
-			sortedDistrictsByState[state] = Array.from(districtsByState[state]).sort();
-		}
-	}
-	return { states: sortedStates, districtsByState: sortedDistrictsByState };
+const CellWrapper = ({
+  isCheapest,
+  children,
+  isFirst,
+  isLast,
+}: {
+  isCheapest: boolean;
+  children: React.ReactNode;
+  isFirst?: boolean;
+  isLast?: boolean;
+}) => {
+  if (!isCheapest)
+    return (
+      <div className="text-sm font-medium text-txt-black-700 dark:text-gray-300">
+        {children}
+      </div>
+    );
+  return (
+    <div
+      className={`text-sm font-medium text-txt-black-700 dark:text-gray-300 
+            ${isFirst ? "rounded-l-2xl ml-0" : ""} 
+            ${isLast ? "rounded-r-2xl mr-0" : ""}`}
+    >
+      {children}
+    </div>
+  );
 };
 
-
 const ItemDetailsWrapper: React.FC = () => {
-	const { itemCode } = useParams<{ itemCode: string }>();
-	const navigate = useNavigate();
-	const location = useLocation();
-	const [itemDetails, setItemDetails] = useState<ItemMetadata | null>(null);
-	const [priceHistory, setPriceHistory] = useState<ItemPriceHistory[]>([]);
-	const [allPriceLatest, setAllPriceLatest] = useState<ItemLatest[]>([]);
-	const [isLoadingMetadata, setIsLoadingMetadata] = useState<boolean>(true);
-	const [isLoadingHistory, setIsLoadingHistory] = useState<boolean>(true);
-	const [isLoadingLatest, setIsLoadingLatest] = useState<boolean>(true);
-	const [metadataError, setMetadataError] = useState<string | null>(null);
-	const [historyError, setHistoryError] = useState<string | null>(null);
-	const [latestError, setLatestError] = useState<string | null>(null);
-	const [availableFilters, setAvailableFilters] = useState<{ states: string[]; districtsByState: Record<string, string[]>; }>({ states: [], districtsByState: {} });
-	const [selectedState, setSelectedState] = useState<string>('');
-	const [selectedDistrict, setSelectedDistrict] = useState<string>('');
-	const isLoadingInitialDetails = useMemo(() => isLoadingMetadata || isLoadingHistory, [isLoadingMetadata, isLoadingHistory]);
-	const initialDetailsError = useMemo(() => metadataError || historyError, [metadataError, historyError]);
+  const { itemCode } = useParams<{ itemCode: string }>();
+  const { db, conn, isReady } = useDuckDB();
 
-	const updateUrlFilters = useCallback((newState: string, newDistrict: string) => {
-		const params = new URLSearchParams();
-		if (newState) params.set('state', newState);
-		if (newState && newDistrict) params.set('district', newDistrict);
-		navigate({ search: params.toString() }, { replace: true, state: location.state });
-	}, [navigate, location.state]);
+  const [itemDetails, setItemDetails] = useState<ItemMetadata | null>(null);
+  const [priceHistory, setPriceHistory] = useState<ItemPriceHistory[]>([]);
+  const [allPriceData, setAllPriceData] = useState<ItemLatest[]>([]);
 
-	useEffect(() => {
-		if (!itemCode) {
-			setIsLoadingMetadata(false);
-			setItemDetails(null);
-			setMetadataError(null);
-			return;
-		}
-		setIsLoadingMetadata(true);
-		setItemDetails(null);
-		setMetadataError(null);
-		const fetchMetadata = async () => {
-			try {
-				const metadataResult = await getItemMetadata({ item_code: itemCode });
-				if (metadataResult && metadataResult.length > 0) {
-					setItemDetails(metadataResult[0]);
-				} else {
-					throw new Error(`Metadata not found for item code ${itemCode}`);
-				}
-			} catch (err) {
-				console.error("Failed to fetch item metadata:", err);
-				setMetadataError(err instanceof Error ? `Metadata error: ${err.message}` : `Could not load details for ${itemCode}`);
-			} finally {
-				setIsLoadingMetadata(false);
-			}
-		};
-		fetchMetadata();
-	}, [itemCode]);
+  const [isLoadingMetadata, setIsLoadingMetadata] = useState<boolean>(true);
+  const [isLoadingHistory, setIsLoadingHistory] = useState<boolean>(true);
+  const [isLoadingPrices, setIsLoadingPrices] = useState<boolean>(true);
 
-	useEffect(() => {
-		if (!itemCode) {
-			setIsLoadingHistory(false);
-			setPriceHistory([]);
-			setHistoryError(null);
-			return;
-		}
-		setIsLoadingHistory(true);
-		setPriceHistory([]);
-		setHistoryError(null);
-		const fetchHistory = async () => {
-			try {
-				const historyData = await getItemPriceHistory({ item_code: itemCode });
-				setPriceHistory(historyData || []); // Assume API returns array or null/undefined
-			} catch (err) {
-				console.error("Failed to fetch item price history:", err);
-				setHistoryError(err instanceof Error ? `History error: ${err.message}` : `Could not load history for ${itemCode}`);
-			} finally {
-				setIsLoadingHistory(false);
-			}
-		};
-		fetchHistory();
-	}, [itemCode]);
+  const [selectedState, setSelectedState] = useState<string>(DEFAULT_STATE);
+  const [selectedDistrict, setSelectedDistrict] = useState<string>("");
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>();
+  const [debouncedDate, setDebouncedDate] = useState<Date | undefined>();
 
-	useEffect(() => {
-		if (!itemCode || isLoadingMetadata || !itemDetails) {
-			setIsLoadingLatest(itemDetails ? true : false);
-			if (!itemDetails && !isLoadingMetadata) {
-				setAllPriceLatest([]);
-				setAvailableFilters({ states: [], districtsByState: {} });
-				setLatestError("Cannot load latest prices without item metadata.");
-				setIsLoadingLatest(false);
-			}
-			return;
-		}
-		setIsLoadingLatest(true);
-		setAllPriceLatest([]);
-		setAvailableFilters({ states: [], districtsByState: {} });
-		setLatestError(null);
-		const fetchAllData = async () => {
-			try {
-				const data = await getItemLatest({ item_code: itemCode });
-				setAllPriceLatest(data);
-				const filterOptions = getFilterOptionsFromLatest(data);
-				setAvailableFilters(filterOptions);
-			} catch (err) {
-				console.error("Failed to fetch latest price:", err);
-				setLatestError(err instanceof Error ? `Data fetch error: ${err.message}` : 'Could not load latest item data.');
-				setAllPriceLatest([]);
-				setAvailableFilters({ states: [], districtsByState: {} });
-			} finally {
-				setIsLoadingLatest(false);
-			}
-		};
-		fetchAllData();
-	}, [itemCode, isLoadingMetadata, itemDetails]);
+  const [downloadDateRange, setDownloadDateRange] = useState<
+    DateRange | undefined
+  >();
+  const [downloadFormat, setDownloadFormat] = useState<"csv" | "parquet">(
+    "csv",
+  );
+  const [isDownloading, setIsDownloading] = useState(false);
 
-	useEffect(() => {
-		if (isLoadingLatest || !itemCode || availableFilters.states.length === 0) {
-			return;
-		}
+  useEffect(() => {
+    const handler = setTimeout(() => setDebouncedDate(selectedDate), 400);
+    return () => clearTimeout(handler);
+  }, [selectedDate]);
 
-		const params = new URLSearchParams(location.search);
-		const stateFromUrl = params.get('state') || '';
-		const districtFromUrl = params.get('district') || '';
+  useEffect(() => {
+    if (!itemCode || !conn) return;
+    setIsLoadingMetadata(true);
+    getItemMetadata(conn, itemCode)
+      .then((data) => {
+        if (data.length > 0) setItemDetails(data[0]);
+      })
+      .finally(() => setIsLoadingMetadata(false));
+  }, [itemCode, conn]);
 
-		let targetState = stateFromUrl;
-		let targetDistrict = districtFromUrl;
-		let needsUrlUpdate = false;
+  useEffect(() => {
+    if (!itemCode || !conn) return;
+    setIsLoadingHistory(true);
+    getItemPriceHistory(conn, itemCode)
+      .then((data) => {
+        setPriceHistory(data);
+        if (data.length > 0 && !selectedDate) {
+          setSelectedDate(new Date(data[data.length - 1].date));
+        }
+      })
+      .finally(() => setIsLoadingHistory(false));
+  }, [itemCode, conn]);
 
-		if (targetState && availableFilters.states.includes(targetState)) {
-		} else {
-			targetState = availableFilters.states.includes(DEFAULT_STATE)
-				? DEFAULT_STATE
-				: (availableFilters.states[0] || '');
-			targetDistrict = '';
-			needsUrlUpdate = true;
-		}
+  useEffect(() => {
+    if (!itemCode || !conn) return;
+    setIsLoadingPrices(true);
+    const targetStr = debouncedDate
+      ? format(debouncedDate, "yyyy-MM-dd")
+      : undefined;
+    getItemPrices(conn, itemCode, targetStr)
+      .then(setAllPriceData)
+      .finally(() => setIsLoadingPrices(false));
+  }, [itemCode, conn, debouncedDate]);
 
-		if (targetState) {
-			const districtsForTargetState = availableFilters.districtsByState[targetState] || [];
-			if (targetDistrict && districtsForTargetState.includes(targetDistrict)) {
-			} else {
-				if (districtFromUrl && targetDistrict === '') needsUrlUpdate = true;
-				else if (districtFromUrl && !districtsForTargetState.includes(districtFromUrl)) needsUrlUpdate = true;
-				targetDistrict = '';
-			}
-		} else {
-			targetDistrict = '';
-			if (districtFromUrl) needsUrlUpdate = true;
-		}
+  const filteredPriceLatest = useMemo(() => {
+    return allPriceData.filter((entry) => {
+      const stateMatch = !selectedState || entry.state === selectedState;
+      const districtMatch =
+        !selectedDistrict || entry.district === selectedDistrict;
+      return stateMatch && districtMatch;
+    });
+  }, [allPriceData, selectedState, selectedDistrict]);
 
-		setSelectedState(targetState);
-		setSelectedDistrict(targetDistrict);
+  const minPrice = useMemo(
+    () =>
+      filteredPriceLatest.length === 0
+        ? null
+        : Math.min(...filteredPriceLatest.map((i) => i.price)),
+    [filteredPriceLatest],
+  );
 
-		if (needsUrlUpdate || stateFromUrl !== targetState || districtFromUrl !== targetDistrict) {
-			if (stateFromUrl !== targetState || districtFromUrl !== targetDistrict) {
-				updateUrlFilters(targetState, targetDistrict);
-			}
-		}
-	}, [
-		itemCode,
-		location.search,
-		availableFilters,
-		isLoadingLatest,
-		updateUrlFilters,
-	]);
+  const columns = useMemo<ColumnDef<ItemLatest>[]>(
+    () => [
+      {
+        accessorKey: "premise",
+        header: "Store Location",
+        cell: (info) => (
+          <CellWrapper
+            isCheapest={info.row.original.price === minPrice}
+            isFirst
+          >
+            <div className="flex flex-col">
+              <span className="text-txt-black-900 dark:text-white font-semibold">
+                {info.getValue<string>()}
+              </span>
+              <span className="text-xs text-txt-black-500 dark:text-gray-500 mt-0.5">
+                {info.row.original.district}
+              </span>
+            </div>
+          </CellWrapper>
+        ),
+      },
+      {
+        accessorKey: "premise_type",
+        header: "Format",
+        cell: (info) => (
+          <CellWrapper isCheapest={info.row.original.price === minPrice}>
+            <span>{info.getValue<string>()}</span>
+          </CellWrapper>
+        ),
+      },
+      {
+        accessorKey: "price",
+        header: "Unit Price",
+        cell: (info) => {
+          const p = info.getValue<number>();
+          const isCheapest = p === minPrice;
+          return (
+            <CellWrapper isCheapest={isCheapest} isLast>
+              <div className="flex items-center gap-3">
+                <span>RM {p.toFixed(2)}</span>
+                {isCheapest && (
+                  <Tag
+                    variant="success"
+                    size="small"
+                    mode="pill"
+                    className="text-[10px] shadow-sm"
+                  >
+                    Lowest
+                  </Tag>
+                )}
+              </div>
+            </CellWrapper>
+          );
+        },
+      },
+    ],
+    [minPrice],
+  );
 
+  const availableStates = useMemo(
+    () => Array.from(new Set(allPriceData.map((p) => p.state))).sort(),
+    [allPriceData],
+  );
+  const availableDistricts = useMemo(
+    () =>
+      Array.from(
+        new Set(
+          allPriceData
+            .filter((p) => p.state === selectedState)
+            .map((p) => p.district),
+        ),
+      ).sort(),
+    [allPriceData, selectedState],
+  );
 
-	const filteredPriceLatest = useMemo(() => {
-		if (isLoadingLatest || !allPriceLatest) return [];
-		return allPriceLatest.filter(entry => {
-			const stateMatch = !selectedState || entry.state === selectedState;
-			const districtMatch = !selectedState || !selectedDistrict || entry.district === selectedDistrict;
-			return stateMatch && districtMatch;
-		});
-	}, [allPriceLatest, selectedState, selectedDistrict, isLoadingLatest]);
+  const minAvailableDate =
+    priceHistory.length > 0 ? new Date(priceHistory[0].date) : undefined;
+  const maxAvailableDate =
+    priceHistory.length > 0
+      ? new Date(priceHistory[priceHistory.length - 1].date)
+      : undefined;
+  const disabledDates =
+    minAvailableDate && maxAvailableDate
+      ? [{ before: minAvailableDate }, { after: maxAvailableDate }]
+      : undefined;
 
-	const sortedAndFilteredPriceLatest = useMemo(() => {
-		return [...filteredPriceLatest].sort((a, b) => {
-			if (a.state < b.state) return -1; if (a.state > b.state) return 1;
-			if (a.district < b.district) return -1; if (a.district > b.district) return 1;
-			return 0;
-		});
-	}, [filteredPriceLatest]);
+  const handleDownload = async () => {
+    if (!db || !conn || !itemCode) return;
+    setIsDownloading(true);
+    try {
+      let dateFilter = "";
+      if (downloadDateRange?.from) {
+        dateFilter += ` AND p.date >= '${format(downloadDateRange.from, "yyyy-MM-dd")}'`;
+      }
+      if (downloadDateRange?.to) {
+        dateFilter += ` AND p.date <= '${format(downloadDateRange.to, "yyyy-MM-dd")}'`;
+      }
 
-	const minPrice = useMemo(() => {
-		if (sortedAndFilteredPriceLatest.length === 0) return null;
-		return Math.min(...sortedAndFilteredPriceLatest.map(item => item.price));
-	}, [sortedAndFilteredPriceLatest]);
+      const query = `
+        SELECT CAST(p.date AS VARCHAR) as date, pr.premise, pr.premise_type, pr.state, pr.district, p.price
+        FROM lake.prices p
+        JOIN lake.lookup_premise pr ON p.premise_code = pr.premise_code
+        WHERE p.item_code = ${itemCode} ${dateFilter}
+        ORDER BY p.date DESC, p.price ASC
+      `;
 
-	const handleStateChange = (value: string) => {
-		if (!value) return;
-		setSelectedState(value);
-		setSelectedDistrict('');
-		updateUrlFilters(value, '');
-	};
-	const handleDistrictChange = (value: string) => {
-		const newDistrictValue = value === ALL_DISTRICTS_VALUE ? "" : value;
-		setSelectedDistrict(newDistrictValue);
-		updateUrlFilters(selectedState, newDistrictValue);
-	};
-	const handleBack = () => navigate('/');
+      const filename = `openpricecatcher_${itemCode}_${Date.now()}.${downloadFormat}`;
 
-	const districtsForSelectedState = useMemo(() => {
-		if (isLoadingLatest || !selectedState || !availableFilters.districtsByState[selectedState]) return [];
-		return availableFilters.districtsByState[selectedState];
-	}, [selectedState, availableFilters.districtsByState, isLoadingLatest]);
+      if (downloadFormat === "csv") {
+        await conn.query(
+          `COPY (${query}) TO '${filename}' (HEADER, DELIMITER ',')`,
+        );
+      } else {
+        await conn.query(`COPY (${query}) TO '${filename}' (FORMAT PARQUET)`);
+      }
 
-	const columns = useMemo<ColumnDef<ItemLatest>[]>(() => [
-		{ accessorKey: 'district', header: 'District', id: 'district', meta: { sortable: true } },
-		{ accessorKey: 'premise', header: 'Premise', id: 'premise', meta: { sortable: true, expandable: true } },
-		{
-			accessorKey: 'premise_type', header: 'Premise Type', id: 'premise_type',
-			cell: info => (<Tag variant="default" size="small" mode="pill">{info.getValue<string>()}</Tag>),
-			meta: { sortable: true },
-		},
-		{
-			accessorKey: 'price', header: 'Price', id: 'price',
-			cell: info => {
-				const price = info.getValue<number>();
-				const isCheapest = price === minPrice;
-				return (
-					<span className={isCheapest ? 'font-bold text-txt-success' : ''}>
-						RM {price.toFixed(2)}
-						{isCheapest && (<Tag variant="success" size="small" className="ml-2">Lowest Price</Tag>)}
-					</span>
-				);
-			},
-			meta: { sortable: true },
-		},
-	], [minPrice]);
+      const buffer = await db.copyFileToBuffer(filename);
+      const blob = new Blob([buffer], {
+        type:
+          downloadFormat === "csv" ? "text/csv" : "application/octet-stream",
+      });
 
-	return (
-		<div className="container mx-auto p-6 md:p-8 bg-bg-white 2xl:px-40">
-			<div className="mb-4 pb-6 md:pb-8 border-b border-otl-gray-200">
-				<MydsSearchBar />
-			</div>
-			<Button variant="primary-ghost" onClick={handleBack} className="my-2 md:mb-4 text-txt-success hover:bg-bg-success-50 focus:ring-otl-success-200/40">
-				<ButtonIcon><ArrowBackIcon /></ButtonIcon>
-				<span>Back to Homepage</span>
-			</Button >
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
 
-			<ItemMetadataDisplay
-				metadata={itemDetails}
-				priceHistory={priceHistory}
-				isLoading={isLoadingInitialDetails}
-				error={initialDetailsError}
-			/>
+      try {
+        await db.dropFile(filename);
+      } catch (e) {
+        // Ignored
+      }
+    } catch (err) {
+      console.error("Failed to export data", err);
+      alert("Failed to export data. Please try again.");
+    } finally {
+      setIsDownloading(false);
+    }
+  };
+  return (
+    <div className="mx-auto w-full max-w-screen-xl px-4 sm:px-6 lg:px-8  flex flex-col gap-8 pt-6 pb-20 animate-in fade-in duration-500">
+      <ItemMetadataDisplay
+        metadata={itemDetails}
+        priceHistory={priceHistory}
+        isLoading={isLoadingMetadata || isLoadingHistory}
+      />
 
-			<div className='flex flex-col gap-2 md:gap-4 border border-otl-gray-200 p-4 rounded-md md:shadow-card my-4'>
-				<h3 className="text-xl text-txt-black-900 font-semibold mb-1 text-center">
-					Latest Prices <span className='max-sm:hidden'>in {selectedState}{selectedDistrict ? ` - ${selectedDistrict}` : (selectedState ? ' - All Districts' : '')}</span>
-				</h3>
-				<div className="flex flex-col md:flex-row gap-4 items-center">
-					<Select
-						variant="outline" size="small"
-						value={selectedState}
-						onValueChange={handleStateChange}
-						disabled={isLoadingLatest || availableFilters.states.length === 0}
-					>
-						<SelectTrigger id="state-select-trigger">
-							<SelectValue label="State:" placeholder="Select State" />
-						</SelectTrigger>
-						<SelectContent>
-							{availableFilters.states.map(state => (<SelectItem key={state} value={state}>{state}</SelectItem>))}
-						</SelectContent>
-					</Select>
-					<Select
-						variant="outline" size="small"
-						value={selectedDistrict === "" ? ALL_DISTRICTS_VALUE : selectedDistrict}
-						onValueChange={handleDistrictChange}
-						disabled={!selectedState || isLoadingLatest || districtsForSelectedState.length === 0}
-					>
-						<SelectTrigger id="district-select-trigger">
-							<SelectValue label="District:" placeholder="All Districts" />
-						</SelectTrigger>
-						<SelectContent>
-							<SelectItem value={ALL_DISTRICTS_VALUE}>All Districts</SelectItem>
-							{districtsForSelectedState.map(district => (<SelectItem key={district} value={district}>{district}</SelectItem>))}
-						</SelectContent>
-					</Select>
-				</div>
+      {itemCode && debouncedDate && (
+        <LocalityAnalysis
+          itemCode={itemCode}
+          targetDate={format(debouncedDate, "yyyy-MM-dd")}
+        />
+      )}
 
-				{latestError && (
-					<div className="text-center p-4 text-txt-danger border border-otl-danger-300 rounded-md bg-bg-danger-50 my-2">
-						Error: {latestError}
-					</div>
-				)}
-				{isLoadingLatest && (<DataTable data={[]} columns={columns} loading className='' />)}
-				{!isLoadingLatest && !latestError && sortedAndFilteredPriceLatest.length === 0 && (
-					<div className="text-center p-4 text-txt-black-500 border rounded-md border-otl-gray-200">No latest price found for the selected criteria.</div>
-				)}
-				{!isLoadingLatest && !latestError && sortedAndFilteredPriceLatest.length > 0 && (
-					<div className="overflow-x-auto overflow-y-auto max-h-[300px] md:max-h-[500px] scrollbar dark:darkscrollbar">
-						<DataTable data={sortedAndFilteredPriceLatest} columns={columns} className='p-2 rounded-md text-xs md:text-md' />
-					</div>
-				)}
-			</div>
-		</div>
-	);
+      <section className="bg-white dark:bg-[#18181B] border border-otl-gray-200/80 dark:border-gray-800 rounded-[32px] overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.04)]">
+        <div className="p-6 md:p-8 md:pb-6 border-b border-otl-gray-100 dark:border-gray-800/60 flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div className="space-y-2">
+            <h3 className="text-2xl md:text-3xl font-semibold text-txt-black-900 dark:text-white tracking-tight">
+              Retail Availability
+            </h3>
+          </div>
+        </div>
+
+        <div className="px-4 md:px-6 py-5 bg-bg-black-25/50 dark:bg-gray-900/10 flex flex-col sm:flex-row gap-4 justify-between">
+          <div className="flex flex-col sm:flex-row space-x-4 divide-x divide-border-otl-gray-200">
+            <div className="flex items-center justify-between gap-3 bg-bg-black-25 dark:bg-gray-900/40">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-txt-black-400 dark:text-gray-500 pl-3">
+                Observation Date
+              </span>
+              <DatePicker
+                value={selectedDate}
+                onValueChange={setSelectedDate}
+                disabled={disabledDates}
+                size="small"
+              />
+            </div>
+            <div className="flex flex-col sm:flex-row gap-4 pl-4">
+              <Select
+                variant="outline"
+                size="small"
+                value={selectedState || availableStates[0] || ""}
+                onValueChange={(v) => {
+                  setSelectedState(v);
+                  setSelectedDistrict("");
+                }}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {availableStates.map((s) => (
+                    <SelectItem key={s} value={s}>
+                      {s}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              <Select
+                variant="outline"
+                size="small"
+                value={selectedDistrict || ALL_DISTRICTS_VALUE}
+                onValueChange={(v) =>
+                  setSelectedDistrict(v === ALL_DISTRICTS_VALUE ? "" : v)
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value={ALL_DISTRICTS_VALUE}>
+                    All Districts
+                  </SelectItem>
+                  {availableDistricts.map((d) => (
+                    <SelectItem key={d} value={d}>
+                      {d}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <div className="flex">
+            <Dropdown>
+              <DropdownTrigger asChild>
+                <Button variant="default-outline" size="small">
+                  <ButtonIcon>
+                    <DownloadIcon className="w-4 h-4" />
+                  </ButtonIcon>
+                  Export
+                </Button>
+              </DropdownTrigger>
+              <DropdownContent
+                align="end"
+                className="p-6 w-[400px] rounded-3xl shadow-2xl bg-white/95 dark:bg-[#1D1D21]/95 backdrop-blur-xl border border-otl-gray-200 dark:border-gray-800"
+              >
+                <div className="space-y-6 p-4">
+                  <p className="font-black text-sm uppercase text-txt-black-900 dark:text-white">
+                    Export Data
+                  </p>
+                  <div className="">
+                    <label className="text-[10px] font-bold uppercase text-txt-black-400 dark:text-gray-500 tracking-wider">
+                      Select Range
+                    </label>
+                    <DateRangePicker
+                      value={downloadDateRange}
+                      onValueChange={setDownloadDateRange}
+                      disabled={disabledDates}
+                      size="small"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-[10px] font-bold uppercase text-txt-black-400 dark:text-gray-500 tracking-wider">
+                      Format
+                    </label>
+                    <div>
+                      <Select
+                        variant="outline"
+                        size="small"
+                        value="csv"
+                        onValueChange={(v) => setDownloadFormat(v)}
+                      >
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem key="csv" value="csv">
+                            .csv
+                          </SelectItem>
+                          <SelectItem key="parquet" value="parquet">
+                            .parquet
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  <Button
+                    variant="default-outline"
+                    className="w-full bg-bg-black-900 text-txt-white font-bold h-11 rounded-xl shadow-md hover:shadow-lg transition-all"
+                    onClick={handleDownload}
+                    disabled={isDownloading}
+                  >
+                    {isDownloading
+                      ? "Generating..."
+                      : `Download ${downloadFormat.toUpperCase()}`}
+                  </Button>
+                </div>
+              </DropdownContent>
+            </Dropdown>
+          </div>
+        </div>
+
+        <div className="bg-white dark:bg-[#18181B]">
+          {isLoadingPrices ? (
+            <div className="p-24 flex flex-col items-center justify-center gap-4">
+              <div className="w-8 h-8 border-4 border-otl-gray-200 dark:border-gray-800 border-t-otl-success-500 rounded-full animate-spin" />
+              <p className="text-sm font-semibold text-txt-black-400 dark:text-gray-500 animate-pulse">
+                Loading premises...
+              </p>
+            </div>
+          ) : filteredPriceLatest.length === 0 ? (
+            <div className="p-24 text-center flex flex-col items-center justify-center gap-2">
+              <p className="text-lg font-bold text-txt-black-900 dark:text-white">
+                No records found
+              </p>
+              <p className="text-sm font-medium text-txt-black-400 dark:text-gray-500">
+                Try adjusting your state or district filters.
+              </p>
+            </div>
+          ) : (
+            <div className="px-6 md:px-8 pb-8 ">
+              <div className="overflow-auto h-full scrollbar max-h-[600px]">
+                <DataTable data={filteredPriceLatest} columns={columns} />
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+    </div>
+  );
 };
 
 export default ItemDetailsWrapper;

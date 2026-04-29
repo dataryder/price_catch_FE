@@ -1,45 +1,54 @@
 @import "@govtechmy/myds-style/full.css";
+@import url("https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+@theme {
+  --font-sans: '"Google Sans"', "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  body {
+    font-family: "Google Sans", sans-serif;
+  }
+}
+
 @layer utilities {
   .scrollbar::-webkit-scrollbar {
-    width: 5px;
-    height: 20px;
+    width: 6px;
+    height: 6px;
   }
 
   .scrollbar::-webkit-scrollbar-track {
-
-    background: #F4F4F5;
+    background: transparent;
   }
 
   .scrollbar::-webkit-scrollbar-thumb {
-    background: #71717A;
-    border-radius: 2px;
+    background: rgba(113, 113, 122, 0.3);
+    border-radius: 10px;
   }
 
   .scrollbar::-webkit-scrollbar-thumb:hover {
-    background: #D4D4D8;
+    background: rgba(113, 113, 122, 0.6);
   }
 
   .darkscrollbar::-webkit-scrollbar {
-    width: 5px;
-    height: 20px;
+    width: 6px;
+    height: 6px;
   }
 
   .darkscrollbar::-webkit-scrollbar-track {
-
-    background: #27272A;
+    background: transparent;
   }
 
   .darkscrollbar::-webkit-scrollbar-thumb {
-    background: #A1A1AA;
-    border-radius: 2px;
+    background: rgba(161, 161, 170, 0.3);
+    border-radius: 10px;
   }
 
   .darkscrollbar::-webkit-scrollbar-thumb:hover {
-    background: #D4D4D8;
+    background: rgba(161, 161, 170, 0.6);
   }
 }
