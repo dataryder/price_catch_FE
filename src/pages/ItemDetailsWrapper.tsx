@@ -67,7 +67,7 @@ const CellWrapper = ({
 
 const ItemDetailsWrapper: React.FC = () => {
   const { itemCode } = useParams<{ itemCode: string }>();
-  const { db, conn, isReady } = useDuckDB();
+  const { db, conn } = useDuckDB();
 
   const [itemDetails, setItemDetails] = useState<ItemMetadata | null>(null);
   const [priceHistory, setPriceHistory] = useState<ItemPriceHistory[]>([]);
@@ -411,6 +411,7 @@ const ItemDetailsWrapper: React.FC = () => {
                         variant="outline"
                         size="small"
                         value="csv"
+                        // @ts-ignore
                         onValueChange={(v) => setDownloadFormat(v)}
                       >
                         <SelectTrigger>

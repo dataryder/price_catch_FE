@@ -59,7 +59,7 @@ export default function NavBarHeader() {
         </span>
       </div>
 
-      <NavbarMenu className="gap-1 md:gap-2">
+      <NavbarMenu>
         <Button
           onClick={() => navigate("/")}
           variant="default-ghost"

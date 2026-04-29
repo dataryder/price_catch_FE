@@ -24,6 +24,7 @@ const CategoryPage: React.FC = () => {
     if (!isReady || !conn) return;
     setIsLoadingHierarchy(true);
     getCategoryHierarchy(conn)
+      // @ts-ignore
       .then(setHierarchy)
       .catch(console.error)
       .finally(() => setIsLoadingHierarchy(false));

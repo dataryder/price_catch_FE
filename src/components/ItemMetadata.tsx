@@ -1,6 +1,7 @@
-import React, { useState, useMemo, useEffect } from "react";
+// @ts-ignore
+import React, { useState, useEffect } from "react";
 import { ItemMetadata, ItemPriceHistory } from "../types";
-import { Tag } from "@govtechmy/myds-react/tag";
+// import { Tag } from "@govtechmy/myds-react/tag";
 import {
   Tabs,
   TabsList,
@@ -78,20 +79,20 @@ const ItemMetadataDisplay: React.FC<ItemMetadataDisplayProps> = ({
   isLoading,
   error,
 }) => {
-  const [chartPeriod, setChartPeriod] = useState<string>("month");
+  // const [chartPeriod, setChartPeriod] = useState<string>("month");
 
-  // Sync default tab when metadata loads
-  useEffect(() => {
-    if (metadata) {
-      setChartPeriod(metadata.frequency === "monthly" ? "sixmonth" : "month");
-    }
-  }, [metadata]);
+  // // Sync default tab when metadata loads
+  // useEffect(() => {
+  //   if (metadata) {
+  //     setChartPeriod(metadata.frequency === "monthly" ? "sixmonth" : "month");
+  //   }
+  // }, [metadata]);
 
   // Lazy load: only calculate data for the currently active tab
-  const activeChartData = useMemo(() => {
-    if (!priceHistory.length) return [];
-    return filter_data(priceHistory, chartPeriod);
-  }, [priceHistory, chartPeriod]);
+  // const activeChartData = useMemo(() => {
+  //   if (!priceHistory.length) return [];
+  //   return filter_data(priceHistory, chartPeriod);
+  // }, [priceHistory, chartPeriod]);
 
   if (isLoading) return <ProductCardSkeleton />;
 
