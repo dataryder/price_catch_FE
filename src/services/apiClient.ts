@@ -5,6 +5,7 @@ import {
   ItemPriceHistory,
   IndexData,
   IndexChartAgg,
+  CategoryData,
 } from "../types";
 
 const arrowToArray = (table: any) =>
@@ -119,7 +120,7 @@ export const getWeeklyIndexCategory = async (): Promise<IndexData> => {
   return JSON.parse(safeText);
 };
 
-let categoryHierarchyCache: any[] | null = null;
+let categoryHierarchyCache: CategoryData[] | null = null;
 
 export const getCategoryHierarchy = async (
   conn: duckdb.AsyncDuckDBConnection,
@@ -133,7 +134,7 @@ export const getCategoryHierarchy = async (
         ORDER BY item_group ASC, item_category ASC;
     `;
   const result = await conn.query(query);
-  categoryHierarchyCache = arrowToArray(result);
+  categoryHierarchyCache = arrowToArray(result) as CategoryData[];
   return categoryHierarchyCache;
 };
 
