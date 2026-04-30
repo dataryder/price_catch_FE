@@ -1,9 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import * as duckdb from "@duckdb/duckdb-wasm";
-import duckdb_wasm from "@duckdb/duckdb-wasm/dist/duckdb-mvp.wasm?url";
-import mvp_worker from "@duckdb/duckdb-wasm/dist/duckdb-browser-mvp.worker.js?url";
-import duckdb_wasm_eh from "@duckdb/duckdb-wasm/dist/duckdb-eh.wasm?url";
-import eh_worker from "@duckdb/duckdb-wasm/dist/duckdb-browser-eh.worker.js?url";
 
 interface DuckDBContextType {
   db: duckdb.AsyncDuckDB | null;
@@ -21,9 +17,18 @@ const DuckDBContext = createContext<DuckDBContextType>({
 
 export const useDuckDB = () => useContext(DuckDBContext);
 
-const MANUAL_BUNDLES: duckdb.DuckDBBundles = {
-  mvp: { mainModule: duckdb_wasm, mainWorker: mvp_worker },
-  eh: { mainModule: duckdb_wasm_eh, mainWorker: eh_worker },
+const DUCKDB_VERSION = "1.33.1-dev53.0";
+const CDN_URL = `https://cdn.jsdelivr.net/npm/@duckdb/duckdb-wasm@${DUCKDB_VERSION}/dist`;
+
+const CDN_BUNDLES: duckdb.DuckDBBundles = {
+  mvp: {
+    mainModule: `${CDN_URL}/duckdb-mvp.wasm`,
+    mainWorker: `${CDN_URL}/duckdb-browser-mvp.worker.js`,
+  },
+  eh: {
+    mainModule: `${CDN_URL}/duckdb-eh.wasm`,
+    mainWorker: `${CDN_URL}/duckdb-browser-eh.worker.js`,
+  },
 };
 
 export const DuckDBProvider: React.FC<{ children: React.ReactNode }> = ({
@@ -37,12 +42,21 @@ export const DuckDBProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     const initDB = async () => {
       try {
-        const bundle = await duckdb.selectBundle(MANUAL_BUNDLES);
-        const worker = new Worker(bundle.mainWorker!);
+        const bundle = await duckdb.selectBundle(CDN_BUNDLES);
+        const workerBlob = new Blob(
+          [`importScripts("${bundle.mainWorker}");`],
+          {
+            type: "text/javascript",
+          },
+        );
+        const workerUrl = URL.createObjectURL(workerBlob);
+        const worker = new Worker(workerUrl);
         const logger = new duckdb.ConsoleLogger();
 
         const database = new duckdb.AsyncDuckDB(logger, worker);
         await database.instantiate(bundle.mainModule, bundle.pthreadWorker);
+        URL.revokeObjectURL(workerUrl);
+
         const connection = await database.connect();
 
         await connection.query(`
