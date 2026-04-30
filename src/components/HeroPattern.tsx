@@ -1,10 +1,9 @@
 import React, { useMemo } from "react";
 
 const HeroPattern: React.FC<{ className?: string }> = ({ className }) => {
-  // Generate random properties for 40 sparkles
-  // We use useMemo to ensure the positions don't jump on every re-render
+  // Generate random properties for 60 sparkles
   const sparkles = useMemo(() => {
-    return Array.from({ length: 60 }).map((_, i) => ({
+    return Array.from({ length: 100 }).map((_, i) => ({
       id: i,
       left: `${Math.random() * 100}%`,
       top: `${Math.random() * 100}%`,

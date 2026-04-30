@@ -17,7 +17,6 @@ interface IndexChartProps {
 const listitemgroup = {
   "BARANGAN BERBUNGKUS": "rgb(var(--bg-warning-700))",
   "BARANGAN KERING": "rgb(var(--bg-primary-500))",
-  "BARANGAN SEGAR": "rgb(var(--bg-success-500))",
   MINUMAN: "rgb(var(--bg-primary-700))",
   "PRODUK KEBERSIHAN": "rgb(var(--bg-success-700))",
   "SUSU DAN BARANGAN BAYI": "rgb(var(--bg-warning-500))",

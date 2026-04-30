@@ -32,7 +32,9 @@ import {
   getItemPriceHistory,
 } from "../services/apiClient";
 import ItemMetadataDisplay from "../components/ItemMetadata";
-import LocalityAnalysis from "../components/LocalityAnalysis";
+import LocalityAnalysis, {
+  LocalityAnalysisSkeleton,
+} from "../components/LocalityAnalysis";
 
 const DEFAULT_STATE = "Selangor";
 const ALL_DISTRICTS_VALUE = "__ALL_DISTRICTS__";
@@ -98,32 +100,36 @@ const ItemDetailsWrapper: React.FC = () => {
   useEffect(() => {
     if (!itemCode || !conn) return;
     setIsLoadingMetadata(true);
-    getItemMetadata(conn, itemCode)
-      .then((data) => {
-        if (data.length > 0) setItemDetails(data[0]);
-      })
-      .finally(() => setIsLoadingMetadata(false));
-  }, [itemCode, conn]);
-
-  useEffect(() => {
-    if (!itemCode || !conn) return;
     setIsLoadingHistory(true);
-    getItemPriceHistory(conn, itemCode)
-      .then((data) => {
-        setPriceHistory(data);
-        if (data.length > 0 && !selectedDate) {
-          setSelectedDate(new Date(data[data.length - 1].date));
+
+    // Fetch Metadata and History concurrently to halve network/DB time
+    Promise.all([
+      getItemMetadata(conn, itemCode),
+      getItemPriceHistory(conn, itemCode),
+    ])
+      .then(([metaData, historyData]) => {
+        if (metaData.length > 0) setItemDetails(metaData[0]);
+        setPriceHistory(historyData);
+
+        // Immediately set the date to bypass debounce delay on first load
+        if (historyData.length > 0 && !selectedDate) {
+          const latestDate = new Date(historyData[historyData.length - 1].date);
+          setSelectedDate(latestDate);
+          setDebouncedDate(latestDate);
         }
       })
-      .finally(() => setIsLoadingHistory(false));
+      .finally(() => {
+        setIsLoadingMetadata(false);
+        setIsLoadingHistory(false);
+      });
   }, [itemCode, conn]);
 
   useEffect(() => {
-    if (!itemCode || !conn) return;
+    // Only fetch prices once we have a definitive date, saving a redundant "MAX(date)" query
+    if (!itemCode || !conn || !debouncedDate) return;
     setIsLoadingPrices(true);
-    const targetStr = debouncedDate
-      ? format(debouncedDate, "yyyy-MM-dd")
-      : undefined;
+    const targetStr = format(debouncedDate, "yyyy-MM-dd");
+
     getItemPrices(conn, itemCode, targetStr)
       .then(setAllPriceData)
       .finally(() => setIsLoadingPrices(false));
@@ -191,7 +197,7 @@ const ItemDetailsWrapper: React.FC = () => {
                     variant="success"
                     size="small"
                     mode="pill"
-                    className="text-[10px] shadow-sm"
+                    className="text-[10px] shadow-sm hidden md:block"
                   >
                     Lowest
                   </Tag>
@@ -248,7 +254,7 @@ const ItemDetailsWrapper: React.FC = () => {
         SELECT CAST(p.date AS VARCHAR) as date, pr.premise, pr.premise_type, pr.state, pr.district, p.price
         FROM lake.prices p
         JOIN lake.lookup_premise pr ON p.premise_code = pr.premise_code
-        WHERE p.item_code = ${itemCode} ${dateFilter}
+        WHERE p.item_code = ${itemCode} AND LOWER(pr.premise) NOT LIKE '%test%' ${dateFilter} ${dateFilter}
         ORDER BY p.date DESC, p.price ASC
       `;
 
@@ -289,22 +295,55 @@ const ItemDetailsWrapper: React.FC = () => {
       setIsDownloading(false);
     }
   };
+
+  const handleLocalitySelect = (level: "state" | "district", name: string) => {
+    if (!name) {
+      setSelectedState(DEFAULT_STATE);
+      setSelectedDistrict("");
+      return;
+    }
+
+    if (level === "state") {
+      // Find proper casing from available items if possible, otherwise use passed name
+      const match = allPriceData.find(
+        (p) =>
+          p.state.localeCompare(name, undefined, { sensitivity: "base" }) === 0,
+      );
+      setSelectedState(match ? match.state : name);
+      setSelectedDistrict("");
+    } else {
+      const match = allPriceData.find(
+        (p) =>
+          p.district.localeCompare(name, undefined, { sensitivity: "base" }) ===
+          0,
+      );
+      if (match) {
+        setSelectedState(match.state);
+        setSelectedDistrict(match.district);
+      } else {
+        setSelectedDistrict(name); // Fallback if no prices exist for that district today
+      }
+    }
+  };
   return (
-    <div className="mx-auto w-full max-w-screen-xl px-4 sm:px-6 lg:px-8  flex flex-col gap-8 pt-6 pb-20 animate-in fade-in duration-500">
+    <div className="mx-auto w-full max-w-screen-xl px-4 sm:px-4 lg:px-8  flex flex-col gap-4 md:gap-8 pt-6 pb-20 animate-in fade-in duration-500">
       <ItemMetadataDisplay
         metadata={itemDetails}
         priceHistory={priceHistory}
         isLoading={isLoadingMetadata || isLoadingHistory}
       />
 
-      {itemCode && debouncedDate && (
+      {itemCode && debouncedDate ? (
         <LocalityAnalysis
           itemCode={itemCode}
           targetDate={format(debouncedDate, "yyyy-MM-dd")}
+          onSelectionChange={handleLocalitySelect}
         />
+      ) : (
+        <LocalityAnalysisSkeleton />
       )}
 
-      <section className="bg-white dark:bg-[#18181B] border border-otl-gray-200/80 dark:border-gray-800 rounded-[32px] overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.04)]">
+      <section className="bg-bg-white border border-otl-gray-200 dark:border-gray-800 rounded-[32px] overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.04)]">
         <div className="p-6 md:p-8 md:pb-6 border-b border-otl-gray-100 dark:border-gray-800/60 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-2">
             <h3 className="text-2xl md:text-3xl font-semibold text-txt-black-900 dark:text-white tracking-tight">
@@ -313,9 +352,9 @@ const ItemDetailsWrapper: React.FC = () => {
           </div>
         </div>
 
-        <div className="px-4 md:px-6 py-5 bg-bg-black-25/50 dark:bg-gray-900/10 flex flex-col sm:flex-row gap-4 justify-between">
-          <div className="flex flex-col sm:flex-row space-x-4 divide-x divide-border-otl-gray-200">
-            <div className="flex items-center justify-between gap-3 bg-bg-black-25 dark:bg-gray-900/40">
+        <div className="px-4 md:px-6 py-5 flex flex-col sm:flex-row gap-4 justify-between">
+          <div className="flex flex-col md:flex-row space-x-4 md:divide-x md:divide-border-otl-gray-200">
+            <div className="flex items-center justify-between gap-3">
               <span className="text-[10px] font-bold uppercase tracking-widest text-txt-black-400 dark:text-gray-500 pl-3">
                 Observation Date
               </span>
@@ -326,7 +365,7 @@ const ItemDetailsWrapper: React.FC = () => {
                 size="small"
               />
             </div>
-            <div className="flex flex-col sm:flex-row gap-4 pl-4">
+            <div className="flex flex-col md:flex-row gap-4 md:pl-4">
               <Select
                 variant="outline"
                 size="small"
@@ -384,7 +423,7 @@ const ItemDetailsWrapper: React.FC = () => {
               </DropdownTrigger>
               <DropdownContent
                 align="end"
-                className="p-6 w-[400px] rounded-3xl shadow-2xl bg-white/95 dark:bg-[#1D1D21]/95 backdrop-blur-xl border border-otl-gray-200 dark:border-gray-800"
+                className="p-6 w-[400px] rounded-3xl shadow-2xl bg-bg-white backdrop-blur-xl border border-otl-gray-200 dark:border-gray-800"
               >
                 <div className="space-y-6 p-4">
                   <p className="font-black text-sm uppercase text-txt-black-900 dark:text-white">

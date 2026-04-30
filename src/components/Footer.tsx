@@ -1,9 +1,10 @@
 import { Footer, SiteInfo, FooterSection } from "@govtechmy/myds-react/footer";
 import { Link } from "@govtechmy/myds-react/link";
+import { useDuckDB } from "../contexts/DuckDBContext";
 
 export default function FooterBar() {
-  const d = new Date();
-  d.setDate(d.getDate() - 1);
+  const { maxDate } = useDuckDB();
+
   return (
     <Footer className="mt-auto pt-10 pb-12 bg-transparent border-t border-otl-gray-200/50 dark:border-gray-800/50">
       <FooterSection className="flex flex-col md:flex-row justify-between items-center w-full py-0 border-none gap-8">
@@ -61,13 +62,17 @@ export default function FooterBar() {
           <p className="font-bold text-txt-black-900 dark:text-white">
             OpenPriceCatcher © {new Date().getFullYear()}
           </p>
-          <p className="text-[10px] uppercase tracking-widest font-bold opacity-80">
-            Last Sync:{" "}
-            {d.toLocaleDateString("en-MY", {
-              day: "numeric",
-              month: "short",
-              year: "numeric",
-            })}
+          <p className="text-[10px] uppercase tracking-widest font-bold opacity-80 flex items-center gap-1.5">
+            Data As Of:{" "}
+            {maxDate ? (
+              new Date(maxDate).toLocaleDateString("en-MY", {
+                day: "numeric",
+                month: "short",
+                year: "numeric",
+              })
+            ) : (
+              <span className="h-3 w-16 bg-otl-gray-200 dark:bg-gray-800 rounded animate-pulse inline-block" />
+            )}
           </p>
         </div>
       </FooterSection>

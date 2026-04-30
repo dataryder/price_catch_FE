@@ -27,7 +27,7 @@ const LakeStatusBadge = () => {
   }
 
   return (
-    <div className="flex items-center gap-2 text-[10px] font-bold tracking-widest uppercase text-txt-success-700 dark:text-success-400 bg-bg-success-50 dark:bg-success-900/20 px-3 py-1.5 rounded-full border border-otl-success-200/50 dark:border-success-800/50 shadow-sm transition-all hover:bg-bg-success-100">
+    <div className="flex items-center gap-2 text-[10px] font-bold tracking-widest uppercase text-txt-success-700 dark:text-success-400 bg-bg-success-50 dark:bg-success-900/20 px-3 py-1.5 rounded-full border border-otl-success-200/50 dark:border-success-800/50 shadow-sm transition-all">
       <div className="w-1.5 h-1.5 rounded-full bg-bg-success-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]"></div>
       <span className="hidden sm:inline">Synced</span>
     </div>
@@ -40,17 +40,17 @@ export default function NavBarHeader() {
   const isNotHome = location.pathname !== "/";
 
   return (
-    <Navbar className="h-16 md:h-[72px] border-b border-otl-gray-200 dark:border-otl-gray-800 bg-white/60 dark:bg-[#18181B]/60 backdrop-blur-2xl sticky top-0 z-[9999] transition-all duration-300 shadow-[0_2px_10px_rgba(0,0,0,0.015)]">
+    <Navbar className="border-b border-otl-gray-200 dark:border-otl-gray-800 bg-bg-white backdrop-blur-2xl sticky top-0 z-[9999] transition-all duration-300 shadow-[0_2px_10px_rgba(0,0,0,0.015)]">
       <div
-        className="flex h-full w-auto mx-auto px-4 sm:px-6 lg:px-8 items-center gap-3 cursor-pointer shrink-0 transition-opacity hover:opacity-75"
+        className="flex h-full w-auto mx-auto px-2 sm:px-6 lg:px-8 items-center gap-3 cursor-pointer shrink-0"
         onClick={() => navigate("/")}
       >
-        <div className="rounded-lg p-1.5 shadow-sm">
+        <div className="rounded-lg shadow-sm">
           <img
             src="/icon.png"
             alt="Logo"
-            width={22}
-            height={22}
+            width={30}
+            height={30}
             className="aspect-square select-none"
           />
         </div>
@@ -63,14 +63,21 @@ export default function NavBarHeader() {
         <Button
           onClick={() => navigate("/")}
           variant="default-ghost"
-          className={`w-full xl:w-auto transition-all duration-200 rounded-xl px-4 text-sm ${!isNotHome ? "bg-bg-black-50 dark:bg-[#27272A] text-txt-black-900 dark:text-white font-bold shadow-sm" : "font-semibold text-txt-black-500 hover:text-txt-black-900"}`}
+          className={`w-full xl:w-auto transition-all duration-200 rounded-xl px-4 text-sm ${!isNotHome ? "bg-bg-black-50 dark:bg-[#27272A] text-txt-black-900 dark:text-white font-bold shadow-sm" : "font-semibold text-txt-black-500"}`}
         >
           Overview
         </Button>
         <Button
+          onClick={() => navigate("/pulse")}
+          variant="default-ghost"
+          className={`w-full xl:w-auto transition-all duration-200 rounded-xl px-4 text-sm ${location.pathname.startsWith("/pulse") ? "bg-bg-black-50 dark:bg-[#27272A] text-txt-black-900 dark:text-white font-bold shadow-sm" : "font-semibold text-txt-black-500"}`}
+        >
+          Market Pulse
+        </Button>
+        <Button
           onClick={() => navigate("/category")}
           variant="default-ghost"
-          className={`w-full xl:w-auto transition-all duration-200 rounded-xl px-4 text-sm ${location.pathname.startsWith("/category") ? "bg-bg-black-50 dark:bg-[#27272A] text-txt-black-900 dark:text-white font-bold shadow-sm" : "font-semibold text-txt-black-500 hover:text-txt-black-900"}`}
+          className={`w-full xl:w-auto transition-all duration-200 rounded-xl px-4 text-sm ${location.pathname.startsWith("/category") ? "bg-bg-black-50 dark:bg-[#27272A] text-txt-black-900 dark:text-white font-bold shadow-sm" : "font-semibold text-txt-black-500"}`}
         >
           Categories
         </Button>

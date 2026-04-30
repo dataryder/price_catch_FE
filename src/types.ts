@@ -89,11 +89,13 @@ export interface CategoryData {
 export interface RawDataRow {
   date: string;
   cat_price_index: number;
+  pop_change_pct?: number;
 }
 
 export interface ProcessedDataRow {
   date: Date;
   cat_price_index: number;
+  pop_change_pct?: number;
 }
 
 export interface IndexData {

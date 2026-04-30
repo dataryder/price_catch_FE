@@ -12,7 +12,7 @@ const FullSearchResultsPage: React.FC = () => {
   const navigate = useNavigate();
   const query = useMemo(() => searchParams.get("q") || "", [searchParams]);
 
-  const { conn, isReady } = useDuckDB();
+  const { conn, isReady, isCacheReady } = useDuckDB();
 
   const [allFilteredResults, setAllFilteredResults] = useState<
     SearchResultInput[]
@@ -34,18 +34,15 @@ const FullSearchResultsPage: React.FC = () => {
       setIsLoading(true);
       setError(null);
       try {
-        const stmt = await conn.prepare(`
-    WITH found AS (
-        SELECT * FROM lake.lookup_item 
-        WHERE item ILIKE ? OR item_category ILIKE ?
-    )
-    SELECT f.*, 
-           CASE 
-             WHEN (SELECT MAX(date) FROM lake.prices p WHERE p.item_code = f.item_code) < current_date() - INTERVAL 60 DAY THEN 'discontinued'
-             ELSE 'active' 
-           END as status
-    FROM found f
-        `);
+        const queryStr = isCacheReady
+          ? `SELECT f.*, COALESCE(s.status, 'active') as status 
+             FROM lake.lookup_item f 
+             LEFT JOIN memory.item_status s ON f.item_code = s.item_code 
+             WHERE f.item ILIKE ? OR f.item_category ILIKE ?`
+          : `SELECT *, 'active' as status FROM lake.lookup_item 
+             WHERE item ILIKE ? OR item_category ILIKE ?`;
+
+        const stmt = await conn.prepare(queryStr);
         const term = `%${query}%`;
         const result = await stmt.query(term, term);
 

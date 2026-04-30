@@ -5,12 +5,14 @@ import NavBarHeader from "./components/Navbar";
 import FooterBar from "./components/Footer";
 import { useTheme } from "@govtechmy/myds-react/hooks";
 
-const HomePage = lazy(() => import("./pages/Home"));
+import HomePage from "./pages/Home";
+
 const FullSearchResultsPage = lazy(
   () => import("./pages/FullSearchResultsPage"),
 );
 const ItemDetailsWrapper = lazy(() => import("./pages/ItemDetailsWrapper"));
 const CategoryPage = lazy(() => import("./pages/CategoryCatalog"));
+const MarketPulsePage = lazy(() => import("./pages/MarketPulse"));
 const PageNotFound = lazy(() => import("./pages/PageNotFound"));
 
 function App() {
@@ -21,7 +23,6 @@ function App() {
   }, [setTheme]);
 
   return (
-    // Base bg in dark mode is gray-900 (#18181B) per MYDS spec
     <div className="w-full min-h-screen bg-bg-white dark:bg-[#18181B] transition-colors duration-300">
       <div className="min-h-screen flex flex-col">
         <NavBarHeader />
@@ -30,7 +31,7 @@ function App() {
           <Suspense
             fallback={
               <div className="flex-grow flex items-center justify-center min-h-[50vh]">
-                <div className="w-8 h-8 border-4 border-otl-success-400 border-t-transparent rounded-full animate-spin"></div>
+                <div className="w-8 h-8 border-4 border-otl-gray-300 border-t-transparent rounded-full animate-spin"></div>
               </div>
             }
           >
@@ -41,6 +42,7 @@ function App() {
                 element={<FullSearchResultsPage />}
               />
               <Route path="/item/:itemCode" element={<ItemDetailsWrapper />} />
+              <Route path="/pulse" element={<MarketPulsePage />} />
               <Route path="/category" element={<CategoryPage />}>
                 <Route path=":group" element={<CategoryPage />}>
                   <Route path=":category" element={<CategoryPage />} />

@@ -20,6 +20,7 @@ import districtMobile from "../lib/geojson/district/_mobile";
 interface LocalityAnalysisProps {
   itemCode: string;
   targetDate: string;
+  onSelectionChange?: (level: "state" | "district", name: string) => void;
 }
 
 const normalizeName = (name: string) => {
@@ -38,25 +39,70 @@ const getGeoJsonName = (feature: any, level: "state" | "district") => {
     : p.NAME_2 || p.Daerah || p.district || p.name || "";
 };
 
-// Smart positioning to keep tooltip inside map boundaries
 const getTooltipPositionClasses = (x: number, y: number) => {
   let xClass = "-translate-x-1/2";
-  let yClass = "-translate-y-[105%]"; // Default: centered above
+  let yClass = "-translate-y-[110%]";
 
-  // viewBox width is 700, Tooltip width is 320 (w-80)
-  if (x < 160)
-    xClass = "-translate-x-[10%]"; // Push right
-  else if (x > 540) xClass = "-translate-x-[90%]"; // Push left
+  if (x < 160) xClass = "-translate-x-[10%]";
+  else if (x > 540) xClass = "-translate-x-[90%]";
 
-  // viewBox height is 400, Tooltip height is roughly ~220
-  if (y < 220) yClass = "translate-y-[5%]"; // Show below if too close to top
+  if (y < 100) yClass = "translate-y-[10%]";
 
   return `${xClass} ${yClass}`;
+};
+
+export const LocalityAnalysisSkeleton = () => {
+  const projection = geoMercator().fitSize([700, 400], stateDesktop as any);
+  const pathGenerator = geoPath().projection(projection);
+
+  return (
+    <div className="flex flex-col border border-otl-gray-300 rounded-[32px] shadow-[0_8px_30px_rgba(0,0,0,0.04)] bg-white dark:bg-[#18181B] relative md:h-[440px] overflow-hidden">
+      <div className="grid grid-cols-1 lg:grid-cols-12 h-full">
+        <div className="lg:col-span-4 flex flex-col h-[440px] border-r border-otl-gray-200/50 dark:border-gray-800/50 p-6 md:p-8">
+          <div className="flex flex-col gap-4 mb-5">
+            <div className="h-6 w-40 bg-gray-200 dark:bg-[#27272A] rounded-lg animate-pulse"></div>
+            <div className="flex gap-2">
+              <div className="h-8 w-24 bg-gray-200 dark:bg-[#27272A] rounded-lg animate-pulse"></div>
+              <div className="h-8 w-24 bg-gray-200 dark:bg-[#27272A] rounded-lg animate-pulse"></div>
+            </div>
+          </div>
+          <div className="flex flex-col gap-3">
+            {[...Array(5)].map((_, i) => (
+              <div
+                key={i}
+                className="h-12 w-full bg-gray-200 dark:bg-[#27272A] rounded-xl animate-pulse"
+              ></div>
+            ))}
+          </div>
+        </div>
+
+        <div className="lg:col-span-8 relative flex justify-center items-center bg-bg-washed p-6">
+          <svg
+            viewBox="0 0 700 400"
+            className="w-full h-full max-h-[400px] overflow-visible opacity-50 animate-pulse"
+          >
+            {/* @ts-ignore */}
+            {stateDesktop.features.map((feature: any, idx: number) => (
+              <path
+                key={idx}
+                d={pathGenerator(feature) || ""}
+                fill="var(--otl-gray-200, rgba(113, 113, 122, 0.15))"
+                stroke="var(--otl-gray-300, rgba(113, 113, 122, 0.3))"
+                strokeWidth={0.5}
+                className="dark:fill-gray-800 dark:stroke-gray-700"
+              />
+            ))}
+          </svg>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 const LocalityAnalysis: React.FC<LocalityAnalysisProps> = ({
   itemCode,
   targetDate,
+  onSelectionChange,
 }) => {
   const { conn, isReady } = useDuckDB();
   const [metric, setMetric] = useState<"median" | "avg" | "p95" | "p5">(
@@ -75,8 +121,6 @@ const LocalityAnalysis: React.FC<LocalityAnalysisProps> = ({
     typeof window !== "undefined" ? window.innerWidth < 1024 : false,
   );
 
-  // Initialize the D3 color interpolator hook
-  // We use rdYlGn so Red = Expensive, Green = Cheap
   const { interpolate } = useColor("rdYlGn");
 
   useEffect(() => {
@@ -90,6 +134,7 @@ const LocalityAnalysis: React.FC<LocalityAnalysisProps> = ({
     setIsLoading(true);
     setHoverInfo(null);
     setPinnedInfo(null);
+    onSelectionChange?.(level, ""); // Clear external selection on metric/level change
 
     getLocalityInsights(conn, itemCode, targetDate, metric, level)
       .then(setData)
@@ -97,19 +142,19 @@ const LocalityAnalysis: React.FC<LocalityAnalysisProps> = ({
       .finally(() => setIsLoading(false));
   }, [conn, isReady, itemCode, targetDate, metric, level]);
 
+  // Scroll active list item into view when pinned info changes
+  useEffect(() => {
+    if (pinnedInfo?.name) {
+      const el = document.getElementById(`locality-item-${pinnedInfo.name}`);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
+    }
+  }, [pinnedInfo]);
+
   const rankingMap = useMemo(() => {
     const map = new Map();
     data?.ranking?.forEach((r: any) => map.set(normalizeName(r.name), r));
-    return map;
-  }, [data]);
-
-  const cheapestMap = useMemo(() => {
-    const map = new Map<string, any[]>();
-    data?.cheapest_stores?.forEach((s: any) => {
-      const normalized = normalizeName(s.name);
-      if (!map.has(normalized)) map.set(normalized, []);
-      map.get(normalized)?.push(s);
-    });
     return map;
   }, [data]);
 
@@ -141,18 +186,34 @@ const LocalityAnalysis: React.FC<LocalityAnalysisProps> = ({
 
   const handleSvgClick = () => {
     setPinnedInfo(null);
+    onSelectionChange?.(level, "");
   };
 
   const colorScale = (val: number | null | undefined) => {
-    if (val === null || val === undefined) return "rgba(113, 113, 122, 0.05)"; // Empty slate color
-    // We invert the domain so maxVal (Expensive) = 0 (Red), minVal (Cheap) = 1 (Green)
+    if (val === null || val === undefined) return "rgba(113, 113, 122, 0.05)";
     return interpolate(val, [maxVal, minVal]);
   };
 
+  const handleSelection = (feature: any, rawName: string, regionData: any) => {
+    if (pinnedInfo?.name === rawName) {
+      setPinnedInfo(null);
+      onSelectionChange?.(level, "");
+    } else {
+      const centroid = feature ? pathGenerator.centroid(feature) : [350, 200];
+      setPinnedInfo({
+        x: centroid[0],
+        y: centroid[1],
+        name: rawName,
+        data: regionData,
+      });
+      onSelectionChange?.(level, rawName);
+    }
+  };
+
   return (
-    <div className="flex flex-col border border-otl-gray-200/80 dark:border-gray-800 rounded-[32px] shadow-[0_8px_30px_rgba(0,0,0,0.04)] bg-white dark:bg-[#18181B] relative md:max-h-[440px] overflow-hidden">
+    <div className="flex flex-col border border-otl-gray-200  rounded-[32px] shadow-[0_8px_30px_rgba(0,0,0,0.04)] bg-bg-white relative md:max-h-[440px] overflow-hidden">
       <div className="grid grid-cols-1 lg:grid-cols-12 h-full">
-        <div className="lg:col-span-4 flex flex-col h-[440px] border-r border-otl-gray-200/50 dark:border-gray-800/50 bg-bg-black-25/30 dark:bg-[#1D1D21]/50 p-6 md:p-8">
+        <div className="lg:col-span-4 flex flex-col h-[440px] border-r border-otl-gray-200 bg-bg-white p-6 md:p-8">
           <div className="flex flex-col gap-4 mb-3">
             <h4 className="text-lg font-black tracking-tight text-txt-black-900 dark:text-white">
               Geospatial Insight
@@ -184,7 +245,7 @@ const LocalityAnalysis: React.FC<LocalityAnalysisProps> = ({
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="">
+                <SelectContent>
                   <SelectItem value="state">State</SelectItem>
                   <SelectItem value="district">District</SelectItem>
                 </SelectContent>
@@ -205,10 +266,10 @@ const LocalityAnalysis: React.FC<LocalityAnalysisProps> = ({
                   return (
                     <div
                       key={item.name}
+                      id={`locality-item-${item.name}`}
                       className={cn(
-                        "flex justify-between items-center px-2 py-3 rounded-lg transition-all duration-200 border border-transparent bg-white dark:bg-[#27272A]/50 shadow-sm cursor-pointer hover:shadow-md",
-                        isItemActive &&
-                          "bg-bg-success-50 dark:bg-success-900/20 border-otl-success-200",
+                        "flex justify-between items-center px-2 py-3 rounded-lg transition-all duration-200 border border-transparent shadow-sm cursor-pointer hover:shadow-md",
+                        isItemActive && "border-2 border-otl-gray-200",
                       )}
                       onMouseEnter={() => {
                         const feature = (mapData as any).features.find(
@@ -224,46 +285,32 @@ const LocalityAnalysis: React.FC<LocalityAnalysisProps> = ({
                           y: centroid[1],
                           name: item.name,
                           data: item,
-                          cheapest: cheapestMap.get(normalizeName(item.name)),
                         });
                       }}
                       onMouseLeave={() => setHoverInfo(null)}
                       onClick={() => {
-                        if (pinnedInfo?.name === item.name) {
-                          setPinnedInfo(null);
-                        } else {
-                          const feature = (mapData as any).features.find(
-                            (f: any) =>
-                              normalizeName(getGeoJsonName(f, level)) ===
-                              normalizeName(item.name),
-                          );
-                          const centroid = feature
-                            ? pathGenerator.centroid(feature)
-                            : [350, 200];
-                          setPinnedInfo({
-                            x: centroid[0],
-                            y: centroid[1],
-                            name: item.name,
-                            data: item,
-                            cheapest: cheapestMap.get(normalizeName(item.name)),
-                          });
-                        }
+                        const feature = (mapData as any).features.find(
+                          (f: any) =>
+                            normalizeName(getGeoJsonName(f, level)) ===
+                            normalizeName(item.name),
+                        );
+                        handleSelection(feature, item.name, item);
                       }}
                     >
                       <span className="text-sm text-txt-black-900 tracking-tight truncate mr-2 flex items-center">
-                        <span className="text-txt-black-400 dark:text-gray-500 font-mono text-xs mr-2 font-medium">
+                        <span className="text-txt-black-500 font-mono text-xs mr-2 font-medium">
                           #{item.rank}
                         </span>
                         {item.name}
                       </span>
-                      <span className="text-sm ftext-txt-black-900 tracking-tight shrink-0">
+                      <span className="text-sm text-txt-black-900 tracking-tight shrink-0">
                         RM {item.val.toFixed(2)}
                       </span>
                     </div>
                   );
                 })
               ) : (
-                <p className="text-sm text-txt-black-400 dark:text-gray-500 text-center py-10 font-medium">
+                <p className="text-sm text-txt-black-500 text-center py-10 font-medium">
                   No spatial data available.
                 </p>
               )}
@@ -282,7 +329,7 @@ const LocalityAnalysis: React.FC<LocalityAnalysisProps> = ({
               .sort((a, b) => {
                 const aName = getGeoJsonName(a, level);
                 const bName = getGeoJsonName(b, level);
-                if (activeInfo?.name === aName) return 1; // Bring to front
+                if (activeInfo?.name === aName) return 1;
                 if (activeInfo?.name === bName) return -1;
                 return 0;
               })
@@ -297,33 +344,29 @@ const LocalityAnalysis: React.FC<LocalityAnalysisProps> = ({
                     key={rawName}
                     d={pathGenerator(feature) || ""}
                     fill={colorScale(regionData?.val)}
-                    stroke={
-                      isActive
-                        ? "var(--otl-black-900, #18181b)"
-                        : "rgba(113, 113, 122, 0.15)"
-                    }
                     strokeWidth={isActive ? 2 : 0.5}
                     className={cn(
                       "transition-all duration-300 cursor-pointer outline-none",
                       isActive
-                        ? "drop-shadow-lg"
-                        : "hover:drop-shadow-sm hover:opacity-80",
+                        ? "drop-shadow-lg stroke-[#18181b] dark:stroke-white"
+                        : "hover:drop-shadow-sm hover:opacity-80 stroke-otl-gray-300",
                     )}
                     onClick={(e) => {
                       e.stopPropagation();
-                      if (pinnedInfo?.name === rawName) {
-                        setPinnedInfo(null);
-                      } else {
+                      handleSelection(feature, rawName, regionData);
+                    }}
+                    onMouseEnter={() => {
+                      if (!pinnedInfo) {
                         const centroid = pathGenerator.centroid(feature);
-                        setPinnedInfo({
+                        setHoverInfo({
                           x: centroid[0],
                           y: centroid[1],
                           name: rawName,
                           data: regionData,
-                          cheapest: cheapestMap.get(normalizedName),
                         });
                       }
                     }}
+                    onMouseLeave={() => setHoverInfo(null)}
                   />
                 );
               })}
@@ -332,7 +375,7 @@ const LocalityAnalysis: React.FC<LocalityAnalysisProps> = ({
           {activeInfo && (
             <div
               className={cn(
-                "absolute bg-bg-white backdrop-blur-2xl border border-otl-gray-200 dark:border-gray-700 p-5 rounded-[24px] shadow-2xl pointer-events-auto z-50 w-80 transform transition-all animate-in fade-in zoom-in-95 duration-200",
+                "absolute bg-bg-white backdrop-blur-2xl border border-otl-gray-200 dark:border-gray-700 p-4 rounded-2xl shadow-xl pointer-events-none z-50 w-auto min-w-[200px] transform transition-all animate-in fade-in zoom-in-95 duration-200",
                 getTooltipPositionClasses(activeInfo.x, activeInfo.y),
               )}
               style={{
@@ -340,58 +383,21 @@ const LocalityAnalysis: React.FC<LocalityAnalysisProps> = ({
                 top: `${(activeInfo.y / 400) * 100}%`,
               }}
             >
-              <div className="flex justify-between items-start mb-4 border-b border-otl-gray-100 dark:border-gray-700 pb-3">
-                <span className="flex items-center gap-2 font-medium text-base text-txt-black-900 leading-tight pr-2 tracking-tight">
+              <div className="flex justify-between items-center gap-4">
+                <span className="flex items-center gap-2 font-medium text-sm text-txt-black-900 tracking-tight">
                   <span
-                    className="w-3 h-3 rounded-full shadow-sm border border-black/10 dark:border-white/10"
+                    className="w-2.5 h-2.5 rounded-full shadow-sm border border-black/10 dark:border-white/10"
                     style={{
                       backgroundColor: colorScale(activeInfo.data?.val),
                     }}
                   />
                   {activeInfo.name}
                 </span>
-                <span className="text-base font-medium text-txt-black-900 whitespace-nowrap">
+                <span className="text-base font-bold text-txt-black-900 whitespace-nowrap">
                   {activeInfo.data
                     ? `RM ${activeInfo.data.val.toFixed(2)}`
                     : "N/A"}
                 </span>
-              </div>
-              <div className="space-y-3">
-                {/* <div className="flex justify-between items-center">
-                  <p className="text-[10px] text-txt-black-400 uppercase tracking-widest">
-                    Top 10 Cheapest Stores
-                  </p>
-                </div> */}
-                <div className="space-y-2.5 max-h-[200px] overflow-auto scrollbar">
-                  {activeInfo.cheapest
-                    ?.slice(0, 10)
-                    .map((store: any, idx: number) => (
-                      <div
-                        key={idx}
-                        className="flex justify-between items-center gap-3 text-xs leading-tight border-b border-bg-black-25 dark:border-gray-700/50 pb-2 last:border-0"
-                      >
-                        <div className="flex flex-col flex-1 min-w-0">
-                          <span className="text-txt-black-900  truncate">
-                            <span className="text-txt-black-400 font-mono mr-2 text-[10px]">
-                              #{store.rank}
-                            </span>
-                            {store.premise}
-                          </span>
-                          <span className="text-txt-black-500 truncate mt-0.5 text-[10px] uppercase tracking-wider ml-5">
-                            {store.district}
-                          </span>
-                        </div>
-                        <span className=" text-txt-success-600 dark:text-success-400 whitespace-nowrap">
-                          RM {store.price.toFixed(2)}
-                        </span>
-                      </div>
-                    ))}
-                  {!activeInfo.cheapest?.length && (
-                    <p className="text-xs text-txt-black-400 dark:text-gray-500  italic">
-                      No stores found.
-                    </p>
-                  )}
-                </div>
               </div>
             </div>
           )}

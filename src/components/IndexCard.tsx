@@ -84,7 +84,7 @@ const IndexCard: React.FC<IndexCardProps> = ({ item_group, period, data }) => {
       >
         <defs>
           <linearGradient
-            id={`colorGradient-${item_group}`}
+            id={`colorGradient-BAWANG`}
             x1="0"
             y1="0"
             x2="0"
@@ -118,7 +118,7 @@ const IndexCard: React.FC<IndexCardProps> = ({ item_group, period, data }) => {
           dataKey="cat_price_index"
           stroke="var(--otl-success-500, #22C55E)"
           fillOpacity={1}
-          fill={`url(#colorGradient-${item_group})`}
+          fill={`url(#colorGradient-BAWANG)`}
           dot={false}
           strokeWidth={2.5}
           activeDot={{

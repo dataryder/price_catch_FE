@@ -23,7 +23,7 @@ interface SearchBarProps {
 const MydsSearchBar: React.FC<SearchBarProps> = ({ variant = "default" }) => {
   const isMinimal = variant === "minimal";
   const navigate = useNavigate();
-  const { conn } = useDuckDB();
+  const { conn, isCacheReady } = useDuckDB();
   const [query, setQuery] = useState("");
   const [hasFocus, setHasFocus] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
@@ -73,19 +73,15 @@ const MydsSearchBar: React.FC<SearchBarProps> = ({ variant = "default" }) => {
       const currentReq = ++requestRef.current;
       setIsSearching(true);
       try {
-        const stmt = await conn.prepare(`
-            WITH found_items AS (
-                SELECT * FROM lake.lookup_item 
-                WHERE item ILIKE ? OR item_category ILIKE ? 
-                LIMIT 5
-            )
-            SELECT f.*, 
-                   CASE 
-                     WHEN (SELECT MAX(date) FROM lake.prices p WHERE p.item_code = f.item_code) < current_date() - INTERVAL 60 DAY THEN 'discontinued'
-                     ELSE 'active' 
-                   END as status
-            FROM found_items f
-        `);
+        const queryStr = isCacheReady
+          ? `SELECT f.*, COALESCE(s.status, 'active') as status 
+             FROM lake.lookup_item f 
+             LEFT JOIN memory.item_status s ON f.item_code = s.item_code 
+             WHERE f.item ILIKE ? OR f.item_category ILIKE ? LIMIT 5`
+          : `SELECT *, 'active' as status FROM lake.lookup_item 
+             WHERE item ILIKE ? OR item_category ILIKE ? LIMIT 5`;
+
+        const stmt = await conn.prepare(queryStr);
         const term = `%${searchTerm}%`;
         const result = await stmt.query(term, term);
         if (currentReq === requestRef.current) {
@@ -121,8 +117,9 @@ const MydsSearchBar: React.FC<SearchBarProps> = ({ variant = "default" }) => {
     }
   };
 
+  // Update the form wrapper and the SearchBarResults component styling
   const searchInterface = (
-    <form onSubmit={handleSearchSubmit} className="w-full">
+    <form onSubmit={handleSearchSubmit} className="w-full relative">
       <SearchBar
         size="large"
         onBlur={(e) => {
@@ -172,8 +169,10 @@ const MydsSearchBar: React.FC<SearchBarProps> = ({ variant = "default" }) => {
         <SearchBarResults
           open={query.length > 0 && (hasFocus || isModalOpen)}
           className={cn(
-            "rounded-2xl border shadow-[0_20px_50px_rgba(0,0,0,0.15)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-white/95 dark:bg-[#1D1D21]/95 backdrop-blur-2xl border-otl-gray-200/80 dark:border-[#27272A] overflow-hidden relative",
-            isModalOpen ? "mt-3" : "mt-2 z-[110]",
+            "rounded-2xl border shadow-[0_20px_50px_rgba(0,0,0,0.15)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-white/95 dark:bg-[#1D1D21]/95 backdrop-blur-2xl border-otl-gray-200/80 dark:border-[#27272A] overflow-hidden",
+            isModalOpen
+              ? "relative mt-3"
+              : "absolute w-full left-0 top-full mt-2 z-[9999]",
           )}
         >
           <div>
@@ -183,9 +182,6 @@ const MydsSearchBar: React.FC<SearchBarProps> = ({ variant = "default" }) => {
               </div>
             ) : liveResults.length > 0 ? (
               <SearchBarResultsList className="p-2 scrollbar overflow-y-auto max-h-[400px]">
-                <div className="px-3 py-2 text-[10px] font-bold tracking-widest uppercase text-txt-black-400">
-                  Instant Results
-                </div>
                 {liveResults.map((item) => (
                   <SearchBarResultsItem
                     key={item.item_code}
@@ -199,7 +195,7 @@ const MydsSearchBar: React.FC<SearchBarProps> = ({ variant = "default" }) => {
                     className="group flex items-center justify-between p-3 rounded-xl hover:bg-bg-black-50 dark:hover:bg-[#27272A] cursor-pointer transition-all duration-200 active:scale-[0.98] outline-none"
                   >
                     <div className="flex flex-col min-w-0 pr-4">
-                      <span className="text-sm font-semibold text-txt-black-900 dark:text-white truncate tracking-tight group-hover:text-txt-success-600 dark:group-hover:text-txt-success-400 transition-colors">
+                      <span className="text-sm font-semibold text-txt-black-900 dark:text-white truncate tracking-tight group-hover:text-txt-black-600 dark:group-hover:text-txt-black-400 transition-colors">
                         {item.item}
                       </span>
                       <div className="flex items-center gap-2 mt-1">
@@ -212,8 +208,8 @@ const MydsSearchBar: React.FC<SearchBarProps> = ({ variant = "default" }) => {
                         </span>
                       </div>
                     </div>
-                    <div className="w-8 h-8 rounded-full flex items-center justify-center bg-transparent group-hover:bg-white dark:group-hover:bg-[#3F3F46] shadow-sm opacity-0 group-hover:opacity-100 transition-all transform translate-x-[-10px] group-hover:translate-x-0">
-                      <ChevronRightIcon className="w-4 h-4 text-txt-success-600 dark:text-txt-success-400" />
+                    <div className="w-8 h-8  min-w-8 min-h-8 rounded-full flex items-center justify-center bg-transparent group-hover:bg-white dark:group-hover:bg-[#3F3F46] shadow-sm opacity-0 group-hover:opacity-100 transition-all transform translate-x-[-10px] group-hover:translate-x-0">
+                      <ChevronRightIcon className="w-4 h-4 text-txt-black-600 dark:text-txt-black-400" />
                     </div>
                   </SearchBarResultsItem>
                 ))}
@@ -221,12 +217,9 @@ const MydsSearchBar: React.FC<SearchBarProps> = ({ variant = "default" }) => {
                 {/* View All Results Button */}
                 <div
                   onClick={() => handleSearchSubmit()}
-                  className="mt-2 mx-1 p-3 flex items-center justify-between bg-bg-success-50/50 dark:bg-success-900/10 hover:bg-bg-success-50 dark:hover:bg-success-900/30 border border-otl-success-100 dark:border-success-800/50 rounded-xl cursor-pointer transition-all active:scale-[0.98] outline-none group"
+                  className="group flex items-center justify-between p-3 rounded-xl hover:bg-bg-black-50 dark:hover:bg-[#27272A] cursor-pointer transition-all duration-200 active:scale-[0.98] outline-none"
                 >
-                  <span className="text-sm font-bold text-txt-success-700 dark:text-success-400 tracking-tight">
-                    See all results for "{query}"
-                  </span>
-                  <SearchIcon className="w-4 h-4 text-txt-success-600 dark:text-success-500 group-hover:scale-110 transition-transform" />
+                  <span className="">See all results for "{query}"</span>
                 </div>
               </SearchBarResultsList>
             ) : (

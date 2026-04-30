@@ -109,7 +109,7 @@ const ItemMetadataDisplay: React.FC<ItemMetadataDisplayProps> = ({
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 items-stretch gap-6">
       {/* Product Info & Hero Stats */}
-      <div className="lg:col-span-5 flex flex-col justify-between gap-6 p-8 md:p-10 border border-otl-gray-200/80 dark:border-gray-800 rounded-[32px] bg-white dark:bg-[#18181B] shadow-[0_8px_30px_rgba(0,0,0,0.04)]">
+      <div className="lg:col-span-5 flex flex-col justify-between gap-6 p-8 md:p-10 border border-otl-gray-200 dark:border-gray-800 rounded-[32px] bg-white dark:bg-[#18181B] shadow-[0_8px_30px_rgba(0,0,0,0.04)]">
         <div className="space-y-5">
           <div className="flex flex-col gap-2.5">
             <h3 className="text-3xl md:text-4xl font-semibold text-txt-black-900 dark:text-white tracking-tight leading-[1.1]">
@@ -175,7 +175,7 @@ const ItemMetadataDisplay: React.FC<ItemMetadataDisplayProps> = ({
       </div>
 
       {/* Chart Section Container */}
-      <div className="lg:col-span-7 flex flex-col p-8 pb-3 border border-otl-gray-200/80 dark:border-gray-800 rounded-[32px] bg-bg-white shadow-[0_8px_30px_rgba(0,0,0,0.04)]">
+      <div className="lg:col-span-7 flex flex-col p-8 pb-3 border border-otl-gray-200 dark:border-gray-800 rounded-[32px] bg-bg-white shadow-[0_8px_30px_rgba(0,0,0,0.04)]">
         <Tabs
           variant="pill"
           defaultValue={metadata.frequency === "monthly" ? "sixmonth" : "month"}
@@ -191,26 +191,26 @@ const ItemMetadataDisplay: React.FC<ItemMetadataDisplayProps> = ({
               {metadata.frequency !== "monthly" && (
                 <TabsTrigger
                   value="month"
-                  className="px-4 py-1.5 rounded-xl text-xs transition-all data-[state=active]:border data-[state=active]:border-otl-gray-200/80"
+                  className="px-4 py-1.5 rounded-xl text-xs transition-all data-[state=active]:border data-[state=active]:border-otl-gray-200"
                 >
                   1M
                 </TabsTrigger>
               )}
               <TabsTrigger
                 value="sixmonth"
-                className="px-4 py-1.5 rounded-xl text-xs transition-all data-[state=active]:border data-[state=active]:border-otl-gray-200/80"
+                className="px-4 py-1.5 rounded-xl text-xs transition-all data-[state=active]:border data-[state=active]:border-otl-gray-200"
               >
                 6M
               </TabsTrigger>
               <TabsTrigger
                 value="year"
-                className="px-4 py-1.5 rounded-xl text-xs transition-all data-[state=active]:border data-[state=active]:border-otl-gray-200/80"
+                className="px-4 py-1.5 rounded-xl text-xs transition-all data-[state=active]:border data-[state=active]:border-otl-gray-200"
               >
                 1Y
               </TabsTrigger>
               <TabsTrigger
                 value="twoyear"
-                className="px-4 py-1.5 rounded-xl text-xs transition-all data-[state=active]:border data-[state=active]:border-otl-gray-200/80"
+                className="px-4 py-1.5 rounded-xl text-xs transition-all data-[state=active]:border data-[state=active]:border-otl-gray-200"
               >
                 MAX
               </TabsTrigger>

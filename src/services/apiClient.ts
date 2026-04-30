@@ -10,28 +10,32 @@ import {
 const arrowToArray = (table: any) =>
   table.toArray().map((row: any) => row.toJSON());
 
+// Replace getItemMetadata and getItemPrices
 export const getItemMetadata = async (
   conn: duckdb.AsyncDuckDBConnection,
   item_code: string,
 ): Promise<ItemMetadata[]> => {
+  // Pushed down date filters and isolated MAX(date) to utilize DuckDB Zone Maps
   const query = `
-        WITH freq_calc AS (
+        WITH max_date_cte AS (
+            SELECT MAX(date) as max_d FROM lake.prices WHERE item_code = ${item_code}
+        ),
+        freq_calc AS (
             SELECT 
-                MAX(date) as max_d,
                 CASE 
-                    WHEN MAX(date) < current_date() - INTERVAL 60 DAY THEN 'discontinued'
-                    WHEN COUNT(DISTINCT CASE WHEN date >= current_date() - INTERVAL 30 DAY THEN date END) >= 20 THEN 'daily'
-                    WHEN COUNT(DISTINCT CASE WHEN date >= current_date() - INTERVAL 30 DAY THEN date END) >= 4 THEN 'weekly'
+                    WHEN m.max_d < current_date() - INTERVAL 60 DAY THEN 'discontinued'
+                    WHEN (SELECT COUNT(DISTINCT date) FROM lake.prices WHERE item_code = ${item_code} AND date >= current_date() - INTERVAL 30 DAY) >= 20 THEN 'daily'
+                    WHEN (SELECT COUNT(DISTINCT date) FROM lake.prices WHERE item_code = ${item_code} AND date >= current_date() - INTERVAL 30 DAY) >= 4 THEN 'weekly'
                     ELSE 'monthly'
                 END as frequency
-            FROM lake.prices 
-            WHERE item_code = ${item_code}
+            FROM max_date_cte m
         ),
         latest_prices AS (
             SELECT p.price 
             FROM lake.prices p
-            JOIN freq_calc f ON p.date = f.max_d
             WHERE p.item_code = ${item_code} 
+              AND p.date = (SELECT max_d FROM max_date_cte)
+              AND p.premise_code NOT IN (SELECT premise_code FROM lake.lookup_premise WHERE premise ILIKE '%test%')
         )
         SELECT 
             i.item_code, i.item, i.unit, i.item_group, i.item_category,
@@ -39,7 +43,7 @@ export const getItemMetadata = async (
             quantile_cont(p.price, 0.05) as minimum, 
             quantile_cont(p.price, 0.95) as maximum,
             quantile_cont(p.price, 0.50) as median,
-            (SELECT max_d FROM freq_calc) as last_updated
+            (SELECT max_d FROM max_date_cte) as last_updated
         FROM latest_prices p
         LEFT JOIN lake.lookup_item i ON i.item_code = ${item_code}
         GROUP BY 1, 2, 3, 4, 5, 6, 10;
@@ -51,27 +55,23 @@ export const getItemMetadata = async (
 export const getItemPrices = async (
   conn: duckdb.AsyncDuckDBConnection,
   item_code: string,
-  targetDate?: string,
+  targetDate: string, // Make targetDate required
 ): Promise<ItemLatest[]> => {
-  let query = `
+  // Simplified query since the UI now strictly dictates the date
+  const query = `
         SELECT 
             CAST(p.date AS VARCHAR) as date, 
             pr.premise, pr.premise_type, pr.state, pr.district, p.price
         FROM lake.prices p
         JOIN lake.lookup_premise pr ON p.premise_code = pr.premise_code
-        WHERE p.item_code = ?
+        WHERE p.item_code = ? 
+          AND p.date = ? 
+          AND pr.premise NOT ILIKE '%test%'
+        ORDER BY p.price ASC;
     `;
 
-  if (targetDate) {
-    query += ` AND p.date = ? ORDER BY p.price ASC;`;
-  } else {
-    query += ` AND p.date = (SELECT MAX(date) FROM lake.prices WHERE item_code = ?) ORDER BY p.price ASC;`;
-  }
-
   const stmt = await conn.prepare(query);
-  const result = targetDate
-    ? await stmt.query(item_code, targetDate)
-    : await stmt.query(item_code, item_code);
+  const result = await stmt.query(item_code, targetDate);
 
   const data = arrowToArray(result);
   stmt.close();
@@ -84,14 +84,15 @@ export const getItemPriceHistory = async (
 ): Promise<ItemPriceHistory[]> => {
   const query = `
         SELECT 
-            CAST(date AS VARCHAR) as date, 
-            quantile_cont(price, 0.50) as median, 
-            quantile_cont(price, 0.05) as p5, 
-            quantile_cont(price, 0.95) as p95
-        FROM lake.prices
-        WHERE item_code = ${item_code}
-        GROUP BY date
-        ORDER BY date ASC;
+            CAST(p.date AS VARCHAR) as date, 
+            quantile_cont(p.price, 0.50) as median, 
+            quantile_cont(p.price, 0.05) as p5, 
+            quantile_cont(p.price, 0.95) as p95
+        FROM lake.prices p
+        WHERE p.item_code = ${item_code} 
+          AND p.premise_code NOT IN (SELECT premise_code FROM lake.lookup_premise WHERE premise ILIKE '%test%')
+        GROUP BY p.date
+        ORDER BY p.date ASC;
     `;
   const result = await conn.query(query);
   return arrowToArray(result);
@@ -99,16 +100,23 @@ export const getItemPriceHistory = async (
 
 export const getWeeklyIndexGroup = async (): Promise<IndexChartAgg[]> => {
   const response = await fetch(
-    "https://pub-0725b434f0414f52b90e99dd024acc67.r2.dev/pricecatcher/item_group_price_index.json",
+    "https://pricecatcher-lake.iwa.my/indices/item_group_price_index.json",
   );
   return await response.json();
 };
 
 export const getWeeklyIndexCategory = async (): Promise<IndexData> => {
   const response = await fetch(
-    "https://pub-0725b434f0414f52b90e99dd024acc67.r2.dev/pricecatcher/item_category_price_index.json",
+    "https://pricecatcher-lake.iwa.my/indices/item_category_price_index.json",
   );
-  return await response.json();
+
+  // Read as raw text first
+  const text = await response.text();
+
+  // Clean invalid Pandas JSON (replace NaN with null) before parsing
+  const safeText = text.replace(/:\s*NaN/g, ": null");
+
+  return JSON.parse(safeText);
 };
 
 let categoryHierarchyCache: any[] | null = null;
@@ -129,21 +137,27 @@ export const getCategoryHierarchy = async (
   return categoryHierarchyCache;
 };
 
+// Update getItemsByCategory to accept isCacheReady and use memory.item_status
 export const getItemsByCategory = async (
   conn: duckdb.AsyncDuckDBConnection,
   group: string,
   category: string,
+  isCacheReady: boolean = false,
 ): Promise<any[]> => {
-  // Replace the URL-safe separator back to the slash used in the database
   const decodedCategory = category.replace(" | ", "/");
 
-  // We add a fallback 'weekly' frequency in case the GitHub Action hasn't added the column yet
-  const stmt = await conn.prepare(`
-        SELECT *, 'weekly' as frequency 
-        FROM lake.lookup_item 
-        WHERE item_group = ? AND item_category = ?
-        ORDER BY item ASC;
-    `);
+  const query = isCacheReady
+    ? `SELECT i.*, 'weekly' as frequency, COALESCE(s.status, 'active') as status
+       FROM lake.lookup_item i
+       LEFT JOIN memory.item_status s ON i.item_code = s.item_code
+       WHERE i.item_group = ? AND i.item_category = ?
+       ORDER BY i.item ASC`
+    : `SELECT i.*, 'weekly' as frequency, 'active' as status
+       FROM lake.lookup_item i
+       WHERE i.item_group = ? AND i.item_category = ?
+       ORDER BY i.item ASC`;
+
+  const stmt = await conn.prepare(query);
   const result = await stmt.query(group, decodedCategory);
   const data = arrowToArray(result);
   stmt.close();
@@ -169,7 +183,9 @@ export const getLocalityInsights = async (
             SELECT p.price, pr.state, pr.district, pr.premise
             FROM lake.prices p
             JOIN lake.lookup_premise pr ON p.premise_code = pr.premise_code
-            WHERE p.item_code = ${item_code} AND p.date = '${targetDate}'
+            WHERE p.item_code = ${item_code} 
+              AND p.date = '${targetDate}' 
+              AND pr.premise NOT ILIKE '%test%'
         ),
         ranked_data AS (
             SELECT 
