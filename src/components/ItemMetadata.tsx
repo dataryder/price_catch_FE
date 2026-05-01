@@ -58,8 +58,8 @@ const ProductCardSkeleton = () => {
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 min-h-[250px]">
       <div className="lg:col-span-5 flex flex-col justify-between border border-otl-gray-200/60 dark:border-otl-gray-800/60 p-8 rounded-[32px] bg-white dark:bg-[#18181B] shadow-sm">
         <div>
-          <div className="h-8 bg-gray-200 dark:bg-[#27272A] rounded-lg w-3/4 animate-pulse mb-3"></div>
-          <div className="h-4 bg-gray-200 dark:bg-[#27272A] rounded-md w-1/3 animate-pulse mb-8"></div>
+          <div className="h-8 bg-bg-gray-200 rounded-lg w-3/4 animate-pulse mb-3"></div>
+          <div className="h-4 bg-bg-gray-200 rounded-md w-1/3 animate-pulse mb-8"></div>
         </div>
         <div className="grid grid-cols-2 gap-4">
           <div className="h-24 bg-gray-100 dark:bg-[#27272A] rounded-2xl animate-pulse"></div>

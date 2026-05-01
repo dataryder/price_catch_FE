@@ -353,9 +353,9 @@ const ItemDetailsWrapper: React.FC = () => {
         </div>
 
         <div className="px-4 md:px-6 py-5 flex flex-col sm:flex-row gap-4 justify-between">
-          <div className="flex flex-col md:flex-row space-x-4 md:divide-x md:divide-border-otl-gray-200">
-            <div className="flex items-center justify-between gap-3">
-              <span className="text-[10px] font-bold uppercase tracking-widest text-txt-black-400 dark:text-gray-500 pl-3">
+          <div className="flex flex-col md:flex-row smd:pace-x-4 md:divide-x md:divide-border-otl-gray-200 max-sm:justify-between max-sm:gap-4">
+            <div className="flex flex-col md:flex-row items-left md:items-center md:justify-between gap-3">
+              <span className="hidden md:block text-[10px] font-bold uppercase tracking-widest text-txt-black-400 dark:text-gray-500 md:pl-3">
                 Observation Date
               </span>
               <DatePicker
@@ -365,7 +365,7 @@ const ItemDetailsWrapper: React.FC = () => {
                 size="small"
               />
             </div>
-            <div className="flex flex-col md:flex-row gap-4 md:pl-4">
+            <div className="flex flex-row gap-4 md:pl-4">
               <Select
                 variant="outline"
                 size="small"
@@ -423,14 +423,14 @@ const ItemDetailsWrapper: React.FC = () => {
               </DropdownTrigger>
               <DropdownContent
                 align="end"
-                className="p-6 w-[400px] rounded-3xl shadow-2xl bg-bg-white backdrop-blur-xl border border-otl-gray-200 dark:border-gray-800"
+                className="max-sm: p-3 md:p-6 w-[370px] md:w-[400px] rounded-3xl shadow-2xl bg-bg-white dark:bg-bg-washed backdrop-blur-xl border dark:border-2 border-otl-gray-200 dark:border-gray-800  max-sm:relative max-sm:left-[1rem]"
               >
-                <div className="space-y-6 p-4">
-                  <p className="font-black text-sm uppercase text-txt-black-900 dark:text-white">
+                <div className="flex flex-col gap-3 md:gap-6 p-3 md:p-4">
+                  <p className="hidden font-semibold text-sm uppercase text-txt-black-900 dark:text-white">
                     Export Data
                   </p>
                   <div className="">
-                    <label className="text-[10px] font-bold uppercase text-txt-black-400 dark:text-gray-500 tracking-wider">
+                    <label className="text-[10px] uppercase font-semibold text-txt-black-500 dark:text-gray-500 tracking-wider">
                       Select Range
                     </label>
                     <DateRangePicker
@@ -442,7 +442,7 @@ const ItemDetailsWrapper: React.FC = () => {
                   </div>
 
                   <div>
-                    <label className="text-[10px] font-bold uppercase text-txt-black-400 dark:text-gray-500 tracking-wider">
+                    <label className="text-[10px] uppercase font-semibold text-txt-black-500 dark:text-gray-500 tracking-wider">
                       Format
                     </label>
                     <div>
@@ -470,7 +470,7 @@ const ItemDetailsWrapper: React.FC = () => {
 
                   <Button
                     variant="default-outline"
-                    className="w-full bg-bg-black-900 text-txt-white font-bold h-11 rounded-xl shadow-md hover:shadow-lg transition-all"
+                    className="w-full bg-bg-black-900 text-txt-white h-11 rounded-xl shadow-md hover:shadow-lg transition-all"
                     onClick={handleDownload}
                     disabled={isDownloading}
                   >

@@ -78,7 +78,7 @@ const CategoryPage: React.FC = () => {
               {[...Array(5)].map((_, i) => (
                 <div
                   key={i}
-                  className="h-10 w-28 bg-gray-200 dark:bg-[#27272A] rounded-xl animate-pulse"
+                  className="h-10 w-28 bg-bg-gray-200 rounded-xl animate-pulse"
                 />
               ))}
             </div>
