@@ -77,13 +77,19 @@ const MydsSearchBar: React.FC<SearchBarProps> = ({ variant = "default" }) => {
           ? `SELECT f.*, COALESCE(s.status, 'active') as status 
              FROM lake.lookup_item f 
              LEFT JOIN memory.item_status s ON f.item_code = s.item_code 
-             WHERE f.item ILIKE ? OR f.item_category ILIKE ? LIMIT 5`
+             WHERE f.item ILIKE ? 
+                OR f.search_index ILIKE ? 
+                OR f.item_category ILIKE ? 
+             LIMIT 5`
           : `SELECT *, 'active' as status FROM lake.lookup_item 
-             WHERE item ILIKE ? OR item_category ILIKE ? LIMIT 5`;
+             WHERE item ILIKE ? 
+                OR search_index ILIKE ? 
+                OR item_category ILIKE ? 
+             LIMIT 5`;
 
         const stmt = await conn.prepare(queryStr);
         const term = `%${searchTerm}%`;
-        const result = await stmt.query(term, term);
+        const result = await stmt.query(term, term, term);
         if (currentReq === requestRef.current) {
           setLiveResults(result.toArray().map((r: any) => r.toJSON()));
         }
@@ -219,7 +225,9 @@ const MydsSearchBar: React.FC<SearchBarProps> = ({ variant = "default" }) => {
                   onClick={() => handleSearchSubmit()}
                   className="group flex items-center justify-between p-3 rounded-xl hover:bg-bg-black-50 dark:hover:bg-[#27272A] cursor-pointer transition-all duration-200 active:scale-[0.98] outline-none"
                 >
-                  <span className="">See all results for "{query}"</span>
+                  <span className="text-txt-black-500">
+                    See all results for "{query}"
+                  </span>
                 </div>
               </SearchBarResultsList>
             ) : (

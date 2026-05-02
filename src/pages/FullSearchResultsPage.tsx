@@ -38,13 +38,13 @@ const FullSearchResultsPage: React.FC = () => {
           ? `SELECT f.*, COALESCE(s.status, 'active') as status 
              FROM lake.lookup_item f 
              LEFT JOIN memory.item_status s ON f.item_code = s.item_code 
-             WHERE f.item ILIKE ? OR f.item_category ILIKE ?`
+             WHERE item ILIKE ? OR search_index ILIKE ? OR item_category ILIKE ?`
           : `SELECT *, 'active' as status FROM lake.lookup_item 
-             WHERE item ILIKE ? OR item_category ILIKE ?`;
+             WHERE item ILIKE ? OR search_index ILIKE ? OR item_category ILIKE ?`;
 
         const stmt = await conn.prepare(queryStr);
         const term = `%${query}%`;
-        const result = await stmt.query(term, term);
+        const result = await stmt.query(term, term, term);
 
         const items = result
           .toArray()
