@@ -151,7 +151,7 @@ const ItemMetadataDisplay: React.FC<ItemMetadataDisplayProps> = ({
               <span className="text-sm text-txt-success-600 dark:text-success-500">
                 RM
               </span>
-              <span className="text-4xl text-txt-success-800 dark:text-success-400">
+              <span className="text-2xl md:text-4xl text-txt-success-800 dark:text-success-400">
                 {formatPrice(metadata.minimum)}
               </span>
             </div>
@@ -166,7 +166,7 @@ const ItemMetadataDisplay: React.FC<ItemMetadataDisplayProps> = ({
               <span className="text-sm text-txt-black-400 dark:text-gray-500">
                 RM
               </span>
-              <span className="text-4xl text-txt-black-900 dark:text-white">
+              <span className="text-2xl md:text-4xl text-txt-black-900 dark:text-white">
                 {formatPrice(metadata.median)}
               </span>
             </div>

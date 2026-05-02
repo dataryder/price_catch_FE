@@ -13,6 +13,7 @@ import {
   SearchBarResultsList,
   SearchBarResultsItem,
 } from "@govtechmy/myds-react/search-bar";
+import { Spinner } from "@govtechmy/myds-react/spinner";
 import { ChevronRightIcon, SearchIcon } from "@govtechmy/myds-react/icon";
 import { cn } from "../lib/utils";
 
@@ -184,7 +185,7 @@ const MydsSearchBar: React.FC<SearchBarProps> = ({ variant = "default" }) => {
           <div>
             {isSearching ? (
               <div className="flex items-center justify-center p-10">
-                <div className="w-6 h-6 border-2 border-otl-gray-200 dark:border-gray-700 border-t-otl-success-500 rounded-full animate-spin" />
+                <Spinner size="large" />
               </div>
             ) : liveResults.length > 0 ? (
               <SearchBarResultsList className="p-2 scrollbar overflow-y-auto max-h-[400px]">

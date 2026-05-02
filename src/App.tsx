@@ -6,6 +6,7 @@ import FooterBar from "./components/Footer";
 import { useTheme } from "@govtechmy/myds-react/hooks";
 
 import HomePage from "./pages/Home";
+import { Spinner } from "@govtechmy/myds-react/spinner";
 
 const FullSearchResultsPage = lazy(
   () => import("./pages/FullSearchResultsPage"),
@@ -31,7 +32,7 @@ function App() {
           <Suspense
             fallback={
               <div className="flex-grow flex items-center justify-center min-h-[50vh]">
-                <div className="w-8 h-8 border-4 border-otl-gray-300 border-t-transparent rounded-full animate-spin"></div>
+                <Spinner size="large" />
               </div>
             }
           >

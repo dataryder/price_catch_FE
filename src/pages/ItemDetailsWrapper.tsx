@@ -35,6 +35,7 @@ import ItemMetadataDisplay from "../components/ItemMetadata";
 import LocalityAnalysis, {
   LocalityAnalysisSkeleton,
 } from "../components/LocalityAnalysis";
+import { Spinner } from "@govtechmy/myds-react/spinner";
 
 const DEFAULT_STATE = "Selangor";
 const ALL_DISTRICTS_VALUE = "__ALL_DISTRICTS__";
@@ -344,18 +345,18 @@ const ItemDetailsWrapper: React.FC = () => {
       )}
 
       <section className="bg-bg-white border border-otl-gray-200 dark:border-gray-800 rounded-[32px] overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.04)]">
-        <div className="p-6 md:p-8 md:pb-6 border-b border-otl-gray-100 dark:border-gray-800/60 flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div className="p-6 md:p-8 md:pb-6 border-b border-otl-gray-200 dark:border-gray-800 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-2">
-            <h3 className="text-2xl md:text-3xl font-semibold text-txt-black-900 dark:text-white tracking-tight">
+            <h3 className="text-2xl md:text-3xl font-semibold text-txt-black-900 tracking-tight">
               Retail Availability
             </h3>
           </div>
         </div>
 
         <div className="px-4 md:px-6 py-5 flex flex-col sm:flex-row gap-4 justify-between">
-          <div className="flex flex-col md:flex-row smd:pace-x-4 md:divide-x md:divide-border-otl-gray-200 max-sm:justify-between max-sm:gap-4">
+          <div className="flex flex-col md:flex-row md:space-x-4 md:divide-x md:divide-otl-gray-200 max-sm:justify-between max-sm:gap-4">
             <div className="flex flex-col md:flex-row items-left md:items-center md:justify-between gap-3">
-              <span className="hidden md:block text-[10px] font-bold uppercase tracking-widest text-txt-black-400 dark:text-gray-500 md:pl-3">
+              <span className="hidden md:block text-[10px] font-bold uppercase tracking-widest text-txt-black-500 md:pl-3">
                 Observation Date
               </span>
               <DatePicker
@@ -487,7 +488,7 @@ const ItemDetailsWrapper: React.FC = () => {
         <div className="bg-white dark:bg-[#18181B]">
           {isLoadingPrices ? (
             <div className="p-24 flex flex-col items-center justify-center gap-4">
-              <div className="w-8 h-8 border-4 border-otl-gray-200 dark:border-gray-800 border-t-otl-success-500 rounded-full animate-spin" />
+              <Spinner size="large" />
               <p className="text-sm font-semibold text-txt-black-400 dark:text-gray-500 animate-pulse">
                 Loading premises...
               </p>
