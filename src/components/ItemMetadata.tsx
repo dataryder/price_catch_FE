@@ -30,9 +30,7 @@ function isDateValid(dateStr: string) {
 
 function filter_data(data: ItemPriceHistory[], period: string) {
   const end_period = new Date();
-  end_period.setDate(end_period.getDate() - 1);
   const start_period = new Date();
-  start_period.setDate(start_period.getDate() - 1);
 
   if (period === "month") {
     start_period.setMonth(start_period.getMonth() - 1);

@@ -346,11 +346,9 @@ const ItemDetailsWrapper: React.FC = () => {
 
       <section className="bg-bg-white border border-otl-gray-200 dark:border-gray-800 rounded-[32px] overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.04)]">
         <div className="p-6 md:p-8 md:pb-6 border-b border-otl-gray-200 dark:border-gray-800 flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="space-y-2">
-            <h3 className="text-2xl md:text-3xl font-semibold text-txt-black-900 tracking-tight">
-              Retail Availability
-            </h3>
-          </div>
+          <h3 className="text-lg font-semibold text-txt-black-900 tracking-tight">
+            Retail Availability
+          </h3>
         </div>
 
         <div className="px-4 md:px-6 py-5 flex flex-col sm:flex-row gap-4 justify-between">
