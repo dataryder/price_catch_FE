@@ -77,6 +77,7 @@ export const DuckDBProvider: React.FC<{ children: React.ReactNode }> = ({
         const connection = await database.connect();
 
         await connection.query(`
+                    INSTALL httpfs; LOAD httpfs;
                     INSTALL ducklake; LOAD ducklake;
                     ATTACH 'https://pricecatcher-lake.iwa.my/catalog.ducklake' AS lake (TYPE DUCKLAKE);
                 `);
