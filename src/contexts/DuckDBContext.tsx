@@ -53,6 +53,7 @@ export const DuckDBProvider: React.FC<{ children: React.ReactNode }> = ({
   const [isCacheReady, setIsCacheReady] = useState(false);
   const [maxDate, setMaxDate] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+
   const isInitializing = useRef(false);
 
   useEffect(() => {
@@ -77,7 +78,6 @@ export const DuckDBProvider: React.FC<{ children: React.ReactNode }> = ({
         const connection = await database.connect();
 
         await connection.query(`
-                    INSTALL httpfs; LOAD httpfs;
                     INSTALL ducklake; LOAD ducklake;
                     ATTACH 'https://pricecatcher-lake.iwa.my/catalog.ducklake' AS lake (TYPE DUCKLAKE);
                 `);
@@ -86,10 +86,12 @@ export const DuckDBProvider: React.FC<{ children: React.ReactNode }> = ({
         setConn(connection);
         setIsReady(true);
 
-        // Fetch global max date instantly using Zone Maps
+        // OPTIMIZATION: Filter by last 30 days so DuckDB only opens the most recent Parquet files
         connection
           .query(
-            `SELECT CAST(MAX(date) AS VARCHAR) as max_date FROM lake.prices`,
+            `SELECT CAST(MAX(date) AS VARCHAR) as max_date 
+             FROM lake.prices 
+             WHERE date >= current_date() - INTERVAL 30 DAY`,
           )
           .then((res) => {
             const val = res.toArray()[0]?.toJSON().max_date;
@@ -97,7 +99,8 @@ export const DuckDBProvider: React.FC<{ children: React.ReactNode }> = ({
           })
           .catch(console.error);
 
-        // Build in-memory cache asynchronously without blocking the UI
+        // OPTIMIZATION: Limit the scan to the last 90 days. Anything without a price in 90 days is inactive anyway.
+        // This stops DuckDB from downloading the column chunks of years of historical data.
         connection
           .query(
             `
@@ -105,6 +108,7 @@ export const DuckDBProvider: React.FC<{ children: React.ReactNode }> = ({
             SELECT item_code, 
                    CASE WHEN MAX(date) < current_date() - INTERVAL 60 DAY THEN 'discontinued' ELSE 'active' END as status
             FROM lake.prices 
+            WHERE date >= current_date() - INTERVAL 90 DAY
             GROUP BY item_code;
         `,
           )
