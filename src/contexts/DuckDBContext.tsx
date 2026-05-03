@@ -4,6 +4,7 @@ import React, {
   useEffect,
   useState,
   useMemo,
+  useRef,
 } from "react";
 import * as duckdb from "@duckdb/duckdb-wasm";
 
@@ -12,7 +13,7 @@ interface DuckDBContextType {
   conn: duckdb.AsyncDuckDBConnection | null;
   isReady: boolean;
   isCacheReady: boolean;
-  maxDate: string | null; // Add maxDate
+  maxDate: string | null;
   error: string | null;
 }
 
@@ -52,8 +53,12 @@ export const DuckDBProvider: React.FC<{ children: React.ReactNode }> = ({
   const [isCacheReady, setIsCacheReady] = useState(false);
   const [maxDate, setMaxDate] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const isInitializing = useRef(false);
 
   useEffect(() => {
+    if (isInitializing.current) return;
+    isInitializing.current = true;
+
     const initDB = async () => {
       try {
         const bundle = await bundlePromise;

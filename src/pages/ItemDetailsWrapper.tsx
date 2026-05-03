@@ -255,7 +255,7 @@ const ItemDetailsWrapper: React.FC = () => {
         SELECT CAST(p.date AS VARCHAR) as date, pr.premise, pr.premise_type, pr.state, pr.district, p.price
         FROM lake.prices p
         JOIN lake.lookup_premise pr ON p.premise_code = pr.premise_code
-        WHERE p.item_code = ${itemCode} AND LOWER(pr.premise) NOT LIKE '%test%' ${dateFilter} ${dateFilter}
+        WHERE p.item_code = ${itemCode} AND LOWER(pr.premise) NOT LIKE '%test%' ${dateFilter}
         ORDER BY p.date DESC, p.price ASC
       `;
 

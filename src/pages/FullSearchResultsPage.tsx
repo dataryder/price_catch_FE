@@ -61,7 +61,7 @@ const FullSearchResultsPage: React.FC = () => {
     };
 
     performSearch();
-  }, [query, isReady, conn]);
+  }, [query, isReady, conn, isCacheReady]);
 
   const totalItems = useMemo(
     () => allFilteredResults.length,

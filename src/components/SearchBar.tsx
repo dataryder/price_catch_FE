@@ -101,7 +101,7 @@ const MydsSearchBar: React.FC<SearchBarProps> = ({ variant = "default" }) => {
         if (currentReq === requestRef.current) setIsSearching(false);
       }
     }, 250);
-  }, [conn]);
+  }, [conn, isCacheReady]);
 
   const handleQueryChange = (newQuery: string) => {
     setQuery(newQuery);
