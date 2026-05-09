@@ -2,11 +2,11 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { Navbar, NavbarAction, NavbarMenu } from "@govtechmy/myds-react/navbar";
 import { ThemeSwitch } from "../components/ThemeSwitch";
 import { Button } from "@govtechmy/myds-react/button";
-import { useDuckDB } from "../contexts/DuckDBContext";
+import { useData } from "../contexts/DataContext";
 import MydsSearchBar from "./SearchBar";
 
 const LakeStatusBadge = () => {
-  const { isReady, error } = useDuckDB();
+  const { isReady, error } = useData(); // <-- Changed
 
   if (error) {
     return (

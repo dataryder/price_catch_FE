@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { useDuckDB } from "../contexts/DuckDBContext";
 import { getLocalityInsights } from "../services/apiClient";
 import {
   Select,
@@ -125,7 +124,6 @@ const LocalityAnalysis: React.FC<LocalityAnalysisProps> = ({
   targetDate,
   onSelectionChange,
 }) => {
-  const { conn, isReady } = useDuckDB();
   const [metric, setMetric] = useState<"median" | "avg" | "p95" | "p5">(
     "median",
   );
@@ -151,17 +149,17 @@ const LocalityAnalysis: React.FC<LocalityAnalysisProps> = ({
   }, []);
 
   useEffect(() => {
-    if (!isReady || !conn || !itemCode || !targetDate) return;
+    if (!itemCode || !targetDate) return;
     setIsLoading(true);
     setHoverInfo(null);
     setPinnedInfo(null);
-    onSelectionChange?.(level, ""); // Clear external selection on metric/level change
+    onSelectionChange?.(level, "");
 
-    getLocalityInsights(conn, itemCode, targetDate, metric, level)
+    getLocalityInsights(itemCode, targetDate, metric, level) // Removed conn dependency
       .then(setData)
       .catch(console.error)
       .finally(() => setIsLoading(false));
-  }, [conn, isReady, itemCode, targetDate, metric, level]);
+  }, [itemCode, targetDate, metric, level]);
 
   // Scroll active list item into view when pinned info changes
   useEffect(() => {

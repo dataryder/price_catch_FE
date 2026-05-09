@@ -26,3 +26,4 @@ dist-ssr
 public/favi (1).svg
 .wrangler
 .dev.vars
+.codefetchignore

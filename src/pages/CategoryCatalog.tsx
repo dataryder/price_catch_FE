@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useDuckDB } from "../contexts/DuckDBContext";
+import { useData } from "../contexts/DataContext";
 import { CategoryData } from "../types";
 import {
   getCategoryHierarchy,
@@ -13,7 +13,7 @@ import { cn } from "../lib/utils";
 const CategoryPage: React.FC = () => {
   const { group, category } = useParams();
   const navigate = useNavigate();
-  const { conn, isReady, isCacheReady } = useDuckDB();
+  const { isReady, globalSearchData } = useData(); // <-- Changed
 
   const [hierarchy, setHierarchy] = useState<CategoryData[]>([]);
   const [itemsList, setItemsList] = useState<any[]>([]);
@@ -22,26 +22,25 @@ const CategoryPage: React.FC = () => {
   const [isLoadingItems, setIsLoadingItems] = useState(false);
 
   useEffect(() => {
-    if (!isReady || !conn) return;
+    if (!isReady) return;
     setIsLoadingHierarchy(true);
-    getCategoryHierarchy(conn)
+    getCategoryHierarchy(globalSearchData)
       .then(setHierarchy)
       .catch(console.error)
       .finally(() => setIsLoadingHierarchy(false));
-  }, [isReady, conn]);
+  }, [isReady, globalSearchData]);
 
   useEffect(() => {
-    if (!isReady || !conn || !group || !category) {
+    if (!isReady || !group || !category) {
       setItemsList([]);
       return;
     }
     setIsLoadingItems(true);
-    // Pass isCacheReady to the API client
-    getItemsByCategory(conn, group, category, isCacheReady)
+    getItemsByCategory(globalSearchData, group, category)
       .then(setItemsList)
       .catch(console.error)
       .finally(() => setIsLoadingItems(false));
-  }, [isReady, conn, group, category, isCacheReady]);
+  }, [isReady, globalSearchData, group, category]);
 
   const availableGroups = useMemo(() => {
     return Array.from(new Set(hierarchy.map((h) => h.item_group)));

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useParams } from "react-router-dom";
-import { useDuckDB } from "../contexts/DuckDBContext";
+import { useData } from "../contexts/DataContext";
 import { DataTable } from "@govtechmy/myds-react/data-table";
 import {
   Select,
@@ -40,6 +40,18 @@ import { Spinner } from "@govtechmy/myds-react/spinner";
 const DEFAULT_STATE = "Selangor";
 const ALL_DISTRICTS_VALUE = "__ALL_DISTRICTS__";
 
+// Helper to map Cloudflare's ISO region names to DOSM's exact state names
+const normalizeCloudflareRegion = (region: string): string => {
+  const r = region.toLowerCase();
+  if (r.includes("penang")) return "Pulau Pinang";
+  if (r.includes("malacca")) return "Melaka";
+  if (r.includes("kuala lumpur")) return "W.P. Kuala Lumpur";
+  if (r.includes("labuan")) return "W.P. Labuan";
+  if (r.includes("putrajaya")) return "W.P. Putrajaya";
+  if (r.includes("negeri sembilan")) return "Negeri Sembilan";
+  return region; // Fallback for names that match (e.g., "Johor", "Selangor", "Sabah")
+};
+
 const CellWrapper = ({
   isCheapest,
   children,
@@ -70,7 +82,7 @@ const CellWrapper = ({
 
 const ItemDetailsWrapper: React.FC = () => {
   const { itemCode } = useParams<{ itemCode: string }>();
-  const { db, conn } = useDuckDB();
+  const { globalSearchData, isReady } = useData(); // <-- Changed
 
   const [itemDetails, setItemDetails] = useState<ItemMetadata | null>(null);
   const [priceHistory, setPriceHistory] = useState<ItemPriceHistory[]>([]);
@@ -80,7 +92,10 @@ const ItemDetailsWrapper: React.FC = () => {
   const [isLoadingHistory, setIsLoadingHistory] = useState<boolean>(true);
   const [isLoadingPrices, setIsLoadingPrices] = useState<boolean>(true);
 
-  const [selectedState, setSelectedState] = useState<string>(DEFAULT_STATE);
+  const [selectedState, setSelectedState] = useState<string>("");
+  const [hasAutoSelectedState, setHasAutoSelectedState] =
+    useState<boolean>(false);
+
   const [selectedDistrict, setSelectedDistrict] = useState<string>("");
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
   const [debouncedDate, setDebouncedDate] = useState<Date | undefined>();
@@ -99,22 +114,32 @@ const ItemDetailsWrapper: React.FC = () => {
   }, [selectedDate]);
 
   useEffect(() => {
-    if (!itemCode || !conn) return;
+    if (!itemCode || !isReady) return; // Wait for context
     setIsLoadingMetadata(true);
     setIsLoadingHistory(true);
 
-    // Fetch Metadata and History concurrently to halve network/DB time
     Promise.all([
-      getItemMetadata(conn, itemCode),
-      getItemPriceHistory(conn, itemCode),
+      getItemMetadata(globalSearchData, itemCode),
+      getItemPriceHistory(itemCode),
     ])
       .then(([metaData, historyData]) => {
+        console.log(metaData);
         if (metaData.length > 0) setItemDetails(metaData[0]);
-        setPriceHistory(historyData);
 
-        // Immediately set the date to bypass debounce delay on first load
-        if (historyData.length > 0 && !selectedDate) {
-          const latestDate = new Date(historyData[historyData.length - 1].date);
+        // 1. Force sort the history by date ascending, ensuring the last item is ALWAYS the latest
+        const sortedHistory = [...historyData].sort((a, b) =>
+          a.date.localeCompare(b.date),
+        );
+        setPriceHistory(sortedHistory);
+
+        if (sortedHistory.length > 0 && !selectedDate) {
+          // 2. Extract the string "YYYY-MM-DD"
+          const rawDateStr = sortedHistory[sortedHistory.length - 1].date;
+
+          // 3. Parse safely into local time to avoid UTC-shift bugs (e.g., 8:00 AM Local instead of Midnight UTC)
+          const [yyyy, mm, dd] = rawDateStr.split("-").map(Number);
+          const latestDate = new Date(yyyy, mm - 1, dd);
+
           setSelectedDate(latestDate);
           setDebouncedDate(latestDate);
         }
@@ -123,18 +148,17 @@ const ItemDetailsWrapper: React.FC = () => {
         setIsLoadingMetadata(false);
         setIsLoadingHistory(false);
       });
-  }, [itemCode, conn]);
+  }, [itemCode, isReady, globalSearchData]);
 
   useEffect(() => {
-    // Only fetch prices once we have a definitive date, saving a redundant "MAX(date)" query
-    if (!itemCode || !conn || !debouncedDate) return;
+    if (!itemCode || !debouncedDate) return;
     setIsLoadingPrices(true);
     const targetStr = format(debouncedDate, "yyyy-MM-dd");
 
-    getItemPrices(conn, itemCode, targetStr)
+    getItemPrices(itemCode, targetStr)
       .then(setAllPriceData)
       .finally(() => setIsLoadingPrices(false));
-  }, [itemCode, conn, debouncedDate]);
+  }, [itemCode, debouncedDate]);
 
   const filteredPriceLatest = useMemo(() => {
     return allPriceData.filter((entry) => {
@@ -216,6 +240,52 @@ const ItemDetailsWrapper: React.FC = () => {
     () => Array.from(new Set(allPriceData.map((p) => p.state))).sort(),
     [allPriceData],
   );
+
+  useEffect(() => {
+    if (availableStates.length === 0 || hasAutoSelectedState) return;
+
+    const determineState = async () => {
+      try {
+        const res = await fetch("/api/geo");
+        if (res.ok) {
+          const { country, region } = await res.json();
+
+          if (country === "MY" && region) {
+            const mappedRegion = normalizeCloudflareRegion(region);
+
+            // Check if the user's state actually has retail data for this item today
+            const exactMatch = availableStates.find(
+              (s) =>
+                s.localeCompare(mappedRegion, undefined, {
+                  sensitivity: "base",
+                }) === 0,
+            );
+
+            if (exactMatch) {
+              setSelectedState(exactMatch);
+              setHasAutoSelectedState(true);
+              return;
+            }
+          }
+        }
+      } catch (e) {
+        console.error("Geo lookup failed, falling back to default.", e);
+      }
+
+      // Fallback Logic:
+      // 1. If not in Malaysia or API fails, default to Selangor if available
+      if (availableStates.includes(DEFAULT_STATE)) {
+        setSelectedState(DEFAULT_STATE);
+      } else {
+        // 2. If Selangor isn't available for this item, pick whatever is first
+        setSelectedState(availableStates[0] || "");
+      }
+      setHasAutoSelectedState(true);
+    };
+
+    determineState();
+  }, [availableStates, hasAutoSelectedState]);
+
   const availableDistricts = useMemo(
     () =>
       Array.from(
@@ -240,42 +310,70 @@ const ItemDetailsWrapper: React.FC = () => {
       : undefined;
 
   const handleDownload = async () => {
-    if (!db || !conn || !itemCode) return;
+    if (!itemCode) return;
     setIsDownloading(true);
     try {
-      let dateFilter = "";
-      if (downloadDateRange?.from) {
-        dateFilter += ` AND p.date >= '${format(downloadDateRange.from, "yyyy-MM-dd")}'`;
-      }
-      if (downloadDateRange?.to) {
-        dateFilter += ` AND p.date <= '${format(downloadDateRange.to, "yyyy-MM-dd")}'`;
-      }
+      const res = await fetch(
+        `https://pricecatcher-lake.iwa.my/data/prices/item_code=${itemCode}/data.parquet`,
+      );
+      if (!res.ok) throw new Error("Failed to fetch data");
+      const buffer = new Uint8Array(await res.arrayBuffer());
 
-      const query = `
-        SELECT CAST(p.date AS VARCHAR) as date, pr.premise, pr.premise_type, pr.state, pr.district, p.price
-        FROM lake.prices p
-        JOIN lake.lookup_premise pr ON p.premise_code = pr.premise_code
-        WHERE p.item_code = ${itemCode} AND LOWER(pr.premise) NOT LIKE '%test%' ${dateFilter}
-        ORDER BY p.date DESC, p.price ASC
-      `;
+      let exportBlob: Blob;
+      let filename = `openpricecatcher_${itemCode}_${Date.now()}`;
 
-      const filename = `openpricecatcher_${itemCode}_${Date.now()}.${downloadFormat}`;
-
-      if (downloadFormat === "csv") {
-        await conn.query(
-          `COPY (${query}) TO '${filename}' (HEADER, DELIMITER ',')`,
-        );
+      if (downloadFormat === "parquet") {
+        exportBlob = new Blob([buffer], { type: "application/octet-stream" });
+        filename += ".parquet";
       } else {
-        await conn.query(`COPY (${query}) TO '${filename}' (FORMAT PARQUET)`);
+        const { default: initParquetWasm, readParquet } =
+          await import("parquet-wasm");
+        const { tableFromIPC } = await import("apache-arrow");
+
+        // Ensure WASM is initialized (safe to call multiple times)
+        await initParquetWasm();
+
+        // Correct conversion API
+        const wasmTable = readParquet(buffer);
+        const table = tableFromIPC(wasmTable.intoIPCStream());
+        let data = table.toArray().map((row) => row.toJSON());
+
+        wasmTable.free(); // Crucial: Free Wasm memory
+
+        // Apply Date Filters
+        if (downloadDateRange?.from) {
+          const fromStr = format(downloadDateRange.from, "yyyy-MM-dd");
+          data = data.filter((d: any) => d.date >= fromStr);
+        }
+        if (downloadDateRange?.to) {
+          const toStr = format(downloadDateRange.to, "yyyy-MM-dd");
+          data = data.filter((d: any) => d.date <= toStr);
+        }
+
+        const headers = [
+          "date",
+          "premise",
+          "premise_type",
+          "state",
+          "district",
+          "price",
+        ];
+        const csvContent = [
+          headers.join(","),
+          ...data.map((row: any) =>
+            headers
+              .map((h) => `"${String(row[h] ?? "").replace(/"/g, '""')}"`)
+              .join(","),
+          ),
+        ].join("\n");
+
+        exportBlob = new Blob([csvContent], {
+          type: "text/csv;charset=utf-8;",
+        });
+        filename += ".csv";
       }
 
-      const buffer = await db.copyFileToBuffer(filename);
-      const blob = new Blob([buffer], {
-        type:
-          downloadFormat === "csv" ? "text/csv" : "application/octet-stream",
-      });
-
-      const url = URL.createObjectURL(blob);
+      const url = URL.createObjectURL(exportBlob);
       const a = document.createElement("a");
       a.href = url;
       a.download = filename;
@@ -283,20 +381,12 @@ const ItemDetailsWrapper: React.FC = () => {
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-
-      try {
-        await db.dropFile(filename);
-      } catch (e) {
-        // Ignored
-      }
     } catch (err) {
-      console.error("Failed to export data", err);
-      alert("Failed to export data. Please try again.");
+      console.error("Export failed", err);
     } finally {
       setIsDownloading(false);
     }
   };
-
   const handleLocalitySelect = (level: "state" | "district", name: string) => {
     if (!name) {
       setSelectedState(DEFAULT_STATE);
@@ -484,7 +574,8 @@ const ItemDetailsWrapper: React.FC = () => {
         </div>
 
         <div className="bg-white dark:bg-[#18181B]">
-          {isLoadingPrices ? (
+          {/* CHANGED: Show spinner while waiting for both prices AND the Geo lookup */}
+          {isLoadingPrices || !hasAutoSelectedState ? (
             <div className="p-24 flex flex-col items-center justify-center gap-4">
               <Spinner size="large" />
               <p className="text-sm font-semibold text-txt-black-400 dark:text-gray-500 animate-pulse">
