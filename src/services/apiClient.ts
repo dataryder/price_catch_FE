@@ -153,16 +153,25 @@ export const getLocalityInsights = async (
       return acc;
     }, {});
 
-    const ranking = Object.entries(grouped).map(([name, group]: any) => {
-      const prices = group.prices;
-      let val = 0;
-      if (metric === "avg")
-        val = prices.reduce((a: number, b: number) => a + b, 0) / prices.length;
-      if (metric === "median") val = quantile(prices, 0.5);
-      if (metric === "p5") val = quantile(prices, 0.05);
-      if (metric === "p95") val = quantile(prices, 0.95);
-      return { name, val };
-    });
+    interface RankingItem {
+      name: string;
+      val: number;
+      rank?: number;
+    }
+
+    const ranking: RankingItem[] = Object.entries(grouped).map(
+      ([name, group]: any) => {
+        const prices = group.prices;
+        let val = 0;
+        if (metric === "avg")
+          val =
+            prices.reduce((a: number, b: number) => a + b, 0) / prices.length;
+        if (metric === "median") val = quantile(prices, 0.5);
+        if (metric === "p5") val = quantile(prices, 0.05);
+        if (metric === "p95") val = quantile(prices, 0.95);
+        return { name, val };
+      },
+    );
 
     ranking.sort((a, b) => a.val - b.val);
     ranking.forEach((r, idx) => (r.rank = idx + 1));
