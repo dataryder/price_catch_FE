@@ -9,6 +9,12 @@ export interface SearchResultInput {
   item_category_eng: string;
   frequency: string;
   status: string;
+  search_index?: string;
+  _search?: string;
+  last_updated?: string;
+  minimum?: number;
+  maximum?: number;
+  median?: number;
 }
 
 export interface SearchResultItem {
@@ -51,7 +57,7 @@ export interface ItemMetadata {
   median: number;
   minimum: number;
   maximum: number;
-  q75: number;
+  q75?: number;
   last_updated: string;
   frequency: string;
 }

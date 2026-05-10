@@ -3,7 +3,7 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import { AutoPagination } from "@govtechmy/myds-react/pagination";
 import SearchResults from "../components/SearchResults";
 import { SearchResultInput } from "../types";
-import { useDuckDB } from "../contexts/DuckDBContext";
+import { useData } from "../contexts/DataContext";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -12,56 +12,54 @@ const FullSearchResultsPage: React.FC = () => {
   const navigate = useNavigate();
   const query = useMemo(() => searchParams.get("q") || "", [searchParams]);
 
-  const { conn, isReady, isCacheReady } = useDuckDB();
+  // 1. Use Data Context
+  const { isReady, globalSearchData } = useData();
 
   const [allFilteredResults, setAllFilteredResults] = useState<
     SearchResultInput[]
   >([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
 
+  // 2. Perform Native JS Filtering (replaces SQL)
   useEffect(() => {
-    if (!isReady || !conn) return;
+    if (!isReady) return;
 
     if (!query.trim()) {
       setAllFilteredResults([]);
       setCurrentPage(1);
+      setIsLoading(false);
       return;
     }
 
-    const performSearch = async () => {
-      setIsLoading(true);
-      setError(null);
-      try {
-        const queryStr = isCacheReady
-          ? `SELECT f.*, COALESCE(s.status, 'active') as status 
-             FROM lake.lookup_item f 
-             LEFT JOIN memory.item_status s ON f.item_code = s.item_code 
-             WHERE item ILIKE ? OR search_index ILIKE ? OR item_category ILIKE ?`
-          : `SELECT *, 'active' as status FROM lake.lookup_item 
-             WHERE item ILIKE ? OR search_index ILIKE ? OR item_category ILIKE ?`;
+    setIsLoading(true);
+    setError(null);
 
-        const stmt = await conn.prepare(queryStr);
-        const term = `%${query}%`;
-        const result = await stmt.query(term, term, term);
+    try {
+      const term = query.trim().toLowerCase();
 
-        const items = result
-          .toArray()
-          .map((r: any) => r.toJSON() as SearchResultInput);
-        setAllFilteredResults(items);
-        setCurrentPage(1);
-        stmt.close();
-      } catch (e) {
-        console.error("Failed to perform full search", e);
-        setError("Search functionality encountered an error.");
-      } finally {
-        setIsLoading(false);
-      }
-    };
+      // Filter against pre-computed index to avoid allocations across 10,000+ items
+      const items = globalSearchData.filter(
+        (item: any) => item && item._search?.includes(term),
+      );
 
-    performSearch();
-  }, [query, isReady, conn]);
+      // Maintain sort order: Active items first, then discontinued
+      items.sort((a, b) => {
+        if (a.status === "active" && b.status === "discontinued") return -1;
+        if (a.status === "discontinued" && b.status === "active") return 1;
+        return a.item.localeCompare(b.item);
+      });
+
+      setAllFilteredResults(items as SearchResultInput[]);
+      setCurrentPage(1);
+    } catch (e) {
+      console.error("Failed to perform full search", e);
+      setError("Search functionality encountered an error.");
+    } finally {
+      setIsLoading(false);
+    }
+  }, [query, isReady, globalSearchData]);
 
   const totalItems = useMemo(
     () => allFilteredResults.length,

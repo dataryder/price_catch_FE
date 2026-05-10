@@ -1,9 +1,9 @@
 import { Footer, SiteInfo, FooterSection } from "@govtechmy/myds-react/footer";
 import { Link } from "@govtechmy/myds-react/link";
-import { useDuckDB } from "../contexts/DuckDBContext";
+import { useData } from "../contexts/DataContext";
 
 export default function FooterBar() {
-  const { maxDate } = useDuckDB();
+  const { maxDate } = useData();
 
   return (
     <Footer className="mt-auto pt-10 pb-12 bg-transparent border-t border-otl-gray-200/50 dark:border-gray-800/50">

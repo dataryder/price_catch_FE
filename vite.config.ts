@@ -3,13 +3,10 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
-  server: {
-    headers: {
-      "Cross-Origin-Opener-Policy": "same-origin",
-      "Cross-Origin-Embedder-Policy": "require-corp",
-    },
-  },
   optimizeDeps: {
-    exclude: ["@duckdb/duckdb-wasm"],
+    exclude: ["parquet-wasm"],
+  },
+  build: {
+    target: "esnext", // Required for top-level await if used by parquet-wasm
   },
 });

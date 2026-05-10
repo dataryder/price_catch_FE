@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDuckDB } from "../contexts/DuckDBContext";
+import { useData } from "../contexts/DataContext"; // Changed from useDuckDB
 import { AreaChart, Area, ResponsiveContainer, YAxis } from "recharts";
 import { RawDataRow } from "../types";
 import { ArrowDownIcon, ArrowUpIcon } from "@govtechmy/myds-react/icon";
@@ -15,7 +15,7 @@ const CategoryTrendCard: React.FC<CategoryTrendCardProps> = ({
   data,
 }) => {
   const navigate = useNavigate();
-  const { conn } = useDuckDB();
+  const { globalSearchData } = useData(); // Use the in-memory global search index
 
   const chartData = useMemo(() => {
     return data.map((d) => ({
@@ -27,11 +27,9 @@ const CategoryTrendCard: React.FC<CategoryTrendCardProps> = ({
   const latest = data[data.length - 1];
   const pop = latest?.pop_change_pct || 0;
 
-  // Set neutral range between -0.1% and 0.1%
   const isNeutral = pop >= -0.1 && pop <= 0.1;
   const isUp = pop > 0.1;
 
-  // Price increases = bad (danger/red), Price decreases = good (success/green)
   const colorHex = isUp ? "#EF4444" : isNeutral ? "#71717A" : "#22C55E";
   const textColorClass = isUp
     ? "text-[#EF4444]"
@@ -39,27 +37,23 @@ const CategoryTrendCard: React.FC<CategoryTrendCardProps> = ({
       ? "text-txt-black-500 dark:text-gray-400"
       : "text-[#22C55E]";
 
-  // Sanitize the category string to ensure a valid SVG ID without spaces
   const safeId = useMemo(
     () => category.replace(/[^a-zA-Z0-9]/g, ""),
     [category],
   );
 
-  const handleClick = async () => {
-    if (!conn) return;
-    try {
-      const stmt = await conn.prepare(
-        "SELECT item_group FROM lake.lookup_item WHERE item_category = ? LIMIT 1",
-      );
-      const result = await stmt.query(category);
-      const arr = result.toArray();
-      if (arr.length > 0) {
-        const group = arr[0].toJSON().item_group;
-        navigate(`/category/${group}/${category.replace("/", " | ")}`);
-      }
-      stmt.close();
-    } catch (e) {
-      console.error("Failed to route to category", e);
+  const handleClick = () => {
+    // Perform lookup in memory instead of SQL
+    const itemMatch = globalSearchData.find(
+      (i) => i.item_category === category,
+    );
+
+    if (itemMatch) {
+      const group = itemMatch.item_group;
+      // Navigate using the pre-computed group and formatted category
+      navigate(`/category/${group}/${category.replace("/", " | ")}`);
+    } else {
+      console.warn(`Category "${category}" not found in search index.`);
     }
   };
 

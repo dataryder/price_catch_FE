@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
 import debounce from "lodash.debounce";
-import { useDuckDB } from "../contexts/DuckDBContext";
+import { useData } from "../contexts/DataContext";
 import { SearchResultInput } from "../types";
 import {
   SearchBar,
@@ -24,7 +24,10 @@ interface SearchBarProps {
 const MydsSearchBar: React.FC<SearchBarProps> = ({ variant = "default" }) => {
   const isMinimal = variant === "minimal";
   const navigate = useNavigate();
-  const { conn, isCacheReady } = useDuckDB();
+
+  // 1. Use the new Data Context instead of DuckDB
+  const { isReady, globalSearchData } = useData();
+
   const [query, setQuery] = useState("");
   const [hasFocus, setHasFocus] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
@@ -32,7 +35,6 @@ const MydsSearchBar: React.FC<SearchBarProps> = ({ variant = "default" }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
-  const requestRef = useRef(0);
 
   const isMac =
     typeof window !== "undefined" &&
@@ -64,44 +66,34 @@ const MydsSearchBar: React.FC<SearchBarProps> = ({ variant = "default" }) => {
     }
   }, [isModalOpen]);
 
+  // 2. Perform Native JS Filtering (replaces SQL)
   const debouncedSearch = useMemo(() => {
-    return debounce(async (searchTerm: string) => {
-      if (!conn || !searchTerm) {
+    return debounce((searchTerm: string) => {
+      const term = searchTerm?.trim().toLowerCase();
+
+      if (!isReady || !term || !globalSearchData) {
         setLiveResults([]);
         setIsSearching(false);
         return;
       }
-      const currentReq = ++requestRef.current;
-      setIsSearching(true);
-      try {
-        const queryStr = isCacheReady
-          ? `SELECT f.*, COALESCE(s.status, 'active') as status 
-             FROM lake.lookup_item f 
-             LEFT JOIN memory.item_status s ON f.item_code = s.item_code 
-             WHERE f.item ILIKE ? 
-                OR f.search_index ILIKE ? 
-                OR f.item_category ILIKE ? 
-             LIMIT 5`
-          : `SELECT *, 'active' as status FROM lake.lookup_item 
-             WHERE item ILIKE ? 
-                OR search_index ILIKE ? 
-                OR item_category ILIKE ? 
-             LIMIT 5`;
 
-        const stmt = await conn.prepare(queryStr);
-        const term = `%${searchTerm}%`;
-        const result = await stmt.query(term, term, term);
-        if (currentReq === requestRef.current) {
-          setLiveResults(result.toArray().map((r: any) => r.toJSON()));
-        }
-        stmt.close();
-      } catch (e) {
-        console.error("Search failed", e);
-      } finally {
-        if (currentReq === requestRef.current) setIsSearching(false);
-      }
-    }, 250);
-  }, [conn]);
+      setIsSearching(true);
+
+      // Filter against pre-computed index to eliminate string allocations
+      const results = globalSearchData
+        .filter((item: any) => item && item._search?.includes(term))
+        .slice(0, 5);
+
+      setLiveResults(results);
+      setIsSearching(false);
+    }, 50);
+  }, [isReady, globalSearchData]);
+
+  useEffect(() => {
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [debouncedSearch]);
 
   const handleQueryChange = (newQuery: string) => {
     setQuery(newQuery);
@@ -124,7 +116,6 @@ const MydsSearchBar: React.FC<SearchBarProps> = ({ variant = "default" }) => {
     }
   };
 
-  // Update the form wrapper and the SearchBarResults component styling
   const searchInterface = (
     <form onSubmit={handleSearchSubmit} className="w-full relative">
       <SearchBar
@@ -137,7 +128,6 @@ const MydsSearchBar: React.FC<SearchBarProps> = ({ variant = "default" }) => {
             setHasFocus(false);
           }
         }}
-        className=""
       >
         <SearchBarInputContainer
           className={cn(
@@ -215,18 +205,17 @@ const MydsSearchBar: React.FC<SearchBarProps> = ({ variant = "default" }) => {
                         </span>
                       </div>
                     </div>
-                    <div className="w-8 h-8  min-w-8 min-h-8 rounded-full flex items-center justify-center bg-transparent group-hover:bg-white dark:group-hover:bg-[#3F3F46] shadow-sm opacity-0 group-hover:opacity-100 transition-all transform translate-x-[-10px] group-hover:translate-x-0">
+                    <div className="w-8 h-8 min-w-8 min-h-8 rounded-full flex items-center justify-center bg-transparent group-hover:bg-white dark:group-hover:bg-[#3F3F46] shadow-sm opacity-0 group-hover:opacity-100 transition-all transform translate-x-[-10px] group-hover:translate-x-0">
                       <ChevronRightIcon className="w-4 h-4 text-txt-black-600 dark:text-txt-black-400" />
                     </div>
                   </SearchBarResultsItem>
                 ))}
 
-                {/* View All Results Button */}
                 <div
                   onClick={() => handleSearchSubmit()}
                   className="group flex items-center justify-between p-3 rounded-xl hover:bg-bg-black-50 dark:hover:bg-[#27272A] cursor-pointer transition-all duration-200 active:scale-[0.98] outline-none"
                 >
-                  <span className="text-txt-black-500">
+                  <span className="text-txt-black-500 font-medium text-sm">
                     See all results for "{query}"
                   </span>
                 </div>
@@ -250,20 +239,20 @@ const MydsSearchBar: React.FC<SearchBarProps> = ({ variant = "default" }) => {
   if (isMinimal) {
     return (
       <>
-        {/* Fake Input Trigger */}
         <button
           type="button"
           onClick={() => setIsModalOpen(true)}
-          className="flex items-center gap-3 w-full px-3 py-2 h-10 bg-bg-white dark:bg-[#1D1D21] border border-otl-gray-200 dark:border-gray-800 rounded-xl hover:bg-white dark:hover:bg-[#27272A] hover:border-otl-gray-300 dark:hover:border-gray-700 transition-all text-txt-black-400 dark:text-gray-400 shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-otl-success-400 text-txt-black-500"
+          className="flex items-center gap-3 w-full px-3 py-2 h-10 bg-bg-white dark:bg-bg-black-200 border border-otl-gray-200 dark:border-gray-800 rounded-xl hover:bg-white dark:hover:bg-[#27272A] hover:border-otl-gray-300 dark:hover:border-gray-700 transition-all text-txt-black-500 shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-otl-success-400"
         >
-          <SearchIcon className="w-4 h-4 shrink-0" />
-          <span className="text-sm flex-1 text-left truncate">Search...</span>
-          <kbd className="hidden sm:inline-block text-[10px] font-bold px-1.5 py-0.5 rounded-md border border-otl-gray-200/80 dark:border-gray-700 bg-bg-black-50 shadow-sm">
+          <SearchIcon className="w-4 h-4 shrink-0 text-txt-black-400" />
+          <span className="text-sm flex-1 text-left truncate text-txt-black-400">
+            Search...
+          </span>
+          <kbd className="hidden sm:inline-block text-[10px] font-bold px-1.5 py-0.5 rounded-md border border-otl-gray-200/80 dark:border-gray-700 bg-bg-black-50 dark:bg-bg-black-200 shadow-sm text-txt-black-500">
             {isMac ? "⌘" : "Ctrl"} K
           </kbd>
         </button>
 
-        {/* Command Palette Portal */}
         {isModalOpen &&
           createPortal(
             <div className="fixed inset-0 z-[9999] flex items-start justify-center pt-[12vh] px-4 sm:px-6">
