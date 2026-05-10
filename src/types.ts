@@ -9,6 +9,7 @@ export interface SearchResultInput {
   item_category_eng: string;
   frequency: string;
   status: string;
+  last_updated: any;
 }
 
 export interface SearchResultItem {

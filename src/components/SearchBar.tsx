@@ -97,6 +97,12 @@ const MydsSearchBar: React.FC<SearchBarProps> = ({ variant = "default" }) => {
     }, 250);
   }, [isReady, globalSearchData]);
 
+  useEffect(() => {
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [debouncedSearch]);
+
   const handleQueryChange = (newQuery: string) => {
     setQuery(newQuery);
     if (newQuery.trim().length > 0) {

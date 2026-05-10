@@ -64,9 +64,11 @@ export const LocalityAnalysisSkeleton = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  const mapFeatures = isMobile ? stateMobile : stateDesktop;
+
   const projection = geoMercator().fitSize(
     [isMobile ? 400 : 700, isMobile ? 350 : 400],
-    (isMobile ? stateMobile : stateDesktop) as any,
+    mapFeatures as any,
   );
   const pathGenerator = geoPath().projection(projection);
 
@@ -90,17 +92,15 @@ export const LocalityAnalysisSkeleton = () => {
           className="w-full h-full max-h-[350px] lg:max-h-[400px] overflow-visible opacity-50 animate-pulse"
         >
           {/* @ts-ignore */}
-          {(isMobile ? stateMobile : stateDesktop).features.map(
-            (feature: any, idx: number) => (
-              <path
-                key={idx}
-                d={pathGenerator(feature) || ""}
-                fill="rgba(113, 113, 122, 0.05)"
-                strokeWidth={0.5}
-                className="stroke-otl-gray-300"
-              />
-            ),
-          )}
+          {mapFeatures.features.map((feature: any, idx: number) => (
+            <path
+              key={idx}
+              d={pathGenerator(feature) || ""}
+              fill="rgba(113, 113, 122, 0.05)"
+              strokeWidth={0.5}
+              className="stroke-otl-gray-300"
+            />
+          ))}
         </svg>
       </div>
 

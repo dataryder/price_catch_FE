@@ -8,11 +8,13 @@ import React, {
 } from "react";
 import initWasm, { readParquet } from "parquet-wasm";
 import { tableFromIPC } from "apache-arrow";
+import { SearchResultInput } from "../types";
 
 interface DataContextType {
   isReady: boolean;
   maxDate: string | null;
-  globalSearchData: any[];
+  globalSearchData: SearchResultInput[];
+  userRegion: string | null;
   error: string | null;
 }
 
@@ -20,6 +22,7 @@ const DataContext = createContext<DataContextType>({
   isReady: false,
   maxDate: null,
   globalSearchData: [],
+  userRegion: null,
   error: null,
 });
 
@@ -31,8 +34,11 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [isReady, setIsReady] = useState(false);
-  const [globalSearchData, setGlobalSearchData] = useState<any[]>([]);
+  const [globalSearchData, setGlobalSearchData] = useState<SearchResultInput[]>(
+    [],
+  );
   const [maxDate, setMaxDate] = useState<string | null>(null);
+  const [userRegion, setUserRegion] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const isInitializing = useRef(false);
@@ -41,30 +47,39 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({
     if (isInitializing.current) return;
     isInitializing.current = true;
 
+    // Fetch Geo API asynchronously without blocking data initialization
+    fetch("/api/geo")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data?.country === "MY" && data?.region) {
+          setUserRegion(data.region);
+        }
+      })
+      .catch(console.error);
+
     const initApp = async () => {
       try {
-        // 1. Initialize WASM strictly before calling any other functions
         await initWasm();
 
-        // 2. Fetch Global Search Parquet
         const res = await fetch(`${DATA_URL}/global_search.parquet`);
         if (!res.ok) throw new Error("Failed to fetch search index");
 
         const buffer = new Uint8Array(await res.arrayBuffer());
 
-        // 3. Decode Parquet to WASM Table -> Convert to IPC Stream -> Load into JS Arrow
         const wasmTable = readParquet(buffer);
         const table = tableFromIPC(wasmTable.intoIPCStream());
 
-        const data = table.toArray().map((row) => row.toJSON());
+        const data = table
+          .toArray()
+          .map((row) => row.toJSON()) as SearchResultInput[];
 
-        // Compute max date directly from search data
         let latest = "";
         for (const item of data) {
           if (item.last_updated && item.last_updated > latest) {
             latest = item.last_updated;
           }
         }
+
         setGlobalSearchData(data);
         setMaxDate(latest || null);
         setIsReady(true);
@@ -78,8 +93,8 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({
   }, []);
 
   const value = useMemo(
-    () => ({ isReady, globalSearchData, maxDate, error }),
-    [isReady, globalSearchData, maxDate, error],
+    () => ({ isReady, globalSearchData, maxDate, userRegion, error }),
+    [isReady, globalSearchData, maxDate, userRegion, error],
   );
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;

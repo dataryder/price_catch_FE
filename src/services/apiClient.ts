@@ -11,17 +11,17 @@ import {
 
 const DATA_URL = "https://pricecatcher-lake.iwa.my/data";
 
+// (Update the fetchParquet function around line 13)
 const fetchParquet = async (url: string) => {
   const res = await fetch(url);
   if (!res.ok) throw new Error("File not found");
 
   const buffer = new Uint8Array(await res.arrayBuffer());
 
-  // Extract from WASM memory to JS Arrow using IPC stream
   const wasmTable = readParquet(buffer);
   const table = tableFromIPC(wasmTable.intoIPCStream());
-
-  return table.toArray().map((row: any) => row.toJSON());
+  const data = table.toArray().map((row: any) => row.toJSON());
+  return data;
 };
 
 // JS Helper for percentiles

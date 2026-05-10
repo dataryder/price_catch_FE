@@ -82,7 +82,7 @@ const CellWrapper = ({
 
 const ItemDetailsWrapper: React.FC = () => {
   const { itemCode } = useParams<{ itemCode: string }>();
-  const { globalSearchData, isReady } = useData(); // <-- Changed
+  const { globalSearchData, isReady, userRegion } = useData();
 
   const [itemDetails, setItemDetails] = useState<ItemMetadata | null>(null);
   const [priceHistory, setPriceHistory] = useState<ItemPriceHistory[]>([]);
@@ -246,48 +246,29 @@ const ItemDetailsWrapper: React.FC = () => {
   useEffect(() => {
     if (availableStates.length === 0 || hasAutoSelectedState) return;
 
-    const determineState = async () => {
-      try {
-        const res = await fetch("/api/geo");
-        if (res.ok) {
-          const { country, region } = await res.json();
+    if (userRegion) {
+      const mappedRegion = normalizeCloudflareRegion(userRegion);
+      const exactMatch = availableStates.find(
+        (s) =>
+          s.localeCompare(mappedRegion, undefined, {
+            sensitivity: "base",
+          }) === 0,
+      );
 
-          if (country === "MY" && region) {
-            const mappedRegion = normalizeCloudflareRegion(region);
-
-            // Check if the user's state actually has retail data for this item today
-            const exactMatch = availableStates.find(
-              (s) =>
-                s.localeCompare(mappedRegion, undefined, {
-                  sensitivity: "base",
-                }) === 0,
-            );
-
-            if (exactMatch) {
-              setSelectedState(exactMatch);
-              setHasAutoSelectedState(true);
-              return;
-            }
-          }
-        }
-      } catch (e) {
-        console.error("Geo lookup failed, falling back to default.", e);
+      if (exactMatch) {
+        setSelectedState(exactMatch);
+        setHasAutoSelectedState(true);
+        return;
       }
+    }
 
-      // Fallback Logic:
-      // 1. If not in Malaysia or API fails, default to Selangor if available
-      if (availableStates.includes(DEFAULT_STATE)) {
-        setSelectedState(DEFAULT_STATE);
-      } else {
-        // 2. If Selangor isn't available for this item, pick whatever is first
-        setSelectedState(availableStates[0] || "");
-      }
-      setHasAutoSelectedState(true);
-    };
-
-    determineState();
-  }, [availableStates, hasAutoSelectedState]);
-
+    if (availableStates.includes(DEFAULT_STATE)) {
+      setSelectedState(DEFAULT_STATE);
+    } else {
+      setSelectedState(availableStates[0] || "");
+    }
+    setHasAutoSelectedState(true);
+  }, [availableStates, hasAutoSelectedState, userRegion]);
   const availableDistricts = useMemo(
     () =>
       Array.from(
@@ -339,8 +320,6 @@ const ItemDetailsWrapper: React.FC = () => {
         const wasmTable = readParquet(buffer);
         const table = tableFromIPC(wasmTable.intoIPCStream());
         let data = table.toArray().map((row) => row.toJSON());
-
-        wasmTable.free(); // Crucial: Free Wasm memory
 
         // Apply Date Filters
         if (downloadDateRange?.from) {
