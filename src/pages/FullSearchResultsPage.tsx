@@ -39,16 +39,10 @@ const FullSearchResultsPage: React.FC = () => {
     try {
       const term = query.trim().toLowerCase();
 
-      // Return all matches, no slice limit
-      const items = globalSearchData.filter((item) => {
-        if (!item) return false;
-
-        const nameMatch = item.item?.toLowerCase().includes(term);
-        const indexMatch = item.search_index?.toLowerCase().includes(term);
-        const catMatch = item.item_category?.toLowerCase().includes(term);
-
-        return nameMatch || indexMatch || catMatch;
-      });
+      // Filter against pre-computed index to avoid allocations across 10,000+ items
+      const items = globalSearchData.filter(
+        (item: any) => item && item._search?.includes(term),
+      );
 
       // Maintain sort order: Active items first, then discontinued
       items.sort((a, b) => {

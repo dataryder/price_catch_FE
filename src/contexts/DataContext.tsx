@@ -69,18 +69,26 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({
         const wasmTable = readParquet(buffer);
         const table = tableFromIPC(wasmTable.intoIPCStream());
 
-        const data = table
-          .toArray()
-          .map((row) => row.toJSON()) as SearchResultInput[];
-
+        const data: any[] = [];
         let latest = "";
-        for (const item of data) {
+
+        for (const row of table) {
+          const item = row.toJSON();
+
+          // Pre-compute lowercased search string for ultra-fast, zero-allocation filtering
+          item._search =
+            `${item.item || ""} ${item.search_index || ""} ${item.item_category || ""}`.toLowerCase();
+
+          // Clear large strings to drop memory footprint, preserve V8 shape using undefined
+          item.search_index = undefined;
+
           if (item.last_updated && item.last_updated > latest) {
             latest = item.last_updated;
           }
+          data.push(item);
         }
 
-        setGlobalSearchData(data);
+        setGlobalSearchData(data as SearchResultInput[]);
         setMaxDate(latest || null);
         setIsReady(true);
       } catch (err: any) {

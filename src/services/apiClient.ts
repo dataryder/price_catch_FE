@@ -11,20 +11,39 @@ import {
 
 const DATA_URL = "https://pricecatcher-lake.iwa.my/data";
 
-// (Update the fetchParquet function around line 13)
-const fetchParquet = async (url: string) => {
-  const res = await fetch(url);
-  if (!res.ok) throw new Error("File not found");
+const bufferCache = new Map<string, Uint8Array>();
 
-  const buffer = new Uint8Array(await res.arrayBuffer());
+const fetchParquet = async (
+  url: string,
+  filterKey?: string,
+  filterValue?: any,
+) => {
+  let buffer = bufferCache.get(url);
+
+  if (!buffer) {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error("File not found");
+    buffer = new Uint8Array(await res.arrayBuffer());
+    bufferCache.set(url, buffer);
+  }
 
   const wasmTable = readParquet(buffer);
   const table = tableFromIPC(wasmTable.intoIPCStream());
-  const data = table.toArray().map((row: any) => row.toJSON());
+
+  let data;
+  if (filterKey) {
+    data = [];
+    for (const row of table) {
+      if (row[filterKey] === filterValue) {
+        data.push(row.toJSON());
+      }
+    }
+  } else {
+    data = table.toArray().map((row: any) => row.toJSON());
+  }
+
   return data;
 };
-
-// JS Helper for percentiles
 const quantile = (arr: number[], q: number) => {
   if (arr.length === 0) return 0;
   const sorted = [...arr].sort((a, b) => a - b);
@@ -60,10 +79,11 @@ export const getItemPrices = async (
   targetDate: string,
 ): Promise<ItemLatest[]> => {
   try {
-    const data = await fetchParquet(
+    return await fetchParquet(
       `${DATA_URL}/prices/item_code=${item_code}/data.parquet`,
+      "date",
+      targetDate,
     );
-    return data.filter((d: any) => d.date === targetDate);
   } catch {
     return [];
   }
@@ -127,60 +147,4 @@ export const getItemsByCategory = async (
       (i) => i.item_group === group && i.item_category === decodedCategory,
     )
     .sort((a, b) => a.item.localeCompare(b.item));
-};
-
-export const getLocalityInsights = async (
-  item_code: string,
-  targetDate: string,
-  metric: "median" | "avg" | "p95" | "p5" = "median",
-  level: "state" | "district" = "state",
-): Promise<any> => {
-  try {
-    const data = await fetchParquet(
-      `${DATA_URL}/prices/item_code=${item_code}/data.parquet`,
-    );
-    const filtered = data.filter((d: any) => d.date === targetDate);
-
-    if (filtered.length === 0) return null;
-
-    const grouped = filtered.reduce((acc: any, row: any) => {
-      const key = row[level];
-      if (!key) return acc;
-      if (!acc[key]) acc[key] = { prices: [], records: [] };
-      acc[key].prices.push(row.price);
-      acc[key].records.push(row);
-      return acc;
-    }, {});
-
-    interface RankingItem {
-      name: string;
-      val: number;
-      rank?: number;
-    }
-
-    const ranking: RankingItem[] = Object.entries(grouped).map(
-      ([name, group]: any) => {
-        const prices = group.prices;
-        let val = 0;
-        if (metric === "avg")
-          val =
-            prices.reduce((a: number, b: number) => a + b, 0) / prices.length;
-        if (metric === "median") val = quantile(prices, 0.5);
-        if (metric === "p5") val = quantile(prices, 0.05);
-        if (metric === "p95") val = quantile(prices, 0.95);
-        return { name, val };
-      },
-    );
-
-    ranking.sort((a, b) => a.val - b.val);
-    ranking.forEach((r, idx) => (r.rank = idx + 1));
-
-    const cheapest_stores = filtered
-      .sort((a: any, b: any) => a.price - b.price)
-      .slice(0, 10);
-
-    return { ranking, cheapest_stores };
-  } catch {
-    return null;
-  }
 };

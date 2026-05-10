@@ -79,22 +79,14 @@ const MydsSearchBar: React.FC<SearchBarProps> = ({ variant = "default" }) => {
 
       setIsSearching(true);
 
-      // Filter the in-memory array (Fast, Case-Insensitive)
+      // Filter against pre-computed index to eliminate string allocations
       const results = globalSearchData
-        .filter((item) => {
-          if (!item) return false;
-
-          const nameMatch = item.item?.toLowerCase().includes(term);
-          const indexMatch = item.search_index?.toLowerCase().includes(term);
-          const catMatch = item.item_category?.toLowerCase().includes(term);
-
-          return nameMatch || indexMatch || catMatch;
-        })
-        .slice(0, 5); // Limit to top 5 results for dropdown
+        .filter((item: any) => item && item._search?.includes(term))
+        .slice(0, 5);
 
       setLiveResults(results);
       setIsSearching(false);
-    }, 250);
+    }, 50);
   }, [isReady, globalSearchData]);
 
   useEffect(() => {

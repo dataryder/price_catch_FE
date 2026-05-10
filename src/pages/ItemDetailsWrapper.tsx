@@ -26,11 +26,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 
 import { ItemMetadata, ItemLatest, ItemPriceHistory } from "../types";
-import {
-  getItemMetadata,
-  getItemPrices,
-  getItemPriceHistory,
-} from "../services/apiClient";
+import { getItemPrices, getItemPriceHistory } from "../services/apiClient";
 import ItemMetadataDisplay from "../components/ItemMetadata";
 import LocalityAnalysis, {
   LocalityAnalysisSkeleton,
@@ -84,21 +80,33 @@ const ItemDetailsWrapper: React.FC = () => {
   const { itemCode } = useParams<{ itemCode: string }>();
   const { globalSearchData, isReady, userRegion } = useData();
 
-  const [itemDetails, setItemDetails] = useState<ItemMetadata | null>(null);
+  // 1. Sync metadata instantly from memory
+  const itemDetails = useMemo(() => {
+    if (!isReady || !globalSearchData.length || !itemCode) return null;
+    const item = globalSearchData.find((i) => i.item_code === Number(itemCode));
+    if (!item) return null;
+    return {
+      ...item,
+      frequency: "weekly",
+      minimum: item.minimum || 0,
+      maximum: item.maximum || 0,
+      median: item.median || 0,
+    } as ItemMetadata;
+  }, [isReady, globalSearchData, itemCode]);
+
   const [priceHistory, setPriceHistory] = useState<ItemPriceHistory[]>([]);
   const [allPriceData, setAllPriceData] = useState<ItemLatest[]>([]);
 
-  const [isLoadingMetadata, setIsLoadingMetadata] = useState<boolean>(true);
   const [isLoadingHistory, setIsLoadingHistory] = useState<boolean>(true);
   const [isLoadingPrices, setIsLoadingPrices] = useState<boolean>(true);
 
   const [selectedState, setSelectedState] = useState<string>("");
   const [hasAutoSelectedState, setHasAutoSelectedState] =
     useState<boolean>(false);
-
   const [selectedDistrict, setSelectedDistrict] = useState<string>("");
+
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
-  const [debouncedDate, setDebouncedDate] = useState<Date | undefined>();
+  const [targetDateStr, setTargetDateStr] = useState<string | null>(null);
 
   const [downloadDateRange, setDownloadDateRange] = useState<
     DateRange | undefined
@@ -108,56 +116,47 @@ const ItemDetailsWrapper: React.FC = () => {
   );
   const [isDownloading, setIsDownloading] = useState(false);
 
+  // 2. Initialize Date instantly from metadata (skips the 400ms debounce delay on load)
   useEffect(() => {
-    const handler = setTimeout(() => setDebouncedDate(selectedDate), 400);
+    if (itemDetails?.last_updated && !selectedDate) {
+      const [yyyy, mm, dd] = itemDetails.last_updated.split("-").map(Number);
+      const latestDate = new Date(yyyy, mm - 1, dd);
+      setSelectedDate(latestDate);
+      setTargetDateStr(itemDetails.last_updated);
+    }
+  }, [itemDetails?.last_updated, selectedDate]);
+
+  // 3. Debounce subsequent user date selections
+  useEffect(() => {
+    if (!selectedDate) return;
+    const str = format(selectedDate, "yyyy-MM-dd");
+    if (str === targetDateStr) return; // Prevent initial double fetch
+
+    const handler = setTimeout(() => setTargetDateStr(str), 400);
     return () => clearTimeout(handler);
-  }, [selectedDate]);
+  }, [selectedDate, targetDateStr]);
 
+  // 4. Fetch History in parallel
   useEffect(() => {
-    if (!itemCode || !isReady) return; // Wait for context
-    setIsLoadingMetadata(true);
+    if (!itemCode || !isReady) return;
     setIsLoadingHistory(true);
-
-    Promise.all([
-      getItemMetadata(globalSearchData, itemCode),
-      getItemPriceHistory(itemCode),
-    ])
-      .then(([metaData, historyData]) => {
-        if (metaData.length > 0) setItemDetails(metaData[0]);
-
-        // 1. Force sort the history by date ascending, ensuring the last item is ALWAYS the latest
-        const sortedHistory = [...historyData].sort((a, b) =>
-          a.date.localeCompare(b.date),
+    getItemPriceHistory(itemCode)
+      .then((historyData) => {
+        setPriceHistory(
+          [...historyData].sort((a, b) => a.date.localeCompare(b.date)),
         );
-        setPriceHistory(sortedHistory);
-
-        if (sortedHistory.length > 0 && !selectedDate) {
-          // 2. Extract the string "YYYY-MM-DD"
-          const rawDateStr = sortedHistory[sortedHistory.length - 1].date;
-
-          // 3. Parse safely into local time to avoid UTC-shift bugs (e.g., 8:00 AM Local instead of Midnight UTC)
-          const [yyyy, mm, dd] = rawDateStr.split("-").map(Number);
-          const latestDate = new Date(yyyy, mm - 1, dd);
-
-          setSelectedDate(latestDate);
-          setDebouncedDate(latestDate);
-        }
       })
-      .finally(() => {
-        setIsLoadingMetadata(false);
-        setIsLoadingHistory(false);
-      });
-  }, [itemCode, isReady, globalSearchData]);
+      .finally(() => setIsLoadingHistory(false));
+  }, [itemCode, isReady]);
 
+  // 5. Fetch Prices in parallel (Triggers immediately once targetDateStr is set)
   useEffect(() => {
-    if (!itemCode || !debouncedDate) return;
+    if (!itemCode || !targetDateStr) return;
     setIsLoadingPrices(true);
-    const targetStr = format(debouncedDate, "yyyy-MM-dd");
-
-    getItemPrices(itemCode, targetStr)
+    getItemPrices(itemCode, targetDateStr)
       .then(setAllPriceData)
       .finally(() => setIsLoadingPrices(false));
-  }, [itemCode, debouncedDate]);
+  }, [itemCode, targetDateStr]);
 
   const filteredPriceLatest = useMemo(() => {
     if (!hasAutoSelectedState) return [];
@@ -168,7 +167,7 @@ const ItemDetailsWrapper: React.FC = () => {
           !selectedDistrict || entry.district === selectedDistrict;
         return stateMatch && districtMatch;
       })
-      .sort((a, b) => a.price - b.price); // <-- Added sort by lowest price
+      .sort((a, b) => a.price - b.price); // Sort by lowest price
   }, [allPriceData, selectedState, selectedDistrict, hasAutoSelectedState]);
 
   const minPrice = useMemo(
@@ -243,6 +242,7 @@ const ItemDetailsWrapper: React.FC = () => {
     [allPriceData],
   );
 
+  // Geo lookup auto select mapped from pre-fetched context
   useEffect(() => {
     if (availableStates.length === 0 || hasAutoSelectedState) return;
 
@@ -262,6 +262,7 @@ const ItemDetailsWrapper: React.FC = () => {
       }
     }
 
+    // Fallback Logic
     if (availableStates.includes(DEFAULT_STATE)) {
       setSelectedState(DEFAULT_STATE);
     } else {
@@ -269,6 +270,7 @@ const ItemDetailsWrapper: React.FC = () => {
     }
     setHasAutoSelectedState(true);
   }, [availableStates, hasAutoSelectedState, userRegion]);
+
   const availableDistricts = useMemo(
     () =>
       Array.from(
@@ -316,19 +318,23 @@ const ItemDetailsWrapper: React.FC = () => {
         // Ensure WASM is initialized (safe to call multiple times)
         await initParquetWasm();
 
-        // Correct conversion API
         const wasmTable = readParquet(buffer);
         const table = tableFromIPC(wasmTable.intoIPCStream());
-        let data = table.toArray().map((row) => row.toJSON());
 
-        // Apply Date Filters
-        if (downloadDateRange?.from) {
-          const fromStr = format(downloadDateRange.from, "yyyy-MM-dd");
-          data = data.filter((d: any) => d.date >= fromStr);
-        }
-        if (downloadDateRange?.to) {
-          const toStr = format(downloadDateRange.to, "yyyy-MM-dd");
-          data = data.filter((d: any) => d.date <= toStr);
+        const fromStr = downloadDateRange?.from
+          ? format(downloadDateRange.from, "yyyy-MM-dd")
+          : null;
+        const toStr = downloadDateRange?.to
+          ? format(downloadDateRange.to, "yyyy-MM-dd")
+          : null;
+
+        // Iterate and filter Arrow Table directly to prevent out-of-memory crashes on large exports
+        const data = [];
+        for (const row of table) {
+          const d = row.date;
+          if (fromStr && d < fromStr) continue;
+          if (toStr && d > toStr) continue;
+          data.push(row.toJSON());
         }
 
         const headers = [
@@ -368,6 +374,7 @@ const ItemDetailsWrapper: React.FC = () => {
       setIsDownloading(false);
     }
   };
+
   const handleLocalitySelect = (level: "state" | "district", name: string) => {
     if (!name) {
       setSelectedState(DEFAULT_STATE);
@@ -376,7 +383,6 @@ const ItemDetailsWrapper: React.FC = () => {
     }
 
     if (level === "state") {
-      // Find proper casing from available items if possible, otherwise use passed name
       const match = allPriceData.find(
         (p) =>
           p.state.localeCompare(name, undefined, { sensitivity: "base" }) === 0,
@@ -393,22 +399,23 @@ const ItemDetailsWrapper: React.FC = () => {
         setSelectedState(match.state);
         setSelectedDistrict(match.district);
       } else {
-        setSelectedDistrict(name); // Fallback if no prices exist for that district today
+        setSelectedDistrict(name);
       }
     }
   };
+
   return (
-    <div className="mx-auto w-full max-w-screen-xl px-4 sm:px-4 lg:px-8  flex flex-col gap-4 md:gap-8 pt-6 pb-20 animate-in fade-in duration-500">
+    <div className="mx-auto w-full max-w-screen-xl px-4 sm:px-4 lg:px-8 flex flex-col gap-4 md:gap-8 pt-6 pb-20 animate-in fade-in duration-500">
       <ItemMetadataDisplay
         metadata={itemDetails}
         priceHistory={priceHistory}
-        isLoading={isLoadingMetadata || isLoadingHistory}
+        isLoading={!itemDetails || isLoadingHistory}
       />
 
-      {itemCode && debouncedDate ? (
+      {itemCode && targetDateStr ? (
         <LocalityAnalysis
-          itemCode={itemCode}
-          targetDate={format(debouncedDate, "yyyy-MM-dd")}
+          rawData={allPriceData}
+          isLoading={isLoadingPrices}
           onSelectionChange={handleLocalitySelect}
         />
       ) : (
@@ -519,7 +526,7 @@ const ItemDetailsWrapper: React.FC = () => {
                       <Select
                         variant="outline"
                         size="small"
-                        value="csv"
+                        value={downloadFormat}
                         // @ts-ignore
                         onValueChange={(v) => setDownloadFormat(v)}
                       >
@@ -555,7 +562,6 @@ const ItemDetailsWrapper: React.FC = () => {
         </div>
 
         <div className="bg-white dark:bg-[#18181B]">
-          {/* CHANGED: Show spinner while waiting for both prices AND the Geo lookup */}
           {isLoadingPrices || !hasAutoSelectedState ? (
             <div className="p-24 flex flex-col items-center justify-center gap-4">
               <Spinner size="large" />

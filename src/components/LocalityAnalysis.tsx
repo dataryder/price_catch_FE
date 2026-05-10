@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { getLocalityInsights } from "../services/apiClient";
 import {
   Select,
   SelectValue,
@@ -15,10 +14,11 @@ import stateDesktop from "../lib/geojson/state/_desktop";
 import stateMobile from "../lib/geojson/state/_mobile";
 import districtDesktop from "../lib/geojson/district/_desktop";
 import districtMobile from "../lib/geojson/district/_mobile";
+import { ItemLatest } from "../types";
 
 interface LocalityAnalysisProps {
-  itemCode: string;
-  targetDate: string;
+  rawData: ItemLatest[];
+  isLoading: boolean;
   onSelectionChange?: (level: "state" | "district", name: string) => void;
 }
 
@@ -53,6 +53,19 @@ const getTooltipPositionClasses = (x: number, y: number, isMobile: boolean) => {
   return `${xClass} ${yClass}`;
 };
 
+const quantile = (arr: number[], q: number) => {
+  if (arr.length === 0) return 0;
+  const sorted = [...arr].sort((a, b) => a - b);
+  const pos = (sorted.length - 1) * q;
+  const base = Math.floor(pos);
+  const rest = pos - base;
+  if (sorted[base + 1] !== undefined) {
+    return sorted[base] + rest * (sorted[base + 1] - sorted[base]);
+  } else {
+    return sorted[base];
+  }
+};
+
 export const LocalityAnalysisSkeleton = () => {
   const [isMobile, setIsMobile] = useState(
     typeof window !== "undefined" ? window.innerWidth < 1024 : false,
@@ -65,7 +78,6 @@ export const LocalityAnalysisSkeleton = () => {
   }, []);
 
   const mapFeatures = isMobile ? stateMobile : stateDesktop;
-
   const projection = geoMercator().fitSize(
     [isMobile ? 400 : 700, isMobile ? 350 : 400],
     mapFeatures as any,
@@ -74,7 +86,6 @@ export const LocalityAnalysisSkeleton = () => {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 lg:grid-rows-[auto_1fr] border border-otl-gray-200/60 dark:border-otl-gray-800/60 rounded-[32px] shadow-[0_8px_30px_rgba(0,0,0,0.04)] bg-bg-white relative lg:h-[440px] overflow-hidden">
-      {/* 1. HEADER & SELECTS */}
       <div className="lg:col-span-4 lg:col-start-1 lg:row-start-1 lg:border-r border-otl-gray-200/60 dark:border-otl-gray-800/60 dark:border-gray-800/50 p-6 md:p-8 pb-4 lg:pb-3 flex flex-col justify-end z-10 bg-bg-white">
         <div className="flex flex-col gap-4">
           <div className="h-6 w-40 bg-bg-black-200 rounded-lg animate-pulse"></div>
@@ -84,8 +95,6 @@ export const LocalityAnalysisSkeleton = () => {
           </div>
         </div>
       </div>
-
-      {/* 2. MAP */}
       <div className="lg:col-span-8 lg:col-start-5 lg:row-span-2 lg:row-start-1 relative flex justify-center items-center bg-bg-washed dark:bg-[#1D1D21] p-4 lg:p-6 h-[320px] lg:h-auto border-y lg:border-y-0 border-otl-gray-200/60 dark:border-otl-gray-800/60 dark:border-gray-800/50 z-0">
         <svg
           viewBox={isMobile ? "0 0 400 350" : "0 0 700 400"}
@@ -103,8 +112,6 @@ export const LocalityAnalysisSkeleton = () => {
           ))}
         </svg>
       </div>
-
-      {/* 3. LIST */}
       <div className="lg:col-span-4 lg:col-start-1 lg:row-start-2 lg:border-r border-otl-gray-200/60 dark:border-otl-gray-800/60 dark:border-gray-800/50 p-6 md:p-8 pt-4 lg:pt-0 flex flex-col h-[260px] lg:h-auto overflow-hidden z-10 bg-bg-white">
         <div className="flex flex-col gap-3 pt-2">
           {[...Array(5)].map((_, i) => (
@@ -120,16 +127,14 @@ export const LocalityAnalysisSkeleton = () => {
 };
 
 const LocalityAnalysis: React.FC<LocalityAnalysisProps> = ({
-  itemCode,
-  targetDate,
+  rawData,
+  isLoading,
   onSelectionChange,
 }) => {
   const [metric, setMetric] = useState<"median" | "avg" | "p95" | "p5">(
     "median",
   );
   const [level, setLevel] = useState<"state" | "district">("state");
-  const [data, setData] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState(false);
 
   const [hoverInfo, setHoverInfo] = useState<any>(null);
   const [pinnedInfo, setPinnedInfo] = useState<any>(null);
@@ -148,20 +153,41 @@ const LocalityAnalysis: React.FC<LocalityAnalysisProps> = ({
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // Compute metrics synchronously entirely in-memory (0 API Calls)
+  const data = useMemo(() => {
+    if (!rawData || rawData.length === 0) return null;
+
+    const grouped = rawData.reduce((acc: any, row: any) => {
+      const key = row[level];
+      if (!key) return acc;
+      if (!acc[key]) acc[key] = { prices: [] };
+      acc[key].prices.push(row.price);
+      return acc;
+    }, {});
+
+    const ranking = Object.entries(grouped).map(([name, group]: any) => {
+      const prices = group.prices;
+      let val = 0;
+      if (metric === "avg")
+        val = prices.reduce((a: number, b: number) => a + b, 0) / prices.length;
+      if (metric === "median") val = quantile(prices, 0.5);
+      if (metric === "p5") val = quantile(prices, 0.05);
+      if (metric === "p95") val = quantile(prices, 0.95);
+      return { name, val };
+    });
+
+    ranking.sort((a, b) => a.val - b.val);
+    ranking.forEach((r, idx) => ((r as any).rank = idx + 1));
+
+    return { ranking };
+  }, [rawData, metric, level]);
+
   useEffect(() => {
-    if (!itemCode || !targetDate) return;
-    setIsLoading(true);
     setHoverInfo(null);
     setPinnedInfo(null);
     onSelectionChange?.(level, "");
+  }, [rawData, metric, level]);
 
-    getLocalityInsights(itemCode, targetDate, metric, level) // Removed conn dependency
-      .then(setData)
-      .catch(console.error)
-      .finally(() => setIsLoading(false));
-  }, [itemCode, targetDate, metric, level]);
-
-  // Scroll active list item into view when pinned info changes
   useEffect(() => {
     if (pinnedInfo?.name) {
       const el = document.getElementById(`locality-item-${pinnedInfo.name}`);
@@ -233,7 +259,6 @@ const LocalityAnalysis: React.FC<LocalityAnalysisProps> = ({
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 lg:grid-rows-[auto_1fr] border border-otl-gray-200 rounded-[32px] shadow-[0_8px_30px_rgba(0,0,0,0.04)] bg-bg-white relative lg:h-[440px] overflow-hidden">
-      {/* 1. HEADER & SELECTS (Top on mobile, Top-Left on desktop) */}
       <div className="lg:col-span-4 lg:col-start-1 lg:row-start-1 lg:border-r border-otl-gray-200 bg-bg-white p-6 md:p-8 pb-4 lg:pb-3 flex flex-col justify-end z-10">
         <div className="flex flex-col gap-4">
           <h4 className="text-lg font-black tracking-tight text-txt-black-900 dark:text-white">
@@ -275,7 +300,6 @@ const LocalityAnalysis: React.FC<LocalityAnalysisProps> = ({
         </div>
       </div>
 
-      {/* 2. MAP (Middle on mobile, Right on desktop) */}
       <div className="lg:col-span-8 lg:col-start-5 lg:row-span-2 lg:row-start-1 relative flex justify-center items-center bg-[#FAFAFA] dark:bg-[#1D1D21] p-4 lg:p-6 h-[320px] lg:h-auto border-y lg:border-y-0 border-otl-gray-200 z-0">
         <svg
           viewBox={isMobile ? "0 0 400 350" : "0 0 700 400"}
@@ -361,7 +385,6 @@ const LocalityAnalysis: React.FC<LocalityAnalysisProps> = ({
         )}
       </div>
 
-      {/* 3. LIST (Bottom on mobile, Bottom-Left on desktop) */}
       <div className="lg:col-span-4 lg:col-start-1 lg:row-start-2 lg:border-r border-otl-gray-200 bg-bg-white p-6 md:p-8 pt-4 lg:pt-0 flex flex-col h-[280px] lg:h-auto overflow-hidden z-10">
         <div className="flex-1 overflow-y-auto scrollbar pr-2">
           {isLoading ? (
