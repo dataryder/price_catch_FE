@@ -10,6 +10,7 @@ export interface SearchResultInput {
   frequency: string;
   status: string;
   last_updated: any;
+  search_index: any;
 }
 
 export interface SearchResultItem {
