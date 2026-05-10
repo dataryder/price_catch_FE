@@ -174,7 +174,9 @@ const CategoryPage: React.FC = () => {
             </h2>
             <div className="flex flex-wrap gap-2">
               {availableCategories.map((catName) => {
-                const urlSafeCatName = catName.replace("/", " | ");
+                const urlSafeCatName = catName
+                  .replace("/", "|")
+                  .replace("/", "|");
                 const isSelected = urlSafeCatName === category;
 
                 return (

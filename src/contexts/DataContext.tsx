@@ -57,7 +57,6 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({
         const table = tableFromIPC(wasmTable.intoIPCStream());
 
         const data = table.toArray().map((row) => row.toJSON());
-        console.log(data);
 
         // Compute max date directly from search data
         let latest = "";
@@ -66,7 +65,6 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({
             latest = item.last_updated;
           }
         }
-        console.log(data);
         setGlobalSearchData(data);
         setMaxDate(latest || null);
         setIsReady(true);

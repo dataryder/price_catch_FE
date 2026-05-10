@@ -123,7 +123,6 @@ const ItemDetailsWrapper: React.FC = () => {
       getItemPriceHistory(itemCode),
     ])
       .then(([metaData, historyData]) => {
-        console.log(metaData);
         if (metaData.length > 0) setItemDetails(metaData[0]);
 
         // 1. Force sort the history by date ascending, ensuring the last item is ALWAYS the latest

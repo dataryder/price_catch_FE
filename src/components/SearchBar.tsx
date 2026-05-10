@@ -244,13 +244,13 @@ const MydsSearchBar: React.FC<SearchBarProps> = ({ variant = "default" }) => {
         <button
           type="button"
           onClick={() => setIsModalOpen(true)}
-          className="flex items-center gap-3 w-full px-3 py-2 h-10 bg-bg-white dark:bg-[#1D1D21] border border-otl-gray-200 dark:border-gray-800 rounded-xl hover:bg-white dark:hover:bg-[#27272A] hover:border-otl-gray-300 dark:hover:border-gray-700 transition-all text-txt-black-500 shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-otl-success-400"
+          className="flex items-center gap-3 w-full px-3 py-2 h-10 bg-bg-white dark:bg-bg-black-200 border border-otl-gray-200 dark:border-gray-800 rounded-xl hover:bg-white dark:hover:bg-[#27272A] hover:border-otl-gray-300 dark:hover:border-gray-700 transition-all text-txt-black-500 shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-otl-success-400"
         >
           <SearchIcon className="w-4 h-4 shrink-0 text-txt-black-400" />
           <span className="text-sm flex-1 text-left truncate text-txt-black-400">
             Search...
           </span>
-          <kbd className="hidden sm:inline-block text-[10px] font-bold px-1.5 py-0.5 rounded-md border border-otl-gray-200/80 dark:border-gray-700 bg-bg-black-50 shadow-sm text-txt-black-500">
+          <kbd className="hidden sm:inline-block text-[10px] font-bold px-1.5 py-0.5 rounded-md border border-otl-gray-200/80 dark:border-gray-700 bg-bg-black-50 dark:bg-bg-black-200 shadow-sm text-txt-black-500">
             {isMac ? "⌘" : "Ctrl"} K
           </kbd>
         </button>

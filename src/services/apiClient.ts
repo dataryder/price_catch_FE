@@ -44,7 +44,6 @@ export const getItemMetadata = async (
 ): Promise<ItemMetadata[]> => {
   const item = globalSearchData.find((i) => i.item_code === Number(item_code));
   if (!item) return [];
-  console.log("item", item);
   return [
     {
       ...item,
