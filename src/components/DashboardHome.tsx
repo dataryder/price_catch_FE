@@ -40,7 +40,7 @@ const HomeDashboard = () => {
         </div>
         <Button
           variant="default-outline"
-          className="rounded-full shrink-0"
+          className="rounded-full shrink-0 px-3"
           onClick={() => navigate("/pulse")}
         >
           View Market Pulse

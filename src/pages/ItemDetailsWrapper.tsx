@@ -161,13 +161,16 @@ const ItemDetailsWrapper: React.FC = () => {
   }, [itemCode, debouncedDate]);
 
   const filteredPriceLatest = useMemo(() => {
-    return allPriceData.filter((entry) => {
-      const stateMatch = !selectedState || entry.state === selectedState;
-      const districtMatch =
-        !selectedDistrict || entry.district === selectedDistrict;
-      return stateMatch && districtMatch;
-    });
-  }, [allPriceData, selectedState, selectedDistrict]);
+    if (!hasAutoSelectedState) return [];
+    return allPriceData
+      .filter((entry) => {
+        const stateMatch = !selectedState || entry.state === selectedState;
+        const districtMatch =
+          !selectedDistrict || entry.district === selectedDistrict;
+        return stateMatch && districtMatch;
+      })
+      .sort((a, b) => a.price - b.price); // <-- Added sort by lowest price
+  }, [allPriceData, selectedState, selectedDistrict, hasAutoSelectedState]);
 
   const minPrice = useMemo(
     () =>
@@ -512,7 +515,7 @@ const ItemDetailsWrapper: React.FC = () => {
               </DropdownTrigger>
               <DropdownContent
                 align="end"
-                className="max-sm: p-3 md:p-6 w-[370px] md:w-[400px] rounded-3xl shadow-2xl bg-bg-white dark:bg-bg-washed backdrop-blur-xl border dark:border-2 border-otl-gray-200 dark:border-gray-800  max-sm:relative max-sm:left-[1rem]"
+                className="max-sm: p-3 w-[370px] md:w-[400px] rounded-3xl shadow-2xl bg-bg-white dark:bg-bg-washed backdrop-blur-xl border dark:border-2 border-otl-gray-200 dark:border-gray-800  max-sm:relative max-sm:left-[1rem]"
               >
                 <div className="flex flex-col gap-3 md:gap-6 p-3 md:p-4">
                   <p className="hidden font-semibold text-sm uppercase text-txt-black-900 dark:text-white">

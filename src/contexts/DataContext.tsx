@@ -66,7 +66,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({
             latest = item.last_updated;
           }
         }
-
+        console.log(data);
         setGlobalSearchData(data);
         setMaxDate(latest || null);
         setIsReady(true);
