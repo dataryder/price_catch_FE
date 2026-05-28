@@ -7,7 +7,8 @@ import { useTheme } from "@govtechmy/myds-react/hooks";
 
 import HomePage from "./pages/Home";
 import { Spinner } from "@govtechmy/myds-react/spinner";
-
+import { Masthead, MastheadTitle } from "@govtechmy/myds-react/masthead";
+import { InfoIcon } from "@govtechmy/myds-react/icon";
 const FullSearchResultsPage = lazy(
   () => import("./pages/FullSearchResultsPage"),
 );
@@ -15,6 +16,18 @@ const ItemDetailsWrapper = lazy(() => import("./pages/ItemDetailsWrapper"));
 const CategoryPage = lazy(() => import("./pages/CategoryCatalog"));
 const MarketPulsePage = lazy(() => import("./pages/MarketPulse"));
 const PageNotFound = lazy(() => import("./pages/PageNotFound"));
+
+const CustomMastheadHeader = ({ children }: { children: React.ReactNode }) => (
+  <div className="px-4.5 flex items-center gap-2 overflow-x-hidden py-2 outline-none sm:py-1 md:px-6 max-w-screen-xl ">
+    {/* Swapping the MalaysiaFlagIcon for InfoIcon */}
+    <div className="pl-2 sm:pl-6 lg:pl-8">
+      <InfoIcon className="inline-block text-txt-black-500" />
+    </div>
+    <div className="text-txt-black-700 text-[12px] flex w-full items-center justify-between truncate sm:justify-start">
+      {children}
+    </div>
+  </div>
+);
 
 function App() {
   const { setTheme } = useTheme();
@@ -25,6 +38,13 @@ function App() {
 
   return (
     <div className="w-full min-h-screen bg-bg-white dark:bg-[#18181B] transition-colors duration-300">
+      <Masthead>
+        <CustomMastheadHeader>
+          <MastheadTitle>
+            This is a community project using built on official open data.
+          </MastheadTitle>
+        </CustomMastheadHeader>
+      </Masthead>
       <div className="min-h-screen flex flex-col">
         <NavBarHeader />
 
