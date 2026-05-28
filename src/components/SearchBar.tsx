@@ -1,193 +1,259 @@
-import React, { useState, useCallback, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import debounce from 'lodash.debounce';
-import Fuse from 'fuse.js';
+import React, { useState, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
+import { useNavigate } from "react-router-dom";
+import { useData } from "../contexts/DataContext";
+import { SearchResultInput } from "../types";
 import {
-	SearchBar,
-	SearchBarInput,
-	SearchBarInputContainer,
-	SearchBarSearchButton,
-	SearchBarClearButton,
-	SearchBarResults,
-	SearchBarResultsList,
-	SearchBarResultsItem,
+  SearchBar,
+  SearchBarInput,
+  SearchBarInputContainer,
+  SearchBarClearButton,
+  SearchBarResults,
+  SearchBarResultsList,
+  SearchBarResultsItem,
 } from "@govtechmy/myds-react/search-bar";
-import { ChevronRightIcon } from "@govtechmy/myds-react/icon";
-import { Tag } from '@govtechmy/myds-react/tag';
-import { Button } from '@govtechmy/myds-react/button';
-import { SearchResultInput } from '../types';
-import itemsDataFromFile from '../data/items.json';
+import { Spinner } from "@govtechmy/myds-react/spinner";
+import { ChevronRightIcon, SearchIcon } from "@govtechmy/myds-react/icon";
+import { cn } from "../lib/utils";
 
-const allSearchableItems: SearchResultInput[] = itemsDataFromFile as SearchResultInput[];
+interface SearchBarProps {
+  variant?: "default" | "minimal";
+}
 
-const fuseOptions: object = {
-	keys: [
-		{ name: 'item', weight: 0.4 },
-		{ name: 'item_group', weight: 0.05 },
-		{ name: 'item_category', weight: 0.05 },
-		{ name: 'item_eng', weight: 0.4 },
-		{ name: 'item_group_eng', weight: 0.05 },
-		{ name: 'item_category_eng', weight: 0.05 },
-	],
-	threshold: 0.2,
-	ignoreLocation: true
-};
+const MydsSearchBar: React.FC<SearchBarProps> = ({ variant = "default" }) => {
+  const isMinimal = variant === "minimal";
+  const navigate = useNavigate();
 
-const MydsSearchBar: React.FC = () => {
-	const navigate = useNavigate();
-	const [query, setQuery] = useState('');
-	const [hasFocus, setHasFocus] = useState(false);
-	const [liveResults, setLiveResults] = useState<SearchResultInput[]>([]);
+  // 1. Use the new Data Context instead of DuckDB
+  const { isReady, globalSearchData } = useData();
 
-	const [fuseInstance, _setFuseInstance] = useState<Fuse<SearchResultInput> | null>(() => {
-		if (allSearchableItems && allSearchableItems.length > 0) {
-			return new Fuse(allSearchableItems, fuseOptions);
-		}
-		console.warn("Search items data is empty or not available.");
-		return null;
-	});
+  const [query, setQuery] = useState("");
+  const [hasFocus, setHasFocus] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
+  const [liveResults, setLiveResults] = useState<SearchResultInput[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-	const hasQuery = query.trim().length > 0;
-	const showResultsDropdown = hasQuery && hasFocus && !!fuseInstance;
+  const inputRef = useRef<HTMLInputElement>(null);
 
-	const debouncedSearch = useRef(
-		debounce((searchTerm: string, currentFuse: Fuse<SearchResultInput> | null) => {
-			if (!currentFuse || searchTerm.trim().length === 0) {
-				setLiveResults([]);
-				return;
-			}
-			const results = currentFuse.search(searchTerm.trim());
-			setLiveResults(results.map(result => result.item).slice(0, 10));
-		}, 300)
-	).current;
+  const isMac =
+    typeof window !== "undefined" &&
+    navigator.userAgent.toLowerCase().includes("mac");
 
-	const handleQueryChange = (newQuery: string) => {
-		setQuery(newQuery);
+  // Global Cmd+K listener
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        if (isMinimal) {
+          setIsModalOpen(true);
+        } else {
+          inputRef.current?.focus();
+        }
+      }
+      if (e.key === "Escape" && isModalOpen) {
+        setIsModalOpen(false);
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isMinimal, isModalOpen]);
 
-		if (newQuery.trim().length > 0 && fuseInstance) {
-			debouncedSearch(newQuery, fuseInstance);
-		} else {
-			setLiveResults([]);
-			if (typeof debouncedSearch.cancel === 'function') {
-				debouncedSearch.cancel();
-			}
-		}
-	};
+  // Autofocus when modal opens
+  useEffect(() => {
+    if (isModalOpen) {
+      setTimeout(() => inputRef.current?.focus(), 50);
+    }
+  }, [isModalOpen]);
 
-	const navigateToFullResults = useCallback(() => {
-		if (query.trim()) {
-			setHasFocus(false);
-			navigate(`/search-results?q=${encodeURIComponent(query.trim())}`);
-		}
-	}, [query, navigate]);
+  const handleQueryChange = (newQuery: string) => {
+    setQuery(newQuery);
 
-	const handleResultItemClick = useCallback((item: SearchResultInput) => {
-		if (!item || typeof item.item_code === 'undefined') {
-			return;
-		}
-		const targetPath = `/item/${item.item_code}`;
-		setHasFocus(false);
-		setQuery('');
-		setLiveResults([]);
+    const term = newQuery?.trim().toLowerCase();
 
-		try {
-			navigate(targetPath);
-		} catch (e) {
-			console.error("[DEBUG] Error during navigate call:", e);
-		}
-	}, [navigate, debouncedSearch]);
+    if (!isReady || !term || !globalSearchData) {
+      setLiveResults([]);
+      setIsSearching(false);
+      return;
+    }
 
-	const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-		event.preventDefault();
-		navigateToFullResults();
-	};
+    setIsSearching(true);
 
-	const handleClear = () => {
-		setQuery('');
-		setLiveResults([]);
-		if (typeof debouncedSearch.cancel === 'function') {
-			debouncedSearch.cancel();
-		}
-	};
+    const results = globalSearchData
+      .filter((item: any) => item && item._search?.includes(term))
+      .slice(0, 5);
 
-	const handleFocus = () => {
-		setHasFocus(true);
-	};
+    setLiveResults(results);
+    setIsSearching(false);
+  };
 
-	const handleBlur = (e: React.FocusEvent<HTMLDivElement>) => {
-		const blurredToChild = e.currentTarget.contains(e.relatedTarget as Node);
-		if (blurredToChild) {
-			return;
-		}
-		setHasFocus(false);
-	};
+  const handleSearchSubmit = (e?: React.FormEvent) => {
+    e?.preventDefault();
+    if (query.trim()) {
+      setHasFocus(false);
+      setIsModalOpen(false);
+      navigate(`/search-results?q=${encodeURIComponent(query.trim())}`);
+    }
+  };
 
-	let resultsContent;
-	if (!fuseInstance) {
-		resultsContent = <p className="text-txt-black-500 text-center p-4">Search is currently unavailable.</p>;
-	} else if (hasQuery && liveResults.length === 0) {
-		resultsContent = <p className="text-txt-black-900 text-center p-4">No results found for "{query}"</p>;
-	} else if (liveResults.length > 0) {
-		resultsContent = (
-			<>
-				<SearchBarResultsList className="max-h-[300px] overflow-y-auto px-1 scrollbar dark:darkscrollbar">
-					{liveResults.map((item) => (
-						<SearchBarResultsItem
-							key={`${item.item_code}-${item.item}`}
-							value={item.item_code.toString()}
-							onSelect={() => handleResultItemClick(item)}
-							role="button"
-							tabIndex={0}
-							className="cursor-pointer flex gap-3 items-center focus:ring focus:ring-otl-success-300/40 focus:outline-none my-1"
-						>
-							<p className="line-clamp-1 flex-1 text-sm">
-								{item.item}
-							</p>
-							<Tag size='small' variant='warning' mode='pill' className='max-sm:hidden'>{item.item_group}</Tag>
-							<Tag size='small' variant='primary' mode='pill' className='max-sm:hidden'>{item.item_category}</Tag>
-							<Tag size='small' variant={(item.frequency === "daily") ? "success" : (item.frequency === "weekly") ? "warning" : "danger"} mode='default' className='max-sm:hidden'>{item.frequency}</Tag>
-							<ChevronRightIcon className="text-gray-400" />
-						</SearchBarResultsItem>
-					))}
-				</SearchBarResultsList>
-				<Button variant="default-ghost" onClick={navigateToFullResults} asChild>
-					<div
-						className="p-3 text-center cursor-pointer w-full focus:ring-otl-success-300/40"
-						role="button"
-						tabIndex={0}
-						onKeyDown={(e) => e.key === 'Enter' && navigateToFullResults()}
-					>
-						See all results for "{query}"
-					</div>
-				</Button>
-			</>
-		);
-	}
+  const searchInterface = (
+    <form onSubmit={handleSearchSubmit} className="w-full relative">
+      <SearchBar
+        size="large"
+        onBlur={(e) => {
+          if (
+            !e.currentTarget.contains(e.relatedTarget as Node) &&
+            !isModalOpen
+          ) {
+            setHasFocus(false);
+          }
+        }}
+      >
+        <SearchBarInputContainer
+          className={cn(
+            "flex items-center gap-3 px-4 transition-all duration-300 shadow-sm",
+            "bg-white/90 dark:bg-[#18181B]/90 backdrop-blur-xl border border-otl-gray-200/80 dark:border-[#27272A]",
+            "h-14 rounded-2xl",
+            (hasFocus || isModalOpen) &&
+              "ring-4 ring-success-500/15 has-[input:focus]:ring-success-500 border-otl-success-400 dark:border-otl-success-500 shadow-lg bg-bg-white",
+          )}
+        >
+          <SearchIcon className="text-txt-black-500 h-5 w-5" />
 
-	return (
-		<form onSubmit={handleFormSubmit} className="relative z-10">
-			<SearchBar
-				size="large"
-				onBlur={handleBlur}
-			>
-				<SearchBarInputContainer className='has-[input:focus]:ring-otl-success-200/40 has-[input:focus]:border-otl-success-300'>
-					<SearchBarInput
-						placeholder="Search (e.g., Ayam, Roti)"
-						value={query}
-						onValueChange={handleQueryChange}
-						onFocus={handleFocus}
-						disabled={!fuseInstance}
-					/>
-					{query && <SearchBarClearButton onClick={handleClear} />}
-					<SearchBarSearchButton type="submit" disabled={!fuseInstance} className='"border-bg-success-600 from-bg-success-400 to-bg-success-600 rounded-full border-otl-success-300 bg-gradient-to-b p-1' />
-				</SearchBarInputContainer>
+          <SearchBarInput
+            ref={inputRef}
+            placeholder="Search products, categories..."
+            value={query}
+            onValueChange={handleQueryChange}
+            onFocus={() => setHasFocus(true)}
+            className="flex-1 ring-0 focus:ring-0 placeholder:text-txt-black-300 dark:text-white dark:placeholder:text-gray-500 p-0"
+          />
 
-				<SearchBarResults open={showResultsDropdown}>
-					{resultsContent}
-				</SearchBarResults>
-			</SearchBar>
-		</form>
-	);
+          <div className="flex items-center gap-2 shrink-0">
+            {query && (
+              <SearchBarClearButton
+                onClick={() => {
+                  setQuery("");
+                  setLiveResults([]);
+                  inputRef.current?.focus();
+                }}
+                className="hover:bg-bg-black-50 dark:hover:bg-gray-800 rounded-lg p-1 transition-colors"
+              />
+            )}
+          </div>
+        </SearchBarInputContainer>
+
+        <SearchBarResults
+          open={query.length > 0 && (hasFocus || isModalOpen)}
+          className={cn(
+            "rounded-2xl border shadow-[0_20px_50px_rgba(0,0,0,0.15)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-white/95 dark:bg-[#1D1D21]/95 backdrop-blur-2xl border-otl-gray-200/80 dark:border-[#27272A] overflow-hidden",
+            isModalOpen
+              ? "relative mt-3"
+              : "absolute w-full left-0 top-full mt-2 z-[9999]",
+          )}
+        >
+          <div>
+            {isSearching ? (
+              <div className="flex items-center justify-center p-10">
+                <Spinner size="large" />
+              </div>
+            ) : liveResults.length > 0 ? (
+              <SearchBarResultsList className="p-2 scrollbar overflow-y-auto max-h-[400px]">
+                {liveResults.map((item) => (
+                  <SearchBarResultsItem
+                    key={item.item_code}
+                    value={item.item_code.toString()}
+                    onSelect={() => {
+                      setHasFocus(false);
+                      setIsModalOpen(false);
+                      setQuery("");
+                      navigate(`/item/${item.item_code}`);
+                    }}
+                    className="group flex items-center justify-between p-3 rounded-xl hover:bg-bg-black-50 dark:hover:bg-[#27272A] cursor-pointer transition-all duration-200 active:scale-[0.98] outline-none"
+                  >
+                    <div className="flex flex-col min-w-0 pr-4">
+                      <span className="text-sm font-semibold text-txt-black-900 dark:text-white truncate tracking-tight group-hover:text-txt-black-600 dark:group-hover:text-txt-black-400 transition-colors">
+                        {item.item}
+                      </span>
+                      <div className="flex items-center gap-2 mt-1">
+                        <span className="text-[10px] font-medium text-txt-black-400 dark:text-gray-500">
+                          per {item.unit}
+                        </span>
+                        <span className="w-1 h-1 rounded-full bg-otl-gray-300 dark:bg-gray-700"></span>
+                        <span className="text-[10px] font-semibold uppercase tracking-wider text-txt-black-500 dark:text-gray-400 truncate">
+                          {item.item_category}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="w-8 h-8 min-w-8 min-h-8 rounded-full flex items-center justify-center bg-transparent group-hover:bg-white dark:group-hover:bg-[#3F3F46] shadow-sm opacity-0 group-hover:opacity-100 transition-all transform translate-x-[-10px] group-hover:translate-x-0">
+                      <ChevronRightIcon className="w-4 h-4 text-txt-black-600 dark:text-txt-black-400" />
+                    </div>
+                  </SearchBarResultsItem>
+                ))}
+
+                <div
+                  onClick={() => handleSearchSubmit()}
+                  className="group flex items-center justify-between p-3 rounded-xl hover:bg-bg-black-50 dark:hover:bg-[#27272A] cursor-pointer transition-all duration-200 active:scale-[0.98] outline-none"
+                >
+                  <span className="text-txt-black-500 font-medium text-sm">
+                    See all results for "{query}"
+                  </span>
+                </div>
+              </SearchBarResultsList>
+            ) : (
+              <div className="p-10 flex flex-col items-center justify-center text-center">
+                <p className="text-sm font-semibold text-txt-black-900 dark:text-white">
+                  No exact matches
+                </p>
+                <p className="text-xs text-txt-black-400 mt-1">
+                  Try a more general search term
+                </p>
+              </div>
+            )}
+          </div>
+        </SearchBarResults>
+      </SearchBar>
+    </form>
+  );
+
+  if (isMinimal) {
+    return (
+      <>
+        <button
+          type="button"
+          onClick={() => setIsModalOpen(true)}
+          className="flex items-center gap-3 w-full px-3 py-2 h-10 bg-bg-white dark:bg-bg-black-200 border border-otl-gray-200 dark:border-gray-800 rounded-xl hover:bg-white dark:hover:bg-[#27272A] hover:border-otl-gray-300 dark:hover:border-gray-700 transition-all text-txt-black-500 shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-otl-success-400"
+        >
+          <SearchIcon className="w-4 h-4 shrink-0 text-txt-black-400" />
+          <span className="text-sm flex-1 text-left truncate text-txt-black-400">
+            Search...
+          </span>
+          <kbd className="hidden sm:inline-block text-[10px] font-bold px-1.5 py-0.5 rounded-md border border-otl-gray-200/80 dark:border-gray-700 bg-bg-black-50 dark:bg-bg-black-200 shadow-sm text-txt-black-500">
+            {isMac ? "⌘" : "Ctrl"} K
+          </kbd>
+        </button>
+
+        {isModalOpen &&
+          createPortal(
+            <div className="fixed inset-0 z-[9999] flex items-start justify-center pt-[12vh] px-4 sm:px-6">
+              <div
+                className="fixed inset-0 bg-black/40 dark:bg-black/60 backdrop-blur-sm transition-opacity animate-in fade-in duration-200"
+                onClick={() => setIsModalOpen(false)}
+              />
+              <div className="relative w-full max-w-2xl animate-in fade-in zoom-in-95 duration-200">
+                {searchInterface}
+              </div>
+            </div>,
+            document.body,
+          )}
+      </>
+    );
+  }
+
+  return (
+    <div className="relative w-full max-w-2xl mx-auto z-[100]">
+      {searchInterface}
+    </div>
+  );
 };
 
 export default MydsSearchBar;

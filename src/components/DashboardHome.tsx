@@ -1,69 +1,69 @@
-import IndexCard from "./IndexCard";
-import {
-	Carousel,
-	CarouselContent,
-	CarouselItem,
-	CarouselNext,
-	CarouselPrevious,
-	CarouselDots
-} from "../components/Carousel";
-import { getWeeklyIndexCategory, } from "../services/apiClient";
+import { useEffect, useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
+import { getWeeklyIndexCategory } from "../services/apiClient";
 import { IndexData } from "../types";
-import { useEffect, useState } from "react";
-// import IndexChart from "./IndexChart";
+import CategoryTrendCard from "./CategoryTrendCard";
+import { Button, ButtonIcon } from "@govtechmy/myds-react/button";
+import { ChevronRightIcon } from "@govtechmy/myds-react/icon";
+
+const cardDataPromise = getWeeklyIndexCategory();
 
 const HomeDashboard = () => {
-	const [cardData, setCardData] = useState<IndexData | null>(null);
-	// const [chartData, setChartData] = useState<any | null>(null);
+  const navigate = useNavigate();
+  const [cardData, setCardData] = useState<IndexData | null>(null);
 
-	useEffect(() => {
-		const fetchCardData = async () => {
-			const card_data = await getWeeklyIndexCategory();
-			setCardData(card_data);
-		};
-		fetchCardData();
-	}, []);
-	// useEffect(() => {
-	// 	const fetchData = async () => {
-	// 		const chart_data = await getWeeklyIndexGroup();
-	// 		setChartData(chart_data);
-	// 	};
-	// 	fetchData();
-	// }, []);
+  useEffect(() => {
+    cardDataPromise.then(setCardData).catch(console.error);
+  }, []);
 
-	const listitemcategory = cardData ? Object.keys(cardData) : [];
+  const topMovers = useMemo(() => {
+    if (!cardData) return [];
+    return Object.entries(cardData)
+      .map(([cat, data]) => {
+        const latest = data[data.length - 1];
+        return { cat, data, pop: latest?.pop_change_pct || 0 };
+      })
+      .sort((a, b) => Math.abs(b.pop) - Math.abs(a.pop)) // Sort by highest volatility
+      .slice(0, 6);
+  }, [cardData]);
 
-	return (
-		<div className="flex flex-col container mx-auto gap-2 md:gap-10">
-			<div className="mx-4 md:mx-10 lg:mx-20">
-				<h2 className="text-center py-2 md:py-4 font-semibold text-txt-black-900 md:text-xl">Weekly Indexes</h2>
-				<Carousel opts={{ align: "start" }} className="w-full">
-					<CarouselContent className="pb-6">
-						{listitemcategory.map((i_group) => (
-							<CarouselItem key={i_group} className="pl-1 basis-1/2 md:basis-1/3 xl:basis-1/6">
-								<div className="flex flex-col p-4 gap-2 border border-otl-gray-200 rounded-md mx-1">
-									<h3 className="text-txt-black-900 capitalize font-medium max-sm:text-xs text-nowrap text-ellipsis overflow-hidden">{i_group.toLowerCase()}</h3>
-									{cardData && <IndexCard item_group={i_group} period="year" data={cardData} />}
-									{/* TODO: SKELETON */}
-								</div>
-							</CarouselItem>
-						))}
-					</CarouselContent>
-					<CarouselPrevious className="max-sm:hidden" />
-					<CarouselNext className="max-sm:hidden" />
-					<CarouselDots className="max-sm:hidden" />
-				</Carousel>
-			</div>
-			<div className="mx-4 lg:mx-20 p-4 lg:p-8 border-t border-otl-gray-200" >
-				<h2 className="text-center py-2 lg:py-4 font-semibold text-txt-black-900 lg:text-xl">More to come!</h2>
-				<div className="h-[300px] md:h-[400px] px-2 lg:px-10 pb-10" />
-				{/* <h2 className="text-center py-2 lg:py-4 font-semibold text-txt-black-900 lg:text-xl">Monthly Index</h2>
-				<div className="h-[300px] md:h-[400px] px-2 lg:px-10 pb-10">
-					<IndexChart data={chartData} />
-				</div> */}
-			</div>
-		</div >
-	);
+  return (
+    <div className="flex flex-col container mx-auto gap-6 px-4 md:px-8 max-w-5xl">
+      <div className="flex flex-col sm:flex-row items-center justify-between mb-2 gap-4">
+        <div>
+          <h2 className="text-center md:text-left font-semibold text-txt-black-900 dark:text-white text-2xl tracking-tighter">
+            Top Movers
+          </h2>
+          <p className="text-center md:text-left text-sm text-txt-black-500 dark:text-gray-500">
+            Categories with highest week-over-week volatility
+          </p>
+        </div>
+        <Button
+          variant="default-outline"
+          className="rounded-full shrink-0 px-3"
+          onClick={() => navigate("/pulse")}
+        >
+          View Market Pulse
+          <ButtonIcon>
+            <ChevronRightIcon />
+          </ButtonIcon>
+        </Button>
+      </div>
+
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {cardData
+          ? topMovers.map(({ cat, data }) => (
+              <CategoryTrendCard key={cat} category={cat} data={data} />
+            ))
+          : [...Array(6)].map((_, i) => (
+              <div
+                key={i}
+                className="h-[160px] w-full bg-bg-black-25 dark:bg-[#1D1D21] rounded-[24px] animate-pulse border border-otl-gray-300"
+              />
+            ))}
+      </div>
+    </div>
+  );
 };
 
 export default HomeDashboard;

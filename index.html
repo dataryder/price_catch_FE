@@ -1,44 +1,66 @@
 <!doctype html>
-<html lang="en" class="bg-bg-white">
+<html lang="en" class="bg-bg-white dark:bg-bg-black-950">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favi.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- HTML Meta Tags -->
+    <title>OpenPriceCatcher</title>
+    <meta
+      name="description"
+      content="Track, compare, and analyze Malaysia retail prices instantly. KPDN PriceCatcher data without the mobile app fuss."
+    />
 
-<head>
-  <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/favi.svg" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- HTML Meta Tags -->
-  <title>OpenPriceCatcher</title>
-  <meta name="description" content="">
+    <!-- Facebook / Twitter Meta Tags (Kept from original) -->
+    <meta property="og:url" content="https://pricecatcher.civictech.my/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="OpenPriceCatcher" />
+    <meta
+      property="og:description"
+      content="Track, compare, and analyze Malaysia retail prices instantly. KPDN PriceCatcher data without the mobile app fuss."
+    />
+    <meta
+      property="og:image"
+      content="https://pricecatcher.civictech.my/og.png"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta property="twitter:domain" content="pricecatcher.civictech.my" />
+    <meta property="twitter:url" content="https://pricecatcher.civictech.my/" />
+    <meta name="twitter:title" content="OpenPriceCatcher" />
+    <meta
+      name="twitter:description"
+      content="Track, compare, and analyze Malaysia retail prices instantly. KPDN PriceCatcher data without the mobile app fuss."
+    />
+    <meta
+      name="twitter:image"
+      content="https://pricecatcher.civictech.my/og.png"
+    />
 
-  <!-- Facebook Meta Tags -->
-  <meta property="og:url" content="https://pricecatcher.civictech.my/">
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="OpenPriceCatcher">
-  <meta property="og:description" content="WIP">
-  <meta property="og:image" content="https://pricecatcher.civictech.my/icon.png">
+    <link
+      rel="preload"
+      href="/fonts/GoogleSans-VariableFont_GRAD,opsz,wght.ttf"
+      as="font"
+      type="font/ttf"
+      crossorigin="anonymous"
+    />
 
-  <!-- Twitter Meta Tags -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta property="twitter:domain" content="pricecatcher.civictech.my">
-  <meta property="twitter:url" content="https://pricecatcher.civictech.my/">
-  <meta name="twitter:title" content="OpenPriceCatcher">
-  <meta name="twitter:description" content="KPDN PriceCatcher without the mobile app fuss.">
-  <meta name="twitter:image" content="https://pricecatcher.civictech.my/icon.png">
-  <link href="/src/index.css" rel="stylesheet">
-  <script>
-    (function () {
-      const theme = localStorage.getItem('theme');
-      if (theme === 'dark') {
-        document.documentElement.classList.add('dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-      }
-    })();
-  </script>
-</head>
+    <link href="/src/index.css" rel="stylesheet" />
 
-<body>
-  <div id="root" class="bg-bg-white"></div>
-  <script type="module" src="/src/main.tsx"></script>
-</body>
-
+    <script>
+      (function () {
+        const theme = localStorage.getItem("theme");
+        if (theme === "dark") {
+          document.documentElement.classList.add("dark");
+        } else {
+          document.documentElement.classList.remove("dark");
+        }
+      })();
+    </script>
+  </head>
+  <body
+    className="bg-bg-white dark:bg-bg-black-950 text-txt-black-900 dark:text-white transition-colors duration-300"
+  >
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>
