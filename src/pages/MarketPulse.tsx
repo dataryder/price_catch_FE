@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useMemo } from "react";
+import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import { getWeeklyIndexCategory } from "../services/apiClient";
 import { IndexData } from "../types";
 import CategoryTrendCard from "../components/CategoryTrendCard";
@@ -13,6 +14,8 @@ import {
 type SortOrder = "desc" | "asc" | "absolute";
 
 const MarketPulsePage: React.FC = () => {
+  useDocumentTitle("Market Pulse");
+
   const [cardData, setCardData] = useState<IndexData | null>(null);
   const [sortOrder, setSortOrder] = useState<SortOrder>("desc");
 

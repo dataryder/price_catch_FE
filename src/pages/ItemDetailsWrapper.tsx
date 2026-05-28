@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useParams } from "react-router-dom";
+import { useDocumentTitle } from "../hooks/useDocumentTitle";
+import { useSEO } from "../hooks/useSEO";
 import { useData } from "../contexts/DataContext";
 import { DataTable } from "@govtechmy/myds-react/data-table";
 import {
@@ -93,6 +95,15 @@ const ItemDetailsWrapper: React.FC = () => {
       median: item.median || 0,
     } as ItemMetadata;
   }, [isReady, globalSearchData, itemCode]);
+
+  useSEO({
+    title: itemDetails?.item,
+    description: itemDetails
+      ? `Compare prices for ${itemDetails.item}. Lowest price: RM${itemDetails.minimum.toFixed(2)}.`
+      : undefined,
+  });
+
+  useDocumentTitle(itemDetails?.item);
 
   const [priceHistory, setPriceHistory] = useState<ItemPriceHistory[]>([]);
   const [allPriceData, setAllPriceData] = useState<ItemLatest[]>([]);

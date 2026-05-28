@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import { useData } from "../contexts/DataContext";
 import { CategoryData } from "../types";
 import {
@@ -12,6 +13,12 @@ import { cn } from "../lib/utils";
 
 const CategoryPage: React.FC = () => {
   const { group, category } = useParams();
+  const currentCategory = category ? category.replace(/\|/g, "/") : group;
+
+  useDocumentTitle(
+    currentCategory ? `Categories - ${currentCategory}` : "Categories",
+  );
+
   const navigate = useNavigate();
   const { isReady, globalSearchData } = useData();
 
