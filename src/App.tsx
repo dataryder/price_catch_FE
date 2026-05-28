@@ -18,12 +18,12 @@ const MarketPulsePage = lazy(() => import("./pages/MarketPulse"));
 const PageNotFound = lazy(() => import("./pages/PageNotFound"));
 
 const CustomMastheadHeader = ({ children }: { children: React.ReactNode }) => (
-  <div className="px-4.5 flex items-center gap-2 overflow-x-hidden py-2 outline-none sm:py-1 md:px-6 max-w-screen-xl ">
+  <div className="px-4.5 flex items-center gap-2 overflow-x-hidden py-2 outline-none sm:py-1 md:px-6 max-w-screen-xl">
     {/* Swapping the MalaysiaFlagIcon for InfoIcon */}
-    <div className="pl-2 sm:pl-6 lg:pl-8">
-      <InfoIcon className="inline-block text-txt-black-500" />
-    </div>
     <div className="text-txt-black-700 text-[12px] flex w-full items-center justify-between truncate sm:justify-start">
+      <div className="px-1.5 pl-2 sm:pl-6 lg:pl-8">
+        <InfoIcon className="inline-block text-txt-black-700" />
+      </div>
       {children}
     </div>
   </div>
