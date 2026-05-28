@@ -1,7 +1,6 @@
-import React, { useState, useMemo, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
-import debounce from "lodash.debounce";
 import { useData } from "../contexts/DataContext";
 import { SearchResultInput } from "../types";
 import {
@@ -66,45 +65,25 @@ const MydsSearchBar: React.FC<SearchBarProps> = ({ variant = "default" }) => {
     }
   }, [isModalOpen]);
 
-  // 2. Perform Native JS Filtering (replaces SQL)
-  const debouncedSearch = useMemo(() => {
-    return debounce((searchTerm: string) => {
-      const term = searchTerm?.trim().toLowerCase();
-
-      if (!isReady || !term || !globalSearchData) {
-        setLiveResults([]);
-        setIsSearching(false);
-        return;
-      }
-
-      setIsSearching(true);
-
-      // Filter against pre-computed index to eliminate string allocations
-      const results = globalSearchData
-        .filter((item: any) => item && item._search?.includes(term))
-        .slice(0, 5);
-
-      setLiveResults(results);
-      setIsSearching(false);
-    }, 50);
-  }, [isReady, globalSearchData]);
-
-  useEffect(() => {
-    return () => {
-      debouncedSearch.cancel();
-    };
-  }, [debouncedSearch]);
-
   const handleQueryChange = (newQuery: string) => {
     setQuery(newQuery);
-    if (newQuery.trim().length > 0) {
-      setIsSearching(true);
-      debouncedSearch(newQuery);
-    } else {
+
+    const term = newQuery?.trim().toLowerCase();
+
+    if (!isReady || !term || !globalSearchData) {
       setLiveResults([]);
       setIsSearching(false);
-      debouncedSearch.cancel();
+      return;
     }
+
+    setIsSearching(true);
+
+    const results = globalSearchData
+      .filter((item: any) => item && item._search?.includes(term))
+      .slice(0, 5);
+
+    setLiveResults(results);
+    setIsSearching(false);
   };
 
   const handleSearchSubmit = (e?: React.FormEvent) => {
