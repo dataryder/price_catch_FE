@@ -11,12 +11,14 @@ export async function onRequest(context) {
     const itemCode = itemMatch[1];
 
     // OPTIONAL: Fetch the actual item name from a lightweight JSON index in your lake
-    // const metaReq = await fetch('https://pricecatcher-lake.iwa.my/data/item_names.json');
-    // const metaMap = await metaReq.json();
-    // const itemName = metaMap[itemCode] || `Item #${itemCode}`;
+    const metaReq = await fetch(
+      "https://pricecatcher-lake.iwa.my/data/item_lookup.json",
+    );
+    const metaMap = await metaReq.json();
+    const itemName = metaMap[itemCode] || `Item #${itemCode}`;
 
     // Fallback if you don't have a JSON map
-    const itemName = `Product #${itemCode}`;
+    // const itemName = `Product #${itemCode}`;
     const dynamicTitle = `${itemName} | OpenPriceCatcher`;
     const dynamicDesc = `Track and compare prices for ${itemName} across Malaysia.`;
 
