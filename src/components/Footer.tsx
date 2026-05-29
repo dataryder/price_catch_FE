@@ -7,7 +7,7 @@ export default function FooterBar() {
 
   return (
     <Footer className="mt-auto pt-10 pb-12 bg-transparent border-t border-otl-gray-200/50 dark:border-gray-800/50">
-      <FooterSection className="flex flex-col md:flex-row justify-between items-center w-full py-0 border-none gap-8">
+      <FooterSection className="flex flex-col md:flex-row justify-between items-center w-full py-0 border-none md:gap-8">
         <SiteInfo>
           <div className="flex flex-col md:flex-row items-center gap-6">
             <Link
@@ -24,7 +24,7 @@ export default function FooterBar() {
                 height={28}
                 alt="logo"
                 loading="lazy"
-                className="rounded-full select-none grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-300 shadow-sm"
+                className="rounded-full select-none shadow-sm"
               />
               <span className="font-bold text-sm text-txt-black-500 dark:text-gray-500 group-hover:text-txt-black-900 dark:group-hover:text-white transition-colors">
                 DataRyder

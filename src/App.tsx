@@ -22,7 +22,7 @@ const CustomMastheadHeader = ({ children }: { children: React.ReactNode }) => (
     {/* Swapping the MalaysiaFlagIcon for InfoIcon */}
     <div className="text-txt-black-700 text-[12px] flex w-full items-center justify-between truncate sm:justify-start">
       <div className="px-1.5 pl-2 sm:pl-6 lg:pl-8">
-        <InfoIcon className="inline-block text-txt-black-700" />
+        <InfoIcon className="hidden md:inline-block text-txt-black-700" />
       </div>
       {children}
     </div>

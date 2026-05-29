@@ -124,7 +124,7 @@ const CategoryPage: React.FC = () => {
   );
 
   return (
-    <div className="flex flex-col container mx-auto 2xl:px-40 pb-20 pt-10 gap-10 px-6 min-h-[70vh]">
+    <div className="flex flex-col container mx-auto 2xl:px-40 pb-10 md:pb-20 pt-10 gap-5 md:gap-10 px-6 min-h-[70vh]">
       {/* HEADER */}
       <div className="flex flex-col gap-2">
         <h1 className="text-4xl font-bold tracking-tighter text-txt-black-900 dark:text-white">
@@ -209,7 +209,7 @@ const CategoryPage: React.FC = () => {
 
       {/* ITEMS LIST SECTION */}
       {group && category && (
-        <div className="mt-4 pt-8 border-t border-otl-gray-200/50 dark:border-gray-800/50">
+        <div className="md:mt-4 pt-8 border-t border-otl-gray-200/50 dark:border-gray-800/50">
           {isLoadingItems ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {[...Array(6)].map((_, i) => (

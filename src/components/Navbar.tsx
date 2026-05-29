@@ -8,6 +8,7 @@ import {
 import { ThemeSwitch } from "../components/ThemeSwitch";
 import { useData } from "../contexts/DataContext";
 import MydsSearchBar from "./SearchBar";
+import { cn } from "../lib/utils";
 
 const LakeStatusBadge = () => {
   const { isReady, error } = useData(); // <-- Changed
@@ -58,7 +59,12 @@ export default function NavBarHeader() {
             className="aspect-square select-none"
           />
         </div>
-        <span className="font-black tracking-tight text-txt-black-900 dark:text-white text-[15px] md:text-lg hidden sm:inline">
+        <span
+          className={cn(
+            "font-black tracking-tight text-txt-black-900 dark:text-white text-lg transition-all",
+            isNotHome ? "hidden md:inline" : "inline",
+          )}
+        >
           OpenPriceCatcher
         </span>
       </div>
