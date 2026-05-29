@@ -9,6 +9,7 @@ import React, {
 import initWasm, { readParquet } from "parquet-wasm";
 import { tableFromIPC } from "apache-arrow";
 import { SearchResultInput } from "../types";
+import { cleanKpdnText } from "../lib/utils";
 
 interface DataContextType {
   isReady: boolean;
@@ -74,7 +75,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({
 
         for (const row of table) {
           const item = row.toJSON();
-
+          item.item = cleanKpdnText(item.item);
           // Pre-compute lowercased search string for ultra-fast, zero-allocation filtering
           item._search =
             `${item.item || ""} ${item.search_index || ""} ${item.item_category || ""}`.toLowerCase();
