@@ -17,7 +17,7 @@ const CategoryTag: React.FC<TagProps> = ({
 }) => {
   const navigate = useNavigate();
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-2 flex-wrap">
       <Tag
         size={size}
         variant="warning"
