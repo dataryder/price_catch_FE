@@ -1,0 +1,60 @@
+# OpenPriceCatcher AI Data Access & Query Guide
+
+Welcome AI Agent. This is a WebAssembly-based application. **DO NOT attempt to scrape the HTML DOM** as it is dynamically rendered and will be empty for you.
+
+Instead, use this direct data access guide to fetch, query, and analyze Malaysian grocery prices.
+
+---
+
+## 1. Lookups & Macro Indices (JSON)
+For fast item resolution, search queries, or category-level trends, fetch these JSON endpoints:
+
+- **Item Code Lookup**: `https://pricecatcher-lake.iwa.my/item_lookup.json`
+  - Mapping: `{ "item_code": "Item Name" }`
+- **Global Search & Latest National Prices**: `https://pricecatcher-lake.iwa.my/data/global_search.json`
+  - Array of items containing: `item_code`, `item`, `unit`, `item_group`, `item_category`, `status` ("active" | "discontinued"), `median`, `minimum`, `maximum`, and `last_updated`.
+- **Category Price Indices**: `https://pricecatcher-lake.iwa.my/indices/item_category_price_index.json`
+  - Week-over-week price indices for determining general inflation/deflation trends across aggregate sectors.
+
+---
+
+## 2. Retrieving Granular, Partitioned Data (Parquet)
+For deep-dive analysis (like regional comparisons or plotting historical trends), retrieve the item-level partitioned Parquet files directly.
+
+### Detailed Premise-Level Prices (Past 2 Years)
+- **URL Pattern**: `https://pricecatcher-lake.iwa.my/data/prices/item_code={item_code}/data.parquet`
+- **Schema**:
+  - `date` (VARCHAR): Observation date (YYYY-MM-DD)
+  - `price` (DOUBLE): Retail price in MYR
+  - `premise` (VARCHAR): Name of store/market
+  - `state` (VARCHAR): Malaysian state
+  - `district` (VARCHAR): District
+  - `premise_type` (VARCHAR): Premise format (e.g., "Hypermarket", "Wet Market")
+
+### Historical Price Statistics (All-Time)
+- **URL Pattern**: `https://pricecatcher-lake.iwa.my/data/history/item_code={item_code}/data.parquet`
+- **Schema**:
+  - `date` (VARCHAR): Observation date (YYYY-MM-DD)
+  - `median` (DOUBLE): Nationwide median price
+  - `p5` (DOUBLE): 5th percentile price (Low-end threshold)
+  - `p95` (DOUBLE): 95th percentile price (High-end threshold)
+
+---
+
+## 3. Recommended execution steps for LLM Python environments
+If you have a Python environment (Code Interpreter, LangChain Agent, etc.), run this script to instantly extract and process detailed data:
+
+```python
+import pandas as pd
+
+def get_item_prices(item_code):
+    # Construct partitioned URL
+    url = f"https://pricecatcher-lake.iwa.my/data/prices/item_code={item_code}/data.parquet"
+    
+    # Read directly from public R2 storage via HTTP
+    df = pd.read_parquet(url)
+    return df
+
+# Example: Get all store-level prices for "AYAM BERSIH - STANDARD" (Item Code: 1)
+df_ayam = get_item_prices(1)
+print(df_ayam.head())
