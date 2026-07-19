@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+
 import { getWeeklyIndexCategory } from "../services/apiClient";
 import { IndexData } from "../types";
 import CategoryTrendCard from "./CategoryTrendCard";
@@ -9,7 +9,6 @@ import { ChevronRightIcon } from "@govtechmy/myds-react/icon";
 const cardDataPromise = getWeeklyIndexCategory();
 
 const HomeDashboard = () => {
-  const navigate = useNavigate();
   const [cardData, setCardData] = useState<IndexData | null>(null);
 
   useEffect(() => {
@@ -41,7 +40,7 @@ const HomeDashboard = () => {
         <Button
           variant="default-outline"
           className="rounded-full shrink-0 px-3"
-          onClick={() => navigate("/pulse")}
+          onClick={() => window.location.assign("/pulse")}
         >
           View Market Pulse
           <ButtonIcon>

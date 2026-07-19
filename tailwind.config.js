@@ -14,8 +14,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['"Google Sans"', "Inter", "sans-serif"],
-        body: ['"Google Sans"', "Inter", "sans-serif"],
+        sans: ['"Google Sans Flex Variable"', '"Google Sans"', "Inter", "sans-serif"],
+        body: ['"Google Sans Flex Variable"', '"Google Sans"', "Inter", "sans-serif"],
       },
     },
   },

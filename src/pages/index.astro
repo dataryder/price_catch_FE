@@ -1,0 +1,57 @@
+---
+import Layout from "../layouts/Layout.astro";
+import MydsSearchBar from "../components/SearchBar";
+import HomeDashboard from "../components/DashboardHome";
+import HeroPattern from "../components/HeroPattern";
+---
+
+<Layout title="Malaysia's prices made easier | OpenPriceCatcher">
+  <div
+    class="relative flex flex-col items-center overflow-x-hidden min-h-screen"
+  >
+    {
+      /* Changed relative z-10 to z-20 to ensure search dropdown stacks above dashboard */
+    }
+    <div
+      class="flex gap-6 md:gap-8 py-20 px-6 md:py-32 md:px-8 w-full justify-center flex-col items-center relative z-20"
+    >
+      <HeroPattern
+        className="bg-gradient-to-b from-bg-success-600 dark:from-bg-success-400/90 to-bg-bg-white"
+      />
+      <div
+        class="container mx-auto 2xl:px-40 flex flex-col gap-6 relative w-full max-w-3xl items-center"
+      >
+        <h1
+          class="text-5xl md:text-7xl text-center text-txt-black-900 dark:text-white font-semibold tracking-tighter drop-shadow-sm leading-[1.05]"
+        >
+          Malaysia's prices <br />
+          <span class="text-transparent bg-clip-text text-txt-white">
+            made easier.
+          </span>
+        </h1>
+
+        <p
+          class="text-txt-black-700 text-center max-w-xl text-lg md:text-xl font-medium tracking-tight"
+        >
+          Search thousands of items, track historical trends, and instantly find
+          the absolute lowest prices in your district.
+        </p>
+
+        {/* Search Bar Container */}
+        <div class="w-full max-w-2xl mx-auto mt-6 relative z-50">
+          <div
+            class="absolute -inset-1.5 bg-gradient-to-r from-otl-success-400/20 to-emerald-400/20 rounded-3xl blur-md opacity-0 hover:opacity-100 transition duration-500"
+          >
+          </div>
+          <MydsSearchBar client:load />
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="w-full bg-transparent border-t border-otl-gray-300 pt-8 md:pt-16 pb-8 md:pb-24 relative z-10"
+    >
+      <HomeDashboard client:visible />
+    </div>
+  </div>
+</Layout>

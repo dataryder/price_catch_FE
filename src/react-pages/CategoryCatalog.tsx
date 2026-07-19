@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useMemo } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import { useData } from "../contexts/DataContext";
 import { CategoryData } from "../types";
+import { slugify } from "../lib/slug";
 import {
   getCategoryHierarchy,
   getItemsByCategory,
@@ -11,15 +12,21 @@ import { ChevronRightIcon, SearchIcon } from "@govtechmy/myds-react/icon";
 import { Tag } from "@govtechmy/myds-react/tag";
 import { cn } from "../lib/utils";
 
-const CategoryPage: React.FC = () => {
-  const { group, category } = useParams();
-  const currentCategory = category ? category.replace(/\|/g, "/") : group;
+interface CategoryPageProps {
+  group?: string;
+  category?: string;
+}
+
+const CategoryPage: React.FC<CategoryPageProps> = ({ group: propGroup, category: propCategory }) => {
+  const [group, setGroup] = useState<string>(propGroup || "");
+  const [category, setCategory] = useState<string>(propCategory || "");
+
+  const currentCategory = category ? category.replace(/--/g, "/") : group;
 
   useDocumentTitle(
     currentCategory ? `Categories - ${currentCategory}` : "Categories",
   );
 
-  const navigate = useNavigate();
   const { isReady, globalSearchData } = useData();
 
   const [hierarchy, setHierarchy] = useState<CategoryData[]>([]);
@@ -27,6 +34,31 @@ const CategoryPage: React.FC = () => {
 
   const [isLoadingHierarchy, setIsLoadingHierarchy] = useState(true);
   const [isLoadingItems, setIsLoadingItems] = useState(false);
+
+  // Sync state on back/forward browser navigation
+  useEffect(() => {
+    const handlePopState = () => {
+      const parts = window.location.pathname.split("/").filter(Boolean);
+      const newGroup = parts[1] || "";
+      const newCategory = parts[2] || "";
+      setGroup(decodeURIComponent(newGroup));
+      setCategory(decodeURIComponent(newCategory));
+    };
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, []);
+
+  const handleGroupSelect = (selectedGroup: string) => {
+    setGroup(selectedGroup);
+    setCategory("");
+    window.history.pushState(null, "", `/category/${encodeURIComponent(selectedGroup)}`);
+  };
+
+  const handleCategorySelect = (selectedCat: string) => {
+    const urlSafeCatName = selectedCat.replace(/\//g, "--");
+    setCategory(urlSafeCatName);
+    window.history.pushState(null, "", `/category/${encodeURIComponent(group)}/${encodeURIComponent(urlSafeCatName)}`);
+  };
 
   useEffect(() => {
     if (!isReady) return;
@@ -75,10 +107,10 @@ const CategoryPage: React.FC = () => {
       key={item.item_code}
       tabIndex={0}
       className={cn(
-        "group flex flex-row justify-between items-center p-5 gap-4 rounded-lg border border-otl-gray-200 dark:border-gray-800 shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 ease-out active:scale-[0.98] cursor-pointer outline-none shrink-1 overflow-clip bg-white dark:bg-[#1D1D21]",
+        "group flex flex-row justify-between items-center p-5 gap-4 rounded-lg border border-otl-gray-200 dark:border-gray-800 shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 ease-out active:scale-[0.98] cursor-pointer outline-none focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 shrink-1 overflow-clip bg-white dark:bg-[#1D1D21]",
         item.status === "discontinued" && "opacity-60 grayscale-[50%]",
       )}
-      onClick={() => navigate(`/item/${item.item_code}`)}
+      onClick={() => window.location.assign(`/item/${slugify(item.item || "")}-${item.item_code}`)}
     >
       <div className="flex flex-col gap-2 flex-1 min-w-0">
         <h4
@@ -93,7 +125,7 @@ const CategoryPage: React.FC = () => {
         </h4>
 
         <div className="flex gap-2 items-center">
-          <span className="text-[10px] font-bold text-txt-black-500 dark:text-gray-400 uppercase tracking-widest bg-bg-black-50 dark:bg-gray-800 px-2 py-1 rounded-md">
+          <span className="text-[10px] font-semibold text-txt-black-500 dark:text-gray-400 uppercase tracking-widest bg-bg-black-50 dark:bg-gray-800 px-2 py-1 rounded-md">
             per {item.unit}
           </span>
           {item.status === "discontinued" ? (
@@ -101,7 +133,7 @@ const CategoryPage: React.FC = () => {
               size="small"
               variant="default"
               mode="pill"
-              className="text-[10px] font-bold bg-bg-black-100 dark:bg-gray-800 text-txt-black-500 shadow-sm"
+              className="text-[10px] font-semibold bg-bg-black-100 dark:bg-gray-800 text-txt-black-500 shadow-sm"
             >
               Discontinued
             </Tag>
@@ -110,7 +142,7 @@ const CategoryPage: React.FC = () => {
               size="small"
               variant="primary"
               mode="pill"
-              className="text-[10px] font-bold tracking-wide opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 delay-75 shadow-sm"
+              className="text-[10px] font-semibold tracking-wide opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 delay-75 shadow-sm"
             >
               View Prices
             </Tag>
@@ -127,7 +159,7 @@ const CategoryPage: React.FC = () => {
     <div className="flex flex-col container mx-auto 2xl:px-40 pb-10 md:pb-20 pt-10 gap-5 md:gap-10 px-6 min-h-[70vh]">
       {/* HEADER */}
       <div className="flex flex-col gap-2">
-        <h1 className="text-4xl font-bold tracking-tighter text-txt-black-900 dark:text-white">
+        <h1 className="text-4xl font-semibold tracking-tighter text-txt-black-900 dark:text-white">
           Explore Categories
         </h1>
         <p className="text-lg text-txt-black-500 dark:text-gray-400">
@@ -158,12 +190,11 @@ const CategoryPage: React.FC = () => {
                 return (
                   <button
                     key={groupName}
-                    className={`capitalize px-5 py-2 rounded-[14px] text-sm transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-otl-success-400 ${
-                      isSelected
+                    className={`capitalize px-5 py-2 rounded-[14px] text-sm transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-otl-success-400 ${isSelected
                         ? "bg-txt-black-900 text-txt-white shadow-md scale-[1.02]"
                         : "bg-white dark:bg-[#1D1D21] text-txt-black-600 dark:text-gray-300 hover:bg-bg-black-25 dark:hover:bg-[#27272A] hover:text-txt-black-900 border border-otl-gray-200 dark:border-gray-800 shadow-sm"
-                    }`}
-                    onClick={() => navigate(`/category/${groupName}`)}
+                      }`}
+                    onClick={() => handleGroupSelect(groupName)}
                   >
                     {groupName.toLowerCase()}
                   </button>
@@ -181,22 +212,17 @@ const CategoryPage: React.FC = () => {
             </h2>
             <div className="flex flex-wrap gap-2">
               {availableCategories.map((catName) => {
-                const urlSafeCatName = catName
-                  .replace("/", "|")
-                  .replace("/", "|");
+                const urlSafeCatName = catName.replace(/\//g, "--");
                 const isSelected = urlSafeCatName === category;
 
                 return (
                   <button
                     key={catName}
-                    className={`capitalize px-4 py-1.5 rounded-xl text-[13px] transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-otl-success-400 ${
-                      isSelected
+                    className={`capitalize px-4 py-1.5 rounded-xl text-[13px] transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-otl-success-400 ${isSelected
                         ? "bg-bg-success-50 dark:bg-success-900/20 text-txt-success-700 dark:text-success-400 border border-otl-success-300 dark:border-success-800 shadow-sm"
                         : "bg-transparent text-txt-black-500 dark:text-gray-400 hover:text-txt-black-900 dark:hover:text-white border border-transparent hover:bg-white dark:hover:bg-gray-800 shadow-none hover:shadow-sm"
-                    }`}
-                    onClick={() =>
-                      navigate(`/category/${group}/${urlSafeCatName}`)
-                    }
+                      }`}
+                    onClick={() => handleCategorySelect(catName)}
                   >
                     {catName.toLowerCase()}
                   </button>
@@ -224,7 +250,7 @@ const CategoryPage: React.FC = () => {
               <div className="w-12 h-12 rounded-full bg-bg-black-50 dark:bg-gray-800 flex items-center justify-center mb-2">
                 <SearchIcon className="w-5 h-5 text-txt-black-400 dark:text-gray-500" />
               </div>
-              <h3 className="text-lg font-bold text-txt-black-900 dark:text-white">
+              <h3 className="text-lg font-semibold text-txt-black-900 dark:text-white">
                 No items found
               </h3>
               <p className="text-txt-black-500 dark:text-gray-500 font-medium text-sm">

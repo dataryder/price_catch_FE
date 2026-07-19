@@ -1,16 +1,21 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { useSearchParams, useNavigate } from "react-router-dom";
+
 import { AutoPagination } from "@govtechmy/myds-react/pagination";
 import SearchResults from "../components/SearchResults";
 import { SearchResultInput } from "../types";
 import { useData } from "../contexts/DataContext";
+import { slugify } from "../lib/slug";
 
 const ITEMS_PER_PAGE = 10;
 
 const FullSearchResultsPage: React.FC = () => {
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
-  const query = useMemo(() => searchParams.get("q") || "", [searchParams]);
+  const [query, setQuery] = useState("");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setQuery(new URLSearchParams(window.location.search).get("q") || "");
+    }
+  }, []);
 
   // 1. Use Data Context
   const { isReady, globalSearchData } = useData();
@@ -79,7 +84,7 @@ const FullSearchResultsPage: React.FC = () => {
 
   const handleSelectItem = (item: SearchResultInput) => {
     if (typeof item.item_code !== "undefined") {
-      navigate(`/item/${item.item_code}`);
+      window.location.assign(`/item/${slugify(item.item || "")}-${item.item_code}`);
     }
   };
 
@@ -95,17 +100,17 @@ const FullSearchResultsPage: React.FC = () => {
         <div className="flex flex-col gap-2 pb-6 border-b border-otl-gray-200/50 dark:border-gray-800">
           {!error && query ? (
             <>
-              <h1 className="text-3xl md:text-4xl font-black text-txt-black-900 dark:text-white tracking-tighter">
+              <h1 className="text-3xl md:text-4xl font-semibold text-txt-black-900 dark:text-white tracking-tighter">
                 Results for "{query}"
               </h1>
               {!isLoading && (
-                <p className="text-sm font-bold text-txt-black-400 dark:text-gray-500 uppercase tracking-widest">
+                <p className="text-sm font-semibold text-txt-black-400 dark:text-gray-500 uppercase tracking-widest">
                   {totalItems} items found
                 </p>
               )}
             </>
           ) : (
-            <h1 className="text-3xl md:text-4xl font-black text-txt-black-900 dark:text-white tracking-tighter">
+            <h1 className="text-3xl md:text-4xl font-semibold text-txt-black-900 dark:text-white tracking-tighter">
               Search Database
             </h1>
           )}

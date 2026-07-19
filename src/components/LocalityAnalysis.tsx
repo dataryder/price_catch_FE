@@ -242,7 +242,7 @@ const LocalityAnalysis: React.FC<LocalityAnalysisProps> = ({
     <div className="grid grid-cols-1 lg:grid-cols-12 lg:grid-rows-[auto_1fr] border border-otl-gray-200 rounded-[32px] shadow-[0_8px_30px_rgba(0,0,0,0.04)] bg-bg-white relative lg:h-[440px] overflow-hidden">
       <div className="lg:col-span-4 lg:col-start-1 lg:row-start-1 lg:border-r border-otl-gray-200 bg-bg-white p-6 md:p-8 pb-4 lg:pb-3 flex flex-col justify-end z-10">
         <div className="flex flex-col gap-4">
-          <h4 className="text-lg font-black tracking-tight text-txt-black-900 dark:text-white">
+          <h4 className="text-lg font-semibold tracking-tight text-txt-black-900 dark:text-white">
             Geospatial Insight
           </h4>
           <div className="flex gap-2">
@@ -363,7 +363,7 @@ const LocalityAnalysis: React.FC<LocalityAnalysisProps> = ({
                 />
                 <span className="truncate">{activeInfo.name}</span>
               </span>
-              <span className="text-base font-bold text-txt-black-900 whitespace-nowrap">
+              <span className="text-base font-semibold text-txt-black-900 whitespace-nowrap">
                 {activeInfo.data
                   ? `RM ${activeInfo.data.val.toFixed(2)}`
                   : "N/A"}

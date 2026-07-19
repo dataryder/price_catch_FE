@@ -36,7 +36,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({
   if (results.length === 0) {
     return (
       <div className="text-center p-16 flex flex-col items-center justify-center bg-bg-black-25 dark:bg-[#1D1D21]/50 border border-dashed border-otl-gray-200 dark:border-gray-800 rounded-[32px]">
-        <h3 className="text-xl font-bold text-txt-black-900 dark:text-white mb-2">
+        <h3 className="text-xl font-semibold text-txt-black-900 dark:text-white mb-2">
           No items found
         </h3>
         <p className="text-txt-black-500 dark:text-gray-500 font-medium">
@@ -57,12 +57,12 @@ const SearchResults: React.FC<SearchResultsProps> = ({
           <div className="flex justify-between items-center w-full">
             <div className="flex flex-col grow gap-2 overflow-hidden mr-4">
               <h3
-                className={`font-black text-base md:text-lg tracking-tight truncate ${item.status === "discontinued" ? "text-txt-black-500 line-through dark:text-gray-500" : "text-txt-black-900 dark:text-white group-hover:text-txt-success-700 dark:group-hover:text-success-400 transition-colors"}`}
+                className={`font-semibold text-base md:text-lg tracking-tight truncate ${item.status === "discontinued" ? "text-txt-black-500 line-through dark:text-gray-500" : "text-txt-black-900 dark:text-white group-hover:text-txt-success-700 dark:group-hover:text-success-400 transition-colors"}`}
               >
                 {item.item}
               </h3>
               <div className="flex flex-wrap gap-2.5 items-center">
-                <span className="px-2.5 py-1 rounded-md bg-bg-black-50 dark:bg-gray-800 text-[10px] font-bold text-txt-black-500 dark:text-gray-400 uppercase tracking-widest leading-none">
+                <span className="px-2.5 py-1 rounded-md bg-bg-black-50 dark:bg-gray-800 text-[10px] font-semibold text-txt-black-500 dark:text-gray-400 uppercase tracking-widest leading-none">
                   per {item.unit}
                 </span>
 
@@ -71,7 +71,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({
                     size="small"
                     variant="default"
                     mode="pill"
-                    className="text-[10px] font-bold bg-bg-black-100 dark:bg-gray-800 text-txt-black-500 shadow-sm"
+                    className="text-[10px] font-semibold bg-bg-black-100 dark:bg-gray-800 text-txt-black-500 shadow-sm"
                   >
                     Discontinued
                   </Tag>
@@ -81,7 +81,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({
                       size="small"
                       variant="warning"
                       mode="pill"
-                      className="max-sm:hidden text-[10px] font-bold tracking-wide shadow-sm"
+                      className="max-sm:hidden text-[10px] font-semibold tracking-wide shadow-sm"
                     >
                       {item.item_group}
                     </Tag>
@@ -89,7 +89,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({
                       size="small"
                       variant="primary"
                       mode="pill"
-                      className="text-[10px] font-bold tracking-wide shadow-sm"
+                      className="text-[10px] font-semibold tracking-wide shadow-sm"
                     >
                       {item.item_category}
                     </Tag>

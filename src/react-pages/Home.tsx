@@ -11,7 +11,7 @@ const HomePage: React.FC = () => {
       <div className="flex gap-6 md:gap-8 py-20 px-6 md:py-32 md:px-8 w-full justify-center flex-col items-center relative z-20">
         <HeroPattern className="bg-gradient-to-b from-bg-success-600 dark:from-bg-success-400/90 to-bg-bg-white" />
         <div className="container mx-auto 2xl:px-40 flex flex-col gap-6 relative w-full max-w-3xl items-center">
-          <h1 className="text-5xl md:text-7xl text-center text-txt-black-900 dark:text-white font-black tracking-tighter drop-shadow-sm leading-[1.05] animate-in fade-in slide-in-from-bottom-6 duration-700 delay-100">
+          <h1 className="text-5xl md:text-7xl text-center text-txt-black-900 dark:text-white font-semibold tracking-tighter drop-shadow-sm leading-[1.05] animate-in fade-in slide-in-from-bottom-6 duration-700 delay-100">
             Malaysia's prices <br />
             <span className="text-transparent bg-clip-text text-txt-white">
               made easier.

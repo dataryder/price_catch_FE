@@ -1,0 +1,79 @@
+---
+import NavBarHeader from '../components/Navbar';
+import FooterBar from '../components/Footer';
+import CustomMasthead from '../components/Masthead';
+import { ClientRouter } from 'astro:transitions';
+import '@fontsource-variable/google-sans-flex';
+import '../index.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { 
+  title = "OpenPriceCatcher", 
+  description = "Track, compare, and analyze Malaysia retail prices instantly. KPDN PriceCatcher data without the mobile app fuss." 
+} = Astro.props;
+
+const pathname = Astro.url.pathname;
+---
+
+<!doctype html>
+<html lang="en" class="bg-bg-white dark:bg-bg-black-950">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favi.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="llms" href="/llms.txt" />
+    
+    <!-- HTML Meta Tags -->
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <ClientRouter />
+
+    <!-- OpenGraph / Facebook Meta Tags -->
+    <meta property="og:url" content={Astro.url.href} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content="https://pricecatcher.civictech.my/og.png" />
+
+    <!-- Twitter Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta property="twitter:domain" content="pricecatcher.civictech.my" />
+    <meta property="twitter:url" content={Astro.url.href} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content="https://pricecatcher.civictech.my/og.png" />
+
+
+
+    <script is:inline>
+      const applyTheme = () => {
+        const theme = localStorage.getItem("theme");
+        if (theme === "dark") {
+          document.documentElement.classList.add("dark");
+        } else {
+          document.documentElement.classList.remove("dark");
+        }
+      };
+
+      // 1. Initial page load sync
+      applyTheme();
+
+      // 2. Astro client router transition sync
+      document.addEventListener("astro:after-swap", applyTheme);
+    </script>
+  </head>
+  <body class="bg-bg-white dark:bg-bg-black-950 text-txt-black-900 dark:text-white transition-colors duration-300">
+    <CustomMasthead client:idle />
+    <div class="min-h-screen flex flex-col">
+      <NavBarHeader pathname={pathname} client:load transition:persist />
+      <main class="flex-grow flex flex-col">
+        <slot />
+      </main>
+      <FooterBar client:load transition:persist />
+    </div>
+  </body>
+</html>

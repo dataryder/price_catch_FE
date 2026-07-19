@@ -1,5 +1,4 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import { Tag } from "@govtechmy/myds-react/tag";
 
 interface TagProps {
@@ -15,14 +14,13 @@ const CategoryTag: React.FC<TagProps> = ({
   category,
   frequency,
 }) => {
-  const navigate = useNavigate();
   return (
     <div className="flex gap-2 flex-wrap">
       <Tag
         size={size}
         variant="warning"
         mode="pill"
-        onClick={() => navigate(`/category/${group}`)}
+        onClick={() => window.location.assign(`/category/${group}`)}
         className={
           frequency ? "max-sm:hidden cursor-pointer" : "cursor-pointer"
         }
@@ -34,7 +32,7 @@ const CategoryTag: React.FC<TagProps> = ({
         size={size}
         variant="primary"
         mode="pill"
-        onClick={() => navigate(`/category/${group}/${category}`)}
+        onClick={() => window.location.assign(`/category/${group}/${category.replace(/\//g, "--")}`)}
         className="cursor-pointer"
       >
         {category}

@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
-import { useNavigate } from "react-router-dom";
+
 import { useData } from "../contexts/DataContext";
 import { SearchResultInput } from "../types";
+import { slugify } from "../lib/slug";
 import {
   SearchBar,
   SearchBarInput,
@@ -22,7 +23,6 @@ interface SearchBarProps {
 
 const MydsSearchBar: React.FC<SearchBarProps> = ({ variant = "default" }) => {
   const isMinimal = variant === "minimal";
-  const navigate = useNavigate();
 
   // 1. Use the new Data Context instead of DuckDB
   const { isReady, globalSearchData } = useData();
@@ -91,7 +91,7 @@ const MydsSearchBar: React.FC<SearchBarProps> = ({ variant = "default" }) => {
     if (query.trim()) {
       setHasFocus(false);
       setIsModalOpen(false);
-      navigate(`/search-results?q=${encodeURIComponent(query.trim())}`);
+      window.location.assign(`/search-results?q=${encodeURIComponent(query.trim())}`);
     }
   };
 
@@ -114,7 +114,7 @@ const MydsSearchBar: React.FC<SearchBarProps> = ({ variant = "default" }) => {
             "bg-white/90 dark:bg-[#18181B]/90 backdrop-blur-xl border border-otl-gray-200/80 dark:border-[#27272A]",
             "h-14 rounded-2xl",
             (hasFocus || isModalOpen) &&
-              "ring-4 ring-success-500/15 has-[input:focus]:ring-success-500 border-otl-success-400 dark:border-otl-success-500 shadow-lg bg-bg-white",
+            "ring-4 ring-success-500/15 has-[input:focus]:ring-success-500 border-otl-success-400 dark:border-otl-success-500 shadow-lg bg-bg-white",
           )}
         >
           <SearchIcon className="text-txt-black-500 h-5 w-5" />
@@ -166,7 +166,7 @@ const MydsSearchBar: React.FC<SearchBarProps> = ({ variant = "default" }) => {
                       setHasFocus(false);
                       setIsModalOpen(false);
                       setQuery("");
-                      navigate(`/item/${item.item_code}`);
+                      window.location.assign(`/item/${slugify(item.item || "")}-${item.item_code}`);
                     }}
                     className="group flex items-center justify-between p-3 rounded-xl hover:bg-bg-black-50 dark:hover:bg-[#27272A] cursor-pointer transition-all duration-200 active:scale-[0.98] outline-none"
                   >
@@ -227,7 +227,7 @@ const MydsSearchBar: React.FC<SearchBarProps> = ({ variant = "default" }) => {
           <span className="text-sm flex-1 text-left truncate text-txt-black-400">
             Search...
           </span>
-          <kbd className="hidden sm:inline-block text-[10px] font-bold px-1.5 py-0.5 rounded-md border border-otl-gray-200/80 dark:border-gray-700 bg-bg-black-50 dark:bg-bg-black-200 shadow-sm text-txt-black-500">
+          <kbd className="hidden sm:inline-block text-[10px] font-semibold px-1.5 py-0.5 rounded-md border border-otl-gray-200/80 dark:border-gray-700 bg-bg-black-50 dark:bg-bg-black-200 shadow-sm text-txt-black-500">
             {isMac ? "⌘" : "Ctrl"} K
           </kbd>
         </button>

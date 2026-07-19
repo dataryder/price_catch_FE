@@ -47,7 +47,7 @@ const MarketPulsePage: React.FC = () => {
       {/* Header & Controls Container */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6">
         <div className="flex flex-col gap-2">
-          <h1 className="text-4xl font-black tracking-tighter text-txt-black-900 dark:text-white">
+          <h1 className="text-4xl font-semibold tracking-tighter text-txt-black-900 dark:text-white">
             Market Pulse
           </h1>
           <p className="text-lg font-medium text-txt-black-500 dark:text-gray-400">
@@ -82,14 +82,14 @@ const MarketPulsePage: React.FC = () => {
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {cardData
           ? sortedCategories.map(({ cat, data }) => (
-              <CategoryTrendCard key={cat} category={cat} data={data} />
-            ))
+            <CategoryTrendCard key={cat} category={cat} data={data} />
+          ))
           : [...Array(12)].map((_, i) => (
-              <div
-                key={i}
-                className="h-[160px] w-full bg-bg-black-25 dark:bg-[#1D1D21] rounded-[24px] animate-pulse border border-otl-gray-200 dark:border-gray-800"
-              />
-            ))}
+            <div
+              key={i}
+              className="h-[160px] w-full bg-bg-black-25 dark:bg-[#1D1D21] rounded-[24px] animate-pulse border border-otl-gray-200 dark:border-gray-800"
+            />
+          ))}
       </div>
     </div>
   );
