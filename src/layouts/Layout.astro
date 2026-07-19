@@ -9,14 +9,17 @@ import '../index.css';
 interface Props {
   title?: string;
   description?: string;
+  image?: string;
 }
 
 const { 
   title = "OpenPriceCatcher", 
-  description = "Track, compare, and analyze Malaysia retail prices instantly. KPDN PriceCatcher data without the mobile app fuss." 
+  description = "Track, compare, and analyze Malaysia retail prices instantly. KPDN PriceCatcher data without the mobile app fuss.",
+  image = "/og.png"
 } = Astro.props;
 
 const pathname = Astro.url.pathname;
+const absoluteImageUrl = new URL(image, Astro.site || Astro.url.origin).href;
 ---
 
 <!doctype html>
@@ -37,7 +40,7 @@ const pathname = Astro.url.pathname;
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content="https://pricecatcher.civictech.my/og.png" />
+    <meta property="og:image" content={absoluteImageUrl} />
 
     <!-- Twitter Meta Tags -->
     <meta name="twitter:card" content="summary_large_image" />
@@ -45,7 +48,7 @@ const pathname = Astro.url.pathname;
     <meta property="twitter:url" content={Astro.url.href} />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content="https://pricecatcher.civictech.my/og.png" />
+    <meta name="twitter:image" content={absoluteImageUrl} />
 
 
 

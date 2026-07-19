@@ -3,17 +3,36 @@ import Layout from '../../layouts/Layout.astro';
 import CategoryPage from '../../react-pages/CategoryCatalog';
 
 export async function getStaticPaths() {
-  const res = await fetch("https://pricecatcher-lake.iwa.my/data/global_search.json");
-  if (!res.ok) throw new Error("Failed to fetch global search catalog for category routes");
-  const data = await res.json();
+  const [searchRes, indexRes] = await Promise.all([
+    fetch("https://pricecatcher-lake.iwa.my/data/global_search.json"),
+    fetch("https://pricecatcher-lake.iwa.my/indices/item_category_price_index.json")
+  ]);
+
+  if (!searchRes.ok) throw new Error("Failed to fetch global search catalog for category routes");
+  const data = await searchRes.json();
+  
+  let indices: Record<string, any> = {};
+  if (indexRes.ok) {
+    const rawText = await indexRes.text();
+    indices = JSON.parse(rawText.replace(/:\s*NaN/g, ": null"));
+  }
   
   const paths = [];
   
   // 1. Root /category
-  paths.push({ params: { path: undefined }, props: { group: undefined, category: undefined } });
+  paths.push({ 
+    params: { path: undefined }, 
+    props: { 
+      group: undefined, 
+      category: undefined,
+      title: "Browse by Categories | OpenPriceCatcher",
+      description: "Drill down into product groups and categories to analyze retail prices and historical food trends in Malaysia.",
+      image: "/og.png"
+    } 
+  });
   
   const groups = new Set();
-  const groupCategoryPairs = new Set();
+  const groupCategoryPairs = new Set<string>();
   
   data.forEach((item) => {
     if (item.item_group) {
@@ -25,10 +44,16 @@ export async function getStaticPaths() {
   });
   
   // 2. /category/[group]
-  groups.forEach((group) => {
+  groups.forEach((group: string) => {
     paths.push({ 
       params: { path: group }, 
-      props: { group, category: undefined } 
+      props: { 
+        group, 
+        category: undefined,
+        title: `${group} Categories | OpenPriceCatcher`,
+        description: `Compare retail prices and analyze trends for products under ${group} in Malaysia.`,
+        image: "/og.png"
+      } 
     });
   });
   
@@ -36,18 +61,41 @@ export async function getStaticPaths() {
   groupCategoryPairs.forEach((pair) => {
     const [group, category] = pair.split("|");
     const urlSafeCatName = category.replace(/\//g, "--");
+    
+    // Find WoW change from index
+    const categoryData = indices[category] || [];
+    const latestData = categoryData[categoryData.length - 1];
+    const wowVal = latestData ? latestData.pop_change_pct : null;
+    
+    let title = `${category} (${group}) Price Trends | OpenPriceCatcher`;
+    let description = `Analyze historical price details and trends for ${category} in Malaysia. Sourced from official KPDN open data.`;
+    
+    if (wowVal !== null && !isNaN(wowVal)) {
+      const sign = wowVal > 0 ? "+" : "";
+      title = `${category} (${sign}${wowVal.toFixed(2)}% WoW) | OpenPriceCatcher`;
+      description = `Track price indices and compare retail prices for ${category} in Malaysia. The index moved by ${sign}${wowVal.toFixed(2)}% this week compared to last week.`;
+    }
+
+    const image = `/og/category-${group}-${urlSafeCatName}.svg`;
+
     paths.push({ 
       params: { path: `${group}/${urlSafeCatName}` }, 
-      props: { group, category: urlSafeCatName } 
+      props: { 
+        group, 
+        category: urlSafeCatName,
+        title,
+        description,
+        image
+      } 
     });
   });
   
   return paths;
 }
 
-const { group, category } = Astro.props;
+const { group, category, title, description, image } = Astro.props;
 ---
 
-<Layout title="Browse by Categories | OpenPriceCatcher">
+<Layout title={title} description={description} image={image}>
   <CategoryPage group={group} category={category} client:load />
 </Layout>

@@ -83,10 +83,11 @@ export async function getStaticPaths() {
 
 const { itemCode, itemName, preloadedHistory, preloadedPrices } = Astro.props;
 
-// Compute min, max, and median price for SEO and OpenGraph tags at build time
+// Compute min, max, average, and median price for SEO and OpenGraph tags at build time
 const pricesList = (preloadedPrices || []).map(p => p.price).filter(p => typeof p === "number");
 const minPrice = pricesList.length > 0 ? Math.min(...pricesList) : null;
 const maxPrice = pricesList.length > 0 ? Math.max(...pricesList) : null;
+const averagePrice = pricesList.length > 0 ? (pricesList.reduce((sum, val) => sum + val, 0) / pricesList.length) : null;
 
 const getMedian = (arr: number[]) => {
   if (arr.length === 0) return null;
@@ -99,13 +100,15 @@ const medianPrice = pricesList.length > 0 ? getMedian(pricesList) : null;
 let pageTitle = `${itemName} | OpenPriceCatcher`;
 let pageDescription = `Track, compare, and analyze retail prices for ${itemName} across different states and markets in Malaysia. Sourced from KPDN open data.`;
 
-if (minPrice !== null && maxPrice !== null && medianPrice !== null) {
-  pageTitle = `${itemName} (RM ${minPrice.toFixed(2)} - RM ${maxPrice.toFixed(2)}) | OpenPriceCatcher`;
-  pageDescription = `Track, compare, and analyze retail prices for ${itemName} in Malaysia. Current median price is RM ${medianPrice.toFixed(2)} (ranging from RM ${minPrice.toFixed(2)} to RM ${maxPrice.toFixed(2)}). Sourced from KPDN open data.`;
+if (minPrice !== null && maxPrice !== null && medianPrice !== null && averagePrice !== null) {
+  pageTitle = `${itemName} (Avg RM ${averagePrice.toFixed(2)}) | OpenPriceCatcher`;
+  pageDescription = `Track, compare, and analyze retail prices for ${itemName} in Malaysia. Current average price is RM ${averagePrice.toFixed(2)}, median price is RM ${medianPrice.toFixed(2)} (ranging from RM ${minPrice.toFixed(2)} to RM ${maxPrice.toFixed(2)}). Sourced from KPDN open data.`;
 }
+
+const ogImage = `/og/item-${itemCode}.svg`;
 ---
 
-<Layout title={pageTitle} description={pageDescription}>
+<Layout title={pageTitle} description={pageDescription} image={ogImage}>
   <ItemDetailsWrapper 
     itemCode={itemCode} 
     preloadedHistory={preloadedHistory} 
