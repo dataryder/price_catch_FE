@@ -37,7 +37,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
               key={`item-${index}`}
               className="flex items-center justify-between gap-6"
             >
-              <span className="flex items-center gap-2 text-xs font-bold text-txt-black-600 dark:text-gray-300">
+              <span className="flex items-center gap-2 text-xs font-semibold text-txt-black-600 dark:text-gray-300">
                 <span
                   className="w-2 h-2 rounded-full shadow-sm"
                   style={{ backgroundColor: entry.color }}

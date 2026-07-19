@@ -4,18 +4,23 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "tsc -b && astro build",
+    "preview": "astro preview",
     "lint": "eslint .",
-    "preview": "vite preview",
-    "pages:dev": "wrangler pages dev --proxy 5173 -- npm run dev"
+    "pages:dev": "wrangler pages dev ./dist"
   },
   "dependencies": {
+    "@astrojs/react": "^6.0.1",
+    "@astrojs/sitemap": "^3.7.3",
+    "@astrojs/tailwind": "^6.0.2",
+    "@fontsource-variable/google-sans-flex": "^5.3.0",
     "@govtechmy/myds-react": "^1.0.2",
     "@govtechmy/myds-style": "^1.0.0",
-    "@tailwindcss/vite": "^4.3.0",
     "@types/d3-scale-chromatic": "^3.1.0",
     "apache-arrow": "^21.1.0",
+    "astro": "^7.1.1",
     "baseline-browser-mapping": "^2.10.29",
     "caniuse-lite": "^1.0.30001792",
     "d3-geo": "^3.1.1",

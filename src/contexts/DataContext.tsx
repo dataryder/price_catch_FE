@@ -1,13 +1,7 @@
 import React, {
-  createContext,
-  useContext,
   useEffect,
   useState,
-  useMemo,
-  useRef,
 } from "react";
-import initWasm, { readParquet } from "parquet-wasm";
-import { tableFromIPC } from "apache-arrow";
 import { SearchResultInput } from "../types";
 import { cleanKpdnText } from "../lib/utils";
 
@@ -19,92 +13,113 @@ interface DataContextType {
   error: string | null;
 }
 
-const DataContext = createContext<DataContextType>({
-  isReady: false,
-  maxDate: null,
-  globalSearchData: [],
-  userRegion: null,
-  error: null,
-});
-
-export const useData = () => useContext(DataContext);
-
 const DATA_URL = "https://pricecatcher-lake.iwa.my/data";
 
+// Global Shared State for Astro Islands
+let isReadyGlobal = false;
+let globalSearchDataGlobal: SearchResultInput[] = [];
+let maxDateGlobal: string | null = null;
+let userRegionGlobal: string | null = null;
+let errorGlobal: string | null = null;
+let isFetchingStarted = false;
+
+const listeners = new Set<() => void>();
+
+const updateState = (updates: Partial<DataContextType>) => {
+  if (updates.isReady !== undefined) isReadyGlobal = updates.isReady;
+  if (updates.globalSearchData !== undefined) globalSearchDataGlobal = updates.globalSearchData;
+  if (updates.maxDate !== undefined) maxDateGlobal = updates.maxDate;
+  if (updates.userRegion !== undefined) userRegionGlobal = updates.userRegion;
+  if (updates.error !== undefined) errorGlobal = updates.error;
+  listeners.forEach((l) => l());
+};
+
+const startFetching = () => {
+  if (isFetchingStarted || typeof window === "undefined") return;
+  isFetchingStarted = true;
+
+  // Fetch Geo API asynchronously
+  fetch("/api/geo")
+    .then((res) => (res.ok ? res.json() : null))
+    .then((data) => {
+      if (data?.country === "MY" && data?.region) {
+        updateState({ userRegion: data.region });
+      }
+    })
+    .catch(() => {
+      // Geo IP API is optional; fail silently without console noise
+    });
+
+  // Fetch Search Index
+  fetch(`${DATA_URL}/global_search.json`)
+    .then((res) => {
+      if (!res.ok) throw new Error("Failed to fetch search index");
+      return res.json();
+    })
+    .then((jsonList) => {
+      const data: any[] = [];
+      let latest = "";
+
+      for (const item of jsonList) {
+        item.item = cleanKpdnText(item.item);
+        item._search =
+          `${item.item || ""} ${item.search_index || ""} ${item.item_category || ""}`.toLowerCase();
+        item.search_index = undefined;
+
+        if (item.last_updated && item.last_updated > latest) {
+          latest = item.last_updated;
+        }
+        data.push(item);
+      }
+
+      updateState({
+        globalSearchData: data as SearchResultInput[],
+        maxDate: latest || null,
+        isReady: true,
+      });
+    })
+    .catch((err) => {
+      console.error("Initialization Failed:", err);
+      updateState({ error: err.message || "Failed to load data." });
+    });
+};
+
+export const useData = () => {
+  const [state, setState] = useState({
+    isReady: isReadyGlobal,
+    globalSearchData: globalSearchDataGlobal,
+    maxDate: maxDateGlobal,
+    userRegion: userRegionGlobal,
+    error: errorGlobal,
+  });
+
+  useEffect(() => {
+    startFetching();
+
+    const handler = () => {
+      setState({
+        isReady: isReadyGlobal,
+        globalSearchData: globalSearchDataGlobal,
+        maxDate: maxDateGlobal,
+        userRegion: userRegionGlobal,
+        error: errorGlobal,
+      });
+    };
+    listeners.add(handler);
+    handler(); // Sync immediate state
+
+    return () => {
+      listeners.delete(handler);
+    };
+  }, []);
+
+  return state;
+};
+
+// Backward-compatible shell for Layout.astro
 export const DataProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [isReady, setIsReady] = useState(false);
-  const [globalSearchData, setGlobalSearchData] = useState<SearchResultInput[]>(
-    [],
-  );
-  const [maxDate, setMaxDate] = useState<string | null>(null);
-  const [userRegion, setUserRegion] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
-
-  const isInitializing = useRef(false);
-
-  useEffect(() => {
-    if (isInitializing.current) return;
-    isInitializing.current = true;
-
-    // Fetch Geo API asynchronously without blocking data initialization
-    fetch("/api/geo")
-      .then((res) => (res.ok ? res.json() : null))
-      .then((data) => {
-        if (data?.country === "MY" && data?.region) {
-          setUserRegion(data.region);
-        }
-      })
-      .catch(console.error);
-
-    const initApp = async () => {
-      try {
-        await initWasm();
-
-        const res = await fetch(`${DATA_URL}/global_search.parquet`);
-        if (!res.ok) throw new Error("Failed to fetch search index");
-
-        const buffer = new Uint8Array(await res.arrayBuffer());
-
-        const wasmTable = readParquet(buffer);
-        const table = tableFromIPC(wasmTable.intoIPCStream());
-
-        const data: any[] = [];
-        let latest = "";
-
-        for (const row of table) {
-          const item = row.toJSON();
-          item.item = cleanKpdnText(item.item);
-          // Pre-compute lowercased search string for ultra-fast, zero-allocation filtering
-          item._search =
-            `${item.item || ""} ${item.search_index || ""} ${item.item_category || ""}`.toLowerCase();
-
-          // Clear large strings to drop memory footprint, preserve V8 shape using undefined
-          item.search_index = undefined;
-
-          if (item.last_updated && item.last_updated > latest) {
-            latest = item.last_updated;
-          }
-          data.push(item);
-        }
-
-        setGlobalSearchData(data as SearchResultInput[]);
-        setMaxDate(latest || null);
-        setIsReady(true);
-      } catch (err: any) {
-        console.error("Initialization Failed:", err);
-        setError(err.message || "Failed to load data.");
-      }
-    };
-
-    initApp();
-  }, []);
-
-  const value = useMemo(
-    () => ({ isReady, globalSearchData, maxDate, userRegion, error }),
-    [isReady, globalSearchData, maxDate, userRegion, error],
-  );
-
-  return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
+  return <>{children}</>;
 };
+

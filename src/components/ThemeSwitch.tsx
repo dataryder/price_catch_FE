@@ -7,7 +7,6 @@ import {
 } from "react";
 import { MoonIcon, SunIcon } from "@govtechmy/myds-react/icon";
 import { Button } from "@govtechmy/myds-react/button";
-import { useTheme } from "@govtechmy/myds-react/hooks";
 import {
   Select,
   SelectValue,
@@ -63,8 +62,19 @@ const ThemeSwitch: FunctionComponent<ThemeSwitch> = ({
   ],
   onChange,
 }) => {
-  const { theme, setTheme, defaultTheme } = useTheme();
+  const [theme, setThemeState] = useState<string>("light");
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  // Initialize theme from document or localStorage on client mount
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+    const isDarkClass = document.documentElement.classList.contains("dark");
+    const activeTheme = savedTheme || (isDarkClass ? "dark" : "light");
+    setThemeState(activeTheme);
+
+    const index = themes.findIndex((t) => t.value === activeTheme);
+    setCurrentIndex(index >= 0 ? index : 0);
+  }, []);
 
   const getTheme = (value: string) =>
     themes.find((theme) => theme.value === value);
@@ -74,7 +84,7 @@ const ThemeSwitch: FunctionComponent<ThemeSwitch> = ({
     const _theme = getTheme(value);
     if (isValidElement(_theme?.icon))
       return (
-        <Slot className={"text-txt-black-900 size-4 flex-shrink-0"}>
+        <Slot className={"text-txt-black-900 size-4 flex-shrink-0 dark:text-white"}>
           {_theme?.icon}
         </Slot>
       );
@@ -87,22 +97,33 @@ const ThemeSwitch: FunctionComponent<ThemeSwitch> = ({
 
     disableTransitionsTemporarily();
 
+    let targetTheme = theme;
     if (as === "toggle") {
       const nextIndex = (currentIndex + 1) % themes.length;
       setCurrentIndex(nextIndex);
-      setTheme(themes[nextIndex]!.value);
-      if (onChange) onChange(themes[nextIndex]!.value);
+      targetTheme = themes[nextIndex]!.value;
     } else if (as === "select") {
       if (!value) return;
-      setTheme(value);
-      if (onChange) onChange(value);
+      targetTheme = value;
     }
+
+    // Toggle document class
+    if (targetTheme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+
+    localStorage.setItem("theme", targetTheme);
+    setThemeState(targetTheme);
+
+    if (onChange) onChange(targetTheme);
   };
 
   useEffect(() => {
     if (as === "toggle") {
       const index = themes.findIndex((t) => t.value === theme);
-      setCurrentIndex(index);
+      setCurrentIndex(index >= 0 ? index : 0);
     }
   }, [theme]);
 
@@ -110,7 +131,7 @@ const ThemeSwitch: FunctionComponent<ThemeSwitch> = ({
     return (
       <Button
         variant="default-ghost"
-        className="aspect-square flex-shrink-0 rounded-md focus:ring-otl-success-200/40"
+        className="aspect-square flex-shrink-0 rounded-md focus:ring-otl-success-200/40 text-txt-black-900 dark:text-white"
         onClick={() => handleChange()}
         size="small"
         aria-label={themes[currentIndex]?.label}
@@ -127,7 +148,7 @@ const ThemeSwitch: FunctionComponent<ThemeSwitch> = ({
     <Select
       size="small"
       variant="outline"
-      value={theme || defaultTheme}
+      value={theme}
       onValueChange={handleChange}
     >
       <SelectTrigger>

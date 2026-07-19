@@ -26,14 +26,14 @@ export default function FooterBar() {
                 loading="lazy"
                 className="rounded-full select-none shadow-sm"
               />
-              <span className="font-bold text-sm text-txt-black-500 dark:text-gray-500 group-hover:text-txt-black-900 dark:group-hover:text-white transition-colors">
+              <span className="font-semibold text-sm text-txt-black-500 dark:text-gray-500 group-hover:text-txt-black-900 dark:group-hover:text-white transition-colors">
                 DataRyder
               </span>
             </Link>
 
             <span className="hidden md:block w-1 h-1 rounded-full bg-otl-gray-300 dark:bg-gray-700"></span>
 
-            <p className="text-[11px] font-bold text-txt-black-400 dark:text-gray-500 text-center tracking-widest uppercase">
+            <p className="text-[11px] font-semibold text-txt-black-400 dark:text-gray-500 text-center tracking-widest uppercase">
               Sourced from{" "}
               <Link
                 href="https://pricecatcher.kpdn.gov.my/"
@@ -59,10 +59,10 @@ export default function FooterBar() {
         </SiteInfo>
 
         <div className="flex flex-col items-center md:items-end text-txt-black-400 dark:text-gray-500 text-xs gap-1.5 font-medium tracking-tight">
-          <p className="font-bold text-txt-black-900 dark:text-white">
+          <p className="font-semibold text-txt-black-900 dark:text-white">
             OpenPriceCatcher © {new Date().getFullYear()}
           </p>
-          <p className="text-[10px] uppercase tracking-widest font-bold opacity-80 flex items-center gap-1.5">
+          <p className="text-[10px] uppercase tracking-widest font-semibold opacity-80 flex items-center gap-1.5">
             Data As Of:{" "}
             {maxDate ? (
               new Date(maxDate).toLocaleDateString("en-MY", {

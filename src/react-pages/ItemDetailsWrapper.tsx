@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { useParams } from "react-router-dom";
+
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import { useSEO } from "../hooks/useSEO";
 import { useData } from "../contexts/DataContext";
@@ -78,8 +78,17 @@ const CellWrapper = ({
   );
 };
 
-const ItemDetailsWrapper: React.FC = () => {
-  const { itemCode } = useParams<{ itemCode: string }>();
+interface PreloadedItemData {
+  preloadedHistory?: ItemPriceHistory[];
+  preloadedPrices?: ItemLatest[];
+}
+
+const ItemDetailsWrapper: React.FC<{ itemCode?: string } & PreloadedItemData> = ({
+  itemCode: propItemCode,
+  preloadedHistory,
+  preloadedPrices,
+}) => {
+  const itemCode = propItemCode;
   const { globalSearchData, isReady, userRegion } = useData();
 
   // 1. Sync metadata instantly from memory
@@ -150,6 +159,11 @@ const ItemDetailsWrapper: React.FC = () => {
   // 4. Fetch History in parallel
   useEffect(() => {
     if (!itemCode || !isReady) return;
+    if (preloadedHistory && preloadedHistory.length > 0) {
+      setPriceHistory(preloadedHistory);
+      setIsLoadingHistory(false);
+      return;
+    }
     setIsLoadingHistory(true);
     getItemPriceHistory(itemCode)
       .then((historyData) => {
@@ -158,16 +172,21 @@ const ItemDetailsWrapper: React.FC = () => {
         );
       })
       .finally(() => setIsLoadingHistory(false));
-  }, [itemCode, isReady]);
+  }, [itemCode, isReady, preloadedHistory]);
 
   // 5. Fetch Prices in parallel (Triggers immediately once targetDateStr is set)
   useEffect(() => {
     if (!itemCode || !targetDateStr) return;
+    if (preloadedPrices && preloadedPrices.length > 0 && itemDetails?.last_updated === targetDateStr) {
+      setAllPriceData(preloadedPrices);
+      setIsLoadingPrices(false);
+      return;
+    }
     setIsLoadingPrices(true);
     getItemPrices(itemCode, targetDateStr)
       .then(setAllPriceData)
       .finally(() => setIsLoadingPrices(false));
-  }, [itemCode, targetDateStr]);
+  }, [itemCode, targetDateStr, preloadedPrices, itemDetails?.last_updated]);
 
   const filteredPriceLatest = useMemo(() => {
     if (!hasAutoSelectedState) return [];
@@ -443,7 +462,7 @@ const ItemDetailsWrapper: React.FC = () => {
         <div className="px-4 md:px-6 py-5 flex flex-col sm:flex-row gap-4 justify-between">
           <div className="flex flex-col md:flex-row md:space-x-4 md:divide-x md:divide-otl-gray-200 max-sm:justify-between max-sm:gap-4">
             <div className="flex flex-col md:flex-row items-left md:items-center md:justify-between gap-3">
-              <span className="hidden md:block text-[10px] font-bold uppercase tracking-widest text-txt-black-500 md:pl-3">
+              <span className="hidden md:block text-[10px] font-semibold uppercase tracking-widest text-txt-black-500 md:pl-3">
                 Observation Date
               </span>
               <DatePicker
@@ -582,7 +601,7 @@ const ItemDetailsWrapper: React.FC = () => {
             </div>
           ) : filteredPriceLatest.length === 0 ? (
             <div className="p-24 text-center flex flex-col items-center justify-center gap-2">
-              <p className="text-lg font-bold text-txt-black-900 dark:text-white">
+              <p className="text-lg font-semibold text-txt-black-900 dark:text-white">
                 No records found
               </p>
               <p className="text-sm font-medium text-txt-black-400 dark:text-gray-500">

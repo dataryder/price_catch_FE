@@ -32,10 +32,10 @@ const CustomTooltip: React.FC<TooltipProps<number, string>> = ({
   if (active && payload && payload.length) {
     return (
       <div className="bg-white/95 dark:bg-[#27272A]/95 backdrop-blur-xl border border-otl-gray-200/80 dark:border-gray-700 p-2.5 rounded-xl shadow-xl flex flex-col gap-1 items-center">
-        <p className="text-txt-black-500 dark:text-gray-400 font-bold tracking-widest text-[9px] uppercase">
+        <p className="text-txt-black-500 dark:text-gray-400 font-semibold tracking-widest text-[9px] uppercase">
           {`${formatLabel(label)}`}
         </p>
-        <p className="text-txt-black-900 dark:text-white font-black text-sm leading-none">
+        <p className="text-txt-black-900 dark:text-white font-semibold text-sm leading-none">
           {payload[0].value?.toFixed(1)}
         </p>
       </div>

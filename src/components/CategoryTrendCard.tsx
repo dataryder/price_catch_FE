@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+
 import { useData } from "../contexts/DataContext"; // Changed from useDuckDB
 import { AreaChart, Area, ResponsiveContainer, YAxis } from "recharts";
 import { RawDataRow } from "../types";
@@ -14,7 +14,6 @@ const CategoryTrendCard: React.FC<CategoryTrendCardProps> = ({
   category,
   data,
 }) => {
-  const navigate = useNavigate();
   const { globalSearchData } = useData(); // Use the in-memory global search index
 
   const chartData = useMemo(() => {
@@ -51,7 +50,7 @@ const CategoryTrendCard: React.FC<CategoryTrendCardProps> = ({
     if (itemMatch) {
       const group = itemMatch.item_group;
       // Navigate using the pre-computed group and formatted category
-      navigate(`/category/${group}/${category.replace("/", " | ")}`);
+      window.location.assign(`/category/${group}/${category.replace(/\//g, "--")}`);
     } else {
       console.warn(`Category "${category}" not found in search index.`);
     }

@@ -1,0 +1,115 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ItemDetailsWrapper from '../../react-pages/ItemDetailsWrapper';
+import { slugify } from '../../lib/slug';
+import { getItemPriceHistory, getItemPrices } from '../../services/apiClient';
+
+export async function getStaticPaths() {
+  // Fetch lookups and search catalog to get last_updated dates
+  const lookupsRes = await fetch("https://pricecatcher-lake.iwa.my/data/item_lookup.json");
+  if (!lookupsRes.ok) throw new Error("Failed to fetch item lookup for static routes");
+  const items = await lookupsRes.json();
+
+  const searchRes = await fetch("https://pricecatcher-lake.iwa.my/data/global_search.json");
+  if (!searchRes.ok) throw new Error("Failed to fetch search catalog for static routes");
+  const searchCatalog = await searchRes.json();
+
+  const itemCodes = Object.keys(items);
+  
+  // We want to load history and latest prices for all items in parallel with concurrency control
+  const CONCURRENCY_LIMIT = 15;
+  const paths = [];
+
+  // Create tasks
+  const tasks = itemCodes.map((itemCode) => async () => {
+    try {
+      const itemName = items[itemCode];
+      const searchItem = searchCatalog.find((i) => String(i.item_code) === String(itemCode));
+      const latestDateStr = searchItem?.last_updated || "";
+
+      // Fetch history and prices at build time!
+      const [history, prices] = await Promise.all([
+        getItemPriceHistory(itemCode),
+        latestDateStr ? getItemPrices(itemCode, latestDateStr) : Promise.resolve([])
+      ]);
+
+      const slug = `${slugify(itemName)}-${itemCode}`;
+
+      return {
+        params: { slug },
+        props: {
+          itemCode,
+          itemName,
+          latestDateStr,
+          preloadedHistory: history,
+          preloadedPrices: prices
+        }
+      };
+    } catch (err) {
+      console.error(`Failed to preload data for item ${itemCode}:`, err);
+      // Fallback with empty preloads if a single parquet file is missing or corrupt
+      const itemName = items[itemCode];
+      const slug = `${slugify(itemName)}-${itemCode}`;
+      return {
+        params: { slug },
+        props: {
+          itemCode,
+          itemName,
+          latestDateStr: "",
+          preloadedHistory: [],
+          preloadedPrices: []
+        }
+      };
+    }
+  });
+
+  // Execute tasks with concurrency limit to avoid network rate limits or timeouts
+  const results = [];
+  const executing = [];
+  for (const task of tasks) {
+    const p = task().then(res => {
+      executing.splice(executing.indexOf(p), 1);
+      return res;
+    });
+    results.push(p);
+    executing.push(p);
+    if (executing.length >= CONCURRENCY_LIMIT) {
+      await Promise.race(executing);
+    }
+  }
+
+  return Promise.all(results);
+}
+
+const { itemCode, itemName, preloadedHistory, preloadedPrices } = Astro.props;
+
+// Compute min, max, and median price for SEO and OpenGraph tags at build time
+const pricesList = (preloadedPrices || []).map(p => p.price).filter(p => typeof p === "number");
+const minPrice = pricesList.length > 0 ? Math.min(...pricesList) : null;
+const maxPrice = pricesList.length > 0 ? Math.max(...pricesList) : null;
+
+const getMedian = (arr: number[]) => {
+  if (arr.length === 0) return null;
+  const sorted = [...arr].sort((a, b) => a - b);
+  const mid = Math.floor(sorted.length / 2);
+  return sorted.length % 2 !== 0 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
+};
+const medianPrice = pricesList.length > 0 ? getMedian(pricesList) : null;
+
+let pageTitle = `${itemName} | OpenPriceCatcher`;
+let pageDescription = `Track, compare, and analyze retail prices for ${itemName} across different states and markets in Malaysia. Sourced from KPDN open data.`;
+
+if (minPrice !== null && maxPrice !== null && medianPrice !== null) {
+  pageTitle = `${itemName} (RM ${minPrice.toFixed(2)} - RM ${maxPrice.toFixed(2)}) | OpenPriceCatcher`;
+  pageDescription = `Track, compare, and analyze retail prices for ${itemName} in Malaysia. Current median price is RM ${medianPrice.toFixed(2)} (ranging from RM ${minPrice.toFixed(2)} to RM ${maxPrice.toFixed(2)}). Sourced from KPDN open data.`;
+}
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <ItemDetailsWrapper 
+    itemCode={itemCode} 
+    preloadedHistory={preloadedHistory} 
+    preloadedPrices={preloadedPrices} 
+    client:load 
+  />
+</Layout>

@@ -1,0 +1,53 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import CategoryPage from '../../react-pages/CategoryCatalog';
+
+export async function getStaticPaths() {
+  const res = await fetch("https://pricecatcher-lake.iwa.my/data/global_search.json");
+  if (!res.ok) throw new Error("Failed to fetch global search catalog for category routes");
+  const data = await res.json();
+  
+  const paths = [];
+  
+  // 1. Root /category
+  paths.push({ params: { path: undefined }, props: { group: undefined, category: undefined } });
+  
+  const groups = new Set();
+  const groupCategoryPairs = new Set();
+  
+  data.forEach((item) => {
+    if (item.item_group) {
+      groups.add(item.item_group);
+      if (item.item_category) {
+        groupCategoryPairs.add(`${item.item_group}|${item.item_category}`);
+      }
+    }
+  });
+  
+  // 2. /category/[group]
+  groups.forEach((group) => {
+    paths.push({ 
+      params: { path: group }, 
+      props: { group, category: undefined } 
+    });
+  });
+  
+  // 3. /category/[group]/[category]
+  groupCategoryPairs.forEach((pair) => {
+    const [group, category] = pair.split("|");
+    const urlSafeCatName = category.replace(/\//g, "--");
+    paths.push({ 
+      params: { path: `${group}/${urlSafeCatName}` }, 
+      props: { group, category: urlSafeCatName } 
+    });
+  });
+  
+  return paths;
+}
+
+const { group, category } = Astro.props;
+---
+
+<Layout title="Browse by Categories | OpenPriceCatcher">
+  <CategoryPage group={group} category={category} client:load />
+</Layout>
