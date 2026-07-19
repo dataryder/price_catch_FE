@@ -76,7 +76,7 @@ export async function getStaticPaths() {
       description = `Track price indices and compare retail prices for ${category} in Malaysia. The index moved by ${sign}${wowVal.toFixed(2)}% this week compared to last week.`;
     }
 
-    const image = `/og/category-${group}-${urlSafeCatName}.svg`;
+    const image = `/og/category-${group}-${urlSafeCatName}.png`;
 
     paths.push({ 
       params: { path: `${group}/${urlSafeCatName}` }, 
