@@ -13,7 +13,6 @@
   "dependencies": {
     "@govtechmy/myds-react": "^1.0.2",
     "@govtechmy/myds-style": "^1.0.0",
-    "@tailwindcss/vite": "^4.3.0",
     "@types/d3-scale-chromatic": "^3.1.0",
     "apache-arrow": "^21.1.0",
     "baseline-browser-mapping": "^2.10.29",

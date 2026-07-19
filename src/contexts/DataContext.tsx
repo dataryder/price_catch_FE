@@ -6,8 +6,6 @@ import React, {
   useMemo,
   useRef,
 } from "react";
-import initWasm, { readParquet } from "parquet-wasm";
-import { tableFromIPC } from "apache-arrow";
 import { SearchResultInput } from "../types";
 import { cleanKpdnText } from "../lib/utils";
 
@@ -60,27 +58,20 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({
 
     const initApp = async () => {
       try {
-        await initWasm();
-
-        const res = await fetch(`${DATA_URL}/global_search.parquet`);
+        const res = await fetch(`${DATA_URL}/global_search.json`);
         if (!res.ok) throw new Error("Failed to fetch search index");
 
-        const buffer = new Uint8Array(await res.arrayBuffer());
-
-        const wasmTable = readParquet(buffer);
-        const table = tableFromIPC(wasmTable.intoIPCStream());
+        const jsonList = await res.json();
 
         const data: any[] = [];
         let latest = "";
 
-        for (const row of table) {
-          const item = row.toJSON();
+        for (const item of jsonList) {
           item.item = cleanKpdnText(item.item);
-          // Pre-compute lowercased search string for ultra-fast, zero-allocation filtering
-          item._search =
-            `${item.item || ""} ${item.search_index || ""} ${item.item_category || ""}`.toLowerCase();
+          // Use pre-computed search index from JSON directly
+          item._search = item.search_index || "";
 
-          // Clear large strings to drop memory footprint, preserve V8 shape using undefined
+          // Clear large strings to drop memory footprint
           item.search_index = undefined;
 
           if (item.last_updated && item.last_updated > latest) {

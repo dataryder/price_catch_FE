@@ -1,5 +1,3 @@
-import { readParquet } from "parquet-wasm";
-import { tableFromIPC } from "apache-arrow";
 import {
   ItemMetadata,
   ItemLatest,
@@ -12,6 +10,8 @@ import {
 const DATA_URL = "https://pricecatcher-lake.iwa.my/data";
 
 const bufferCache = new Map<string, Uint8Array>();
+
+let wasmInitialized = false;
 
 const fetchParquet = async (
   url: string,
@@ -26,6 +26,15 @@ const fetchParquet = async (
     buffer = new Uint8Array(await res.arrayBuffer());
     bufferCache.set(url, buffer);
   }
+
+  // Lazy load and initialize WASM only when needed
+  if (!wasmInitialized) {
+    const initWasm = (await import("parquet-wasm")).default;
+    await initWasm();
+    wasmInitialized = true;
+  }
+  const { readParquet } = await import("parquet-wasm");
+  const { tableFromIPC } = await import("apache-arrow");
 
   const wasmTable = readParquet(buffer);
   const table = tableFromIPC(wasmTable.intoIPCStream());
