@@ -111,6 +111,15 @@ const ogImage = `/og/item-${itemCode}.png`;
 ---
 
 <Layout title={pageTitle} description={pageDescription} image={ogImage}>
+  <!-- Clean JSON data block for AI agents and scrapers -->
+  <script id="item-data" type="application/json" set:html={JSON.stringify({
+    itemCode,
+    itemName,
+    metadata: preloadedMetadata,
+    prices: preloadedPrices,
+    history: preloadedHistory
+  }, (key, value) => typeof value === 'bigint' ? Number(value) : value)} />
+
   <ItemDetailsWrapper 
     itemCode={itemCode} 
     preloadedHistory={preloadedHistory} 

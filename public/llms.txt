@@ -58,3 +58,27 @@ def get_item_prices(item_code):
 # Example: Get all store-level prices for "AYAM BERSIH - STANDARD" (Item Code: 1)
 df_ayam = get_item_prices(1)
 print(df_ayam.head())
+```
+
+---
+
+## 4. HTML Scraping Fallback
+If you are directly scraping the HTML pages (for example, using a standard crawler or web agent), you do not need to parse the dynamic React components or custom Astro structures. We embed the clean raw data inside a standard `<script>` tag at build time:
+
+- **Item Pages**: Extract and parse the JSON inside `<script id="item-data" type="application/json">`.
+- **Category Pages**: Extract and parse the JSON inside `<script id="category-data" type="application/json">`.
+
+Example Python scraper:
+```python
+import json
+import requests
+from bs4 import BeautifulSoup
+
+url = "https://pricecatcher.civictech.my/item/kacang-dal-australia-1422/"
+soup = BeautifulSoup(requests.get(url).text, "html.parser")
+data = json.loads(soup.find("script", id="item-data").string)
+
+print(data["prices"])      # Array of retail prices and store names
+print(data["history"])     # Historical price trend indices
+print(data["metadata"])    # Item lookup info (unit, category, etc.)
+```

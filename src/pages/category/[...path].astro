@@ -125,6 +125,14 @@ const { group, category, title, description, image, preloadedHierarchy, preloade
 ---
 
 <Layout title={title} description={description} image={image}>
+  <!-- Clean JSON data block for AI agents and scrapers -->
+  <script id="category-data" type="application/json" set:html={JSON.stringify({
+    group,
+    category,
+    hierarchy: preloadedHierarchy,
+    items: preloadedItems
+  }, (key, value) => typeof value === 'bigint' ? Number(value) : value)} />
+
   <CategoryPage 
     group={group} 
     category={category} 
