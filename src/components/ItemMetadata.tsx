@@ -111,7 +111,7 @@ const ItemMetadataDisplay: React.FC<ItemMetadataDisplayProps> = ({
         <div className="space-y-5">
           <div className="flex flex-col gap-2.5">
             <h3 className="text-3xl md:text-4xl font-semibold text-txt-black-900 dark:text-white tracking-tight leading-[1.1] text-pretty break-normal">
-              {metadata.item.replace(/\//g, "/\u200B")}
+              {(metadata.item || "").replace(/\//g, "/\u200B")}
               <span className="px-2 text-xs inline align-top font-normal tracking-normal whitespace-nowrap">
                 per {metadata.unit}
               </span>

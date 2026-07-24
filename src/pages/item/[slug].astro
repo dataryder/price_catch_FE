@@ -42,7 +42,8 @@ export async function getStaticPaths() {
           itemName,
           latestDateStr,
           preloadedHistory: history,
-          preloadedPrices: prices
+          preloadedPrices: prices,
+          preloadedMetadata: searchItem || null
         }
       };
     } catch (err) {
@@ -57,7 +58,8 @@ export async function getStaticPaths() {
           itemName,
           latestDateStr: "",
           preloadedHistory: [],
-          preloadedPrices: []
+          preloadedPrices: [],
+          preloadedMetadata: null
         }
       };
     }
@@ -81,7 +83,7 @@ export async function getStaticPaths() {
   return Promise.all(results);
 }
 
-const { itemCode, itemName, preloadedHistory, preloadedPrices } = Astro.props;
+const { itemCode, itemName, preloadedHistory, preloadedPrices, preloadedMetadata } = Astro.props;
 
 // Compute min, max, average, and median price for SEO and OpenGraph tags at build time
 const pricesList = (preloadedPrices || []).map(p => p.price).filter(p => typeof p === "number");
@@ -113,6 +115,7 @@ const ogImage = `/og/item-${itemCode}.png`;
     itemCode={itemCode} 
     preloadedHistory={preloadedHistory} 
     preloadedPrices={preloadedPrices} 
+    preloadedMetadata={preloadedMetadata}
     client:load 
   />
 </Layout>

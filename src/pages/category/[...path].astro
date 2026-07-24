@@ -17,6 +17,23 @@ export async function getStaticPaths() {
     indices = JSON.parse(rawText.replace(/:\s*NaN/g, ": null"));
   }
   
+  // Precompute hierarchy at build time
+  const uniqueKeys = new Set<string>();
+  const hierarchy: any[] = [];
+  data.forEach((i) => {
+    if (i.item_group) {
+      const key = `${i.item_group}|${i.item_category}`;
+      if (!uniqueKeys.has(key)) {
+        uniqueKeys.add(key);
+        hierarchy.push({
+          item_group: i.item_group,
+          item_category: i.item_category,
+        });
+      }
+    }
+  });
+  hierarchy.sort((a, b) => a.item_group.localeCompare(b.item_group));
+
   const paths = [];
   
   // 1. Root /category
@@ -27,7 +44,9 @@ export async function getStaticPaths() {
       category: undefined,
       title: "Browse by Categories | OpenPriceCatcher",
       description: "Drill down into product groups and categories to analyze retail prices and historical food trends in Malaysia.",
-      image: "/og.png"
+      image: "/og.png",
+      preloadedHierarchy: hierarchy,
+      preloadedItems: []
     } 
   });
   
@@ -52,7 +71,9 @@ export async function getStaticPaths() {
         category: undefined,
         title: `${group} Categories | OpenPriceCatcher`,
         description: `Compare retail prices and analyze trends for products under ${group} in Malaysia.`,
-        image: "/og.png"
+        image: "/og.png",
+        preloadedHierarchy: hierarchy,
+        preloadedItems: []
       } 
     });
   });
@@ -78,6 +99,11 @@ export async function getStaticPaths() {
 
     const image = `/og/category-${group}-${urlSafeCatName}.png`;
 
+    // Filter items list for this category at build time
+    const itemsList = data
+      .filter((i) => i.item_group === group && i.item_category === category)
+      .sort((a, b) => a.item.localeCompare(b.item));
+
     paths.push({ 
       params: { path: `${group}/${urlSafeCatName}` }, 
       props: { 
@@ -85,7 +111,9 @@ export async function getStaticPaths() {
         category: urlSafeCatName,
         title,
         description,
-        image
+        image,
+        preloadedHierarchy: hierarchy,
+        preloadedItems: itemsList
       } 
     });
   });
@@ -93,9 +121,15 @@ export async function getStaticPaths() {
   return paths;
 }
 
-const { group, category, title, description, image } = Astro.props;
+const { group, category, title, description, image, preloadedHierarchy, preloadedItems } = Astro.props;
 ---
 
 <Layout title={title} description={description} image={image}>
-  <CategoryPage group={group} category={category} client:load />
+  <CategoryPage 
+    group={group} 
+    category={category} 
+    preloadedHierarchy={preloadedHierarchy}
+    preloadedItems={preloadedItems}
+    client:load 
+  />
 </Layout>

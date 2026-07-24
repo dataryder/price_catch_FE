@@ -29,11 +29,21 @@ const fetchParquet = async (
 
   // Lazy load and initialize WASM only when needed
   if (!wasmInitialized) {
-    const initWasm = (await import("parquet-wasm")).default;
-    await initWasm();
+    const { default: initWasm } = await import("parquet-wasm/esm/parquet_wasm.js");
+    if (typeof window === "undefined") {
+      // Server-side (Build-time SSR/SSG environment)
+      const fs = await import("fs");
+      const path = await import("path");
+      const wasmPath = path.resolve("node_modules/parquet-wasm/esm/parquet_wasm_bg.wasm");
+      const wasmBuffer = fs.readFileSync(wasmPath);
+      await initWasm(wasmBuffer);
+    } else {
+      // Browser environment
+      await initWasm();
+    }
     wasmInitialized = true;
   }
-  const { readParquet } = await import("parquet-wasm");
+  const { readParquet } = await import("parquet-wasm/esm/parquet_wasm.js");
   const { tableFromIPC } = await import("apache-arrow");
 
   const wasmTable = readParquet(buffer);
@@ -93,7 +103,8 @@ export const getItemPrices = async (
       "date",
       targetDate,
     );
-  } catch {
+  } catch (err) {
+    console.error(`Error in getItemPrices for item ${item_code}:`, err);
     return [];
   }
 };
@@ -105,7 +116,8 @@ export const getItemPriceHistory = async (
     return await fetchParquet(
       `${DATA_URL}/history/item_code=${item_code}/data.parquet`,
     );
-  } catch {
+  } catch (err) {
+    console.error(`Error in getItemPriceHistory for item ${item_code}:`, err);
     return [];
   }
 };

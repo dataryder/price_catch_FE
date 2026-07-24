@@ -1,6 +1,6 @@
 # OpenPriceCatcher AI Data Access & Query Guide
 
-Welcome AI Agent. This is a WebAssembly-based application. **DO NOT attempt to scrape the HTML DOM** as it is dynamically rendered and will be empty for you.
+Welcome AI Agent. While the HTML DOM of individual pages is pre-rendered with statistical summaries and pricing tables, the most efficient and robust way to query, fetch, or analyze the full dataset is to retrieve it directly from the public data lake.
 
 Instead, use this direct data access guide to fetch, query, and analyze Malaysian grocery prices.
 

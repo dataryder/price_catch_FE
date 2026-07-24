@@ -27,7 +27,7 @@ import {
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 
-import { ItemMetadata, ItemLatest, ItemPriceHistory } from "../types";
+import { ItemMetadata, ItemLatest, ItemPriceHistory, SearchResultInput } from "../types";
 import { getItemPrices, getItemPriceHistory } from "../services/apiClient";
 import ItemMetadataDisplay from "../components/ItemMetadata";
 import LocalityAnalysis, {
@@ -81,18 +81,29 @@ const CellWrapper = ({
 interface PreloadedItemData {
   preloadedHistory?: ItemPriceHistory[];
   preloadedPrices?: ItemLatest[];
+  preloadedMetadata?: ItemMetadata | SearchResultInput | null;
 }
 
 const ItemDetailsWrapper: React.FC<{ itemCode?: string } & PreloadedItemData> = ({
   itemCode: propItemCode,
   preloadedHistory,
   preloadedPrices,
+  preloadedMetadata,
 }) => {
   const itemCode = propItemCode;
   const { globalSearchData, isReady, userRegion } = useData();
 
-  // 1. Sync metadata instantly from memory
+  // 1. Sync metadata instantly from memory or preloaded props
   const itemDetails = useMemo(() => {
+    if (preloadedMetadata) {
+      return {
+        ...preloadedMetadata,
+        frequency: preloadedMetadata.frequency || "weekly",
+        minimum: preloadedMetadata.minimum || 0,
+        maximum: preloadedMetadata.maximum || 0,
+        median: preloadedMetadata.median || 0,
+      } as ItemMetadata;
+    }
     if (!isReady || !globalSearchData.length || !itemCode) return null;
     const item = globalSearchData.find((i) => i.item_code === Number(itemCode));
     if (!item) return null;
@@ -103,7 +114,7 @@ const ItemDetailsWrapper: React.FC<{ itemCode?: string } & PreloadedItemData> = 
       maximum: item.maximum || 0,
       median: item.median || 0,
     } as ItemMetadata;
-  }, [isReady, globalSearchData, itemCode]);
+  }, [preloadedMetadata, isReady, globalSearchData, itemCode]);
 
   useSEO({
     title: itemDetails?.item,
@@ -114,19 +125,37 @@ const ItemDetailsWrapper: React.FC<{ itemCode?: string } & PreloadedItemData> = 
 
   useDocumentTitle(itemDetails?.item);
 
-  const [priceHistory, setPriceHistory] = useState<ItemPriceHistory[]>([]);
-  const [allPriceData, setAllPriceData] = useState<ItemLatest[]>([]);
+  const [priceHistory, setPriceHistory] = useState<ItemPriceHistory[]>(
+    preloadedHistory || []
+  );
+  const [allPriceData, setAllPriceData] = useState<ItemLatest[]>(
+    preloadedPrices || []
+  );
 
-  const [isLoadingHistory, setIsLoadingHistory] = useState<boolean>(true);
-  const [isLoadingPrices, setIsLoadingPrices] = useState<boolean>(true);
+  const [isLoadingHistory, setIsLoadingHistory] = useState<boolean>(
+    !(preloadedHistory && preloadedHistory.length > 0)
+  );
+  const [isLoadingPrices, setIsLoadingPrices] = useState<boolean>(
+    !(preloadedPrices && preloadedPrices.length > 0)
+  );
 
   const [selectedState, setSelectedState] = useState<string>("");
   const [hasAutoSelectedState, setHasAutoSelectedState] =
     useState<boolean>(false);
   const [selectedDistrict, setSelectedDistrict] = useState<string>("");
 
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>();
-  const [targetDateStr, setTargetDateStr] = useState<string | null>(null);
+  const initialDateStr = preloadedMetadata?.last_updated || "";
+  const [targetDateStr, setTargetDateStr] = useState<string | null>(
+    initialDateStr || null
+  );
+
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(() => {
+    if (initialDateStr) {
+      const [yyyy, mm, dd] = initialDateStr.split("-").map(Number);
+      return new Date(yyyy, mm - 1, dd);
+    }
+    return undefined;
+  });
 
   const [downloadDateRange, setDownloadDateRange] = useState<
     DateRange | undefined
@@ -342,7 +371,7 @@ const ItemDetailsWrapper: React.FC<{ itemCode?: string } & PreloadedItemData> = 
         filename += ".parquet";
       } else {
         const { default: initParquetWasm, readParquet } =
-          await import("parquet-wasm");
+          await import("parquet-wasm/esm/parquet_wasm.js");
         const { tableFromIPC } = await import("apache-arrow");
 
         // Ensure WASM is initialized (safe to call multiple times)

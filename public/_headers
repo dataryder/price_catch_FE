@@ -1,0 +1,7 @@
+# Default caching rule for all files (HTML pages, etc.)
+/*
+  Cache-Control: public, max-age=7200, must-revalidate
+
+# Hashed assets compiled by Astro (JS, CSS, images, fonts) can be cached indefinitely
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable

@@ -15,9 +15,16 @@ import { cn } from "../lib/utils";
 interface CategoryPageProps {
   group?: string;
   category?: string;
+  preloadedHierarchy?: CategoryData[];
+  preloadedItems?: any[];
 }
 
-const CategoryPage: React.FC<CategoryPageProps> = ({ group: propGroup, category: propCategory }) => {
+const CategoryPage: React.FC<CategoryPageProps> = ({ 
+  group: propGroup, 
+  category: propCategory,
+  preloadedHierarchy,
+  preloadedItems
+}) => {
   const [group, setGroup] = useState<string>(propGroup || "");
   const [category, setCategory] = useState<string>(propCategory || "");
 
@@ -29,10 +36,16 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ group: propGroup, category:
 
   const { isReady, globalSearchData } = useData();
 
-  const [hierarchy, setHierarchy] = useState<CategoryData[]>([]);
-  const [itemsList, setItemsList] = useState<any[]>([]);
+  const [hierarchy, setHierarchy] = useState<CategoryData[]>(
+    preloadedHierarchy || []
+  );
+  const [itemsList, setItemsList] = useState<any[]>(
+    preloadedItems || []
+  );
 
-  const [isLoadingHierarchy, setIsLoadingHierarchy] = useState(true);
+  const [isLoadingHierarchy, setIsLoadingHierarchy] = useState(
+    !(preloadedHierarchy && preloadedHierarchy.length > 0)
+  );
   const [isLoadingItems, setIsLoadingItems] = useState(false);
 
   // Sync state on back/forward browser navigation
@@ -61,15 +74,19 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ group: propGroup, category:
   };
 
   useEffect(() => {
+    if (preloadedHierarchy && preloadedHierarchy.length > 0) return;
     if (!isReady) return;
     setIsLoadingHierarchy(true);
     getCategoryHierarchy(globalSearchData)
       .then(setHierarchy)
       .catch(console.error)
       .finally(() => setIsLoadingHierarchy(false));
-  }, [isReady, globalSearchData]);
+  }, [isReady, globalSearchData, preloadedHierarchy]);
 
   useEffect(() => {
+    if (preloadedItems && preloadedItems.length > 0 && group === propGroup && category === propCategory) {
+      return;
+    }
     if (!isReady || !group || !category) {
       setItemsList([]);
       return;
@@ -79,7 +96,7 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ group: propGroup, category:
       .then(setItemsList)
       .catch(console.error)
       .finally(() => setIsLoadingItems(false));
-  }, [isReady, globalSearchData, group, category]);
+  }, [isReady, globalSearchData, group, category, preloadedItems, propGroup, propCategory]);
 
   const availableGroups = useMemo(() => {
     return Array.from(new Set(hierarchy.map((h) => h.item_group)));
