@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import CategoryPage from '../../react-pages/CategoryCatalog';
+import { slugify } from '../../lib/slug';
 
 export async function getStaticPaths() {
   const [searchRes, indexRes] = await Promise.all([
@@ -125,13 +126,22 @@ const { group, category, title, description, image, preloadedHierarchy, preloade
 ---
 
 <Layout title={title} description={description} image={image}>
-  <!-- Clean JSON data block for AI agents and scrapers -->
-  <script id="category-data" type="application/json" set:html={JSON.stringify({
-    group,
-    category,
-    hierarchy: preloadedHierarchy,
-    items: preloadedItems
-  }, (key, value) => typeof value === 'bigint' ? Number(value) : value)} />
+
+
+  <!-- Standard HTML fallback for scrapers, crawlers and search bots -->
+  <div class="sr-only hidden" aria-hidden="true" style="display: none;">
+    <h1>Category: {category} ({group})</h1>
+    <h2>Items in this category</h2>
+    <ul>
+      {preloadedItems.map((item) => (
+        <li>
+          <a href={`/item/${slugify(item.item)}-${item.item_code}`}>
+            {item.item} - RM {item.median !== null ? item.median.toFixed(2) : "N/A"} (Median)
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
 
   <CategoryPage 
     group={group} 

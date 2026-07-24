@@ -111,14 +111,48 @@ const ogImage = `/og/item-${itemCode}.png`;
 ---
 
 <Layout title={pageTitle} description={pageDescription} image={ogImage}>
-  <!-- Clean JSON data block for AI agents and scrapers -->
-  <script id="item-data" type="application/json" set:html={JSON.stringify({
-    itemCode,
-    itemName,
-    metadata: preloadedMetadata,
-    prices: preloadedPrices,
-    history: preloadedHistory
-  }, (key, value) => typeof value === 'bigint' ? Number(value) : value)} />
+
+
+  <!-- Standard HTML fallback for scrapers, crawlers and search bots -->
+  <div class="sr-only hidden" aria-hidden="true" style="display: none;">
+    <h1>{itemName}</h1>
+    <p>Unit: {preloadedMetadata?.unit}</p>
+    <p>Category: {preloadedMetadata?.item_category} ({preloadedMetadata?.item_group})</p>
+    
+    <h2>Price Summary</h2>
+    <ul>
+      <li>Nationwide Low: RM {minPrice !== null ? minPrice.toFixed(2) : "N/A"}</li>
+      <li>Median Average: RM {medianPrice !== null ? medianPrice.toFixed(2) : "N/A"}</li>
+      <li>Nationwide Average: RM {averagePrice !== null ? averagePrice.toFixed(2) : "N/A"}</li>
+      <li>Nationwide High: RM {maxPrice !== null ? maxPrice.toFixed(2) : "N/A"}</li>
+    </ul>
+
+    <h2>Retail Prices (Premises)</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Premise</th>
+          <th>State</th>
+          <th>District</th>
+          <th>Type</th>
+          <th>Price (RM)</th>
+        </tr>
+      </thead>
+      <tbody>
+        {preloadedPrices.map((p) => (
+          <tr>
+            <td>{p.date}</td>
+            <td>{p.premise}</td>
+            <td>{p.state}</td>
+            <td>{p.district}</td>
+            <td>{p.premise_type}</td>
+            <td>{p.price.toFixed(2)}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
 
   <ItemDetailsWrapper 
     itemCode={itemCode} 
