@@ -62,8 +62,44 @@ print(df_ayam.head())
 
 ---
 
-## 4. HTML Scraping Fallback
-If you are directly scraping the HTML pages (for example, using a standard crawler or web agent), you do not need to parse the dynamic React components or custom Astro structures. The HTML document includes a visually hidden semantic HTML5 fallback block (`<div class="sr-only hidden" style="display: none;">`) containing standard, fully hydrated elements:
+## 4. Reading Data From Item Pages
+Every item page (`https://pricecatcher.iwa.my/item/{slug}-{item_code}/`) embeds its full data as one plain JSON block. If you can read raw HTML, this is the easiest option:
 
-- **Item Pages**: Contains an `<h1>` heading with the item name, a summary list of stats (`<ul>`), and a clean, fully populated standard `<table>` containing retail prices (Date, Premise, State, District, Type, Price).
-- **Category Pages**: Contains a list of links (`<a>` elements pointing to `/item/...`) for all items in that category.
+```html
+<script type="application/json" id="item-data">{ ... }</script>
+```
+
+Structure (tabular data uses `columns` + `rows`; each row lines up with `columns`):
+
+```json
+{
+  "item_code": "1611",
+  "item": "SANTAN KELAPA JENAMA KARA",
+  "unit": "200 ml",
+  "item_group": "BARANGAN BERBUNGKUS",
+  "item_category": "SANTAN (KOTAK)",
+  "sources": {
+    "latest_prices_parquet": "https://pricecatcher-lake.iwa.my/data/prices/item_code=1611/data.parquet",
+    "price_history_parquet": "https://pricecatcher-lake.iwa.my/data/history/item_code=1611/data.parquet",
+    "docs": "https://pricecatcher.iwa.my/llms.txt"
+  },
+  "latest_prices": {
+    "date": "2026-10-26",
+    "columns": ["premise", "premise_type", "state", "district", "price"],
+    "rows": [["PASARAYA WELL MART, TAMAN MELATI SP1", "Pasar Raya / Supermarket", "W.P. Kuala Lumpur", "Wangsa Maju", 4.39]]
+  },
+  "price_history": {
+    "columns": ["date", "median", "p5", "p95"],
+    "rows": [["2022-01-01", 3, 2.69, 3.5]]
+  }
+}
+```
+
+- `latest_prices` holds every premise-level price on the latest observation date (`date`). If a page ever mixes dates, `date` is `null` and `"date"` becomes the first column.
+- `price_history` holds the nationwide daily median and 5th/95th percentile prices (in MYR, rounded to 4 decimals).
+
+### Plain-HTML fallback
+If your tool strips `<script>` tags (for example, HTML-to-Markdown converters), the page also includes a visually hidden semantic HTML block (`<div class="sr-only hidden" style="display: none;">`) with:
+
+- **Item Pages**: an `<h1>` with the item name, a summary list of stats (`<ul>`), links to the raw Parquet files, and a standard `<table>` of retail prices (Date, Premise, State, District, Type, Price).
+- **Category Pages**: a list of links (`<a>` elements pointing to `/item/...`) for all items in that category.

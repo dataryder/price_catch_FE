@@ -3,6 +3,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import { useSEO } from "../hooks/useSEO";
 import { useData } from "../contexts/DataContext";
+import { getPreloadedItemData } from "../lib/itemData";
 import { DataTable } from "@govtechmy/myds-react/data-table";
 import {
   Select,
@@ -86,11 +87,16 @@ interface PreloadedItemData {
 
 const ItemDetailsWrapper: React.FC<{ itemCode?: string } & PreloadedItemData> = ({
   itemCode: propItemCode,
-  preloadedHistory,
-  preloadedPrices,
+  preloadedHistory: propHistory,
+  preloadedPrices: propPrices,
   preloadedMetadata,
 }) => {
   const itemCode = propItemCode;
+  // Item pages ship their data in a <script id="item-data"> JSON block
+  // (see lib/itemData.ts) instead of island props; props still win if given.
+  const embedded = useMemo(() => getPreloadedItemData(itemCode), [itemCode]);
+  const preloadedHistory = propHistory ?? embedded?.history;
+  const preloadedPrices = propPrices ?? embedded?.prices;
   const { globalSearchData, isReady, userRegion } = useData();
 
   // 1. Sync metadata instantly from memory or preloaded props

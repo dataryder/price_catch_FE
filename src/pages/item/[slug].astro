@@ -3,6 +3,7 @@ import Layout from '../../layouts/Layout.astro';
 import ItemDetailsWrapper from '../../react-pages/ItemDetailsWrapper';
 import { slugify } from '../../lib/slug';
 import { getItemPriceHistory, getItemPrices } from '../../services/apiClient';
+import { ITEM_DATA_ELEMENT_ID, encodeItemData, serializeItemData, setServerItemData } from '../../lib/itemData';
 
 export async function getStaticPaths() {
   // Fetch lookups and search catalog to get last_updated dates
@@ -108,6 +109,11 @@ if (minPrice !== null && maxPrice !== null && medianPrice !== null && averagePri
 }
 
 const ogImage = `/og/item-${itemCode}.png`;
+
+// One plain JSON copy of the data, read by the React island and by agents.
+const itemData = encodeItemData(itemCode, itemName, preloadedMetadata, preloadedPrices || [], preloadedHistory || []);
+setServerItemData(itemData);
+const itemDataJson = serializeItemData(itemData);
 ---
 
 <Layout title={pageTitle} description={pageDescription} image={ogImage}>
@@ -125,6 +131,14 @@ const ogImage = `/og/item-${itemCode}.png`;
       <li>Median Average: RM {medianPrice !== null ? medianPrice.toFixed(2) : "N/A"}</li>
       <li>Nationwide Average: RM {averagePrice !== null ? averagePrice.toFixed(2) : "N/A"}</li>
       <li>Nationwide High: RM {maxPrice !== null ? maxPrice.toFixed(2) : "N/A"}</li>
+    </ul>
+
+    <h2>Raw Data</h2>
+    <ul>
+      <li>Machine-readable JSON of this page: <code>&lt;script type="application/json" id="{ITEM_DATA_ELEMENT_ID}"&gt;</code></li>
+      <li>Premise-level prices (Parquet): <a href={itemData.sources.latest_prices_parquet}>{itemData.sources.latest_prices_parquet}</a></li>
+      <li>Price history (Parquet): <a href={itemData.sources.price_history_parquet}>{itemData.sources.price_history_parquet}</a></li>
+      <li>Data access guide: <a href="/llms.txt">/llms.txt</a></li>
     </ul>
 
     <h2>Retail Prices (Premises)</h2>
@@ -154,10 +168,10 @@ const ogImage = `/og/item-${itemCode}.png`;
     </table>
   </div>
 
-  <ItemDetailsWrapper 
-    itemCode={itemCode} 
-    preloadedHistory={preloadedHistory} 
-    preloadedPrices={preloadedPrices} 
+  <script type="application/json" id={ITEM_DATA_ELEMENT_ID} is:inline set:html={itemDataJson}></script>
+
+  <ItemDetailsWrapper
+    itemCode={itemCode}
     preloadedMetadata={preloadedMetadata}
     client:load 
   />
