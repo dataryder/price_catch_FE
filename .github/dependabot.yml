@@ -1,0 +1,22 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      # One PR per week for all minor/patch bumps
+      minor-and-patch:
+        update-types: [minor, patch]
+      # Security fixes grouped into a single PR
+      security:
+        applies-to: security-updates
+        patterns: ["*"]
+    ignore:
+      # Pinned majors: @govtechmy/myds-style requires Tailwind 3;
+      # typescript-eslint supports TypeScript < 6.1
+      - dependency-name: tailwindcss
+        update-types: [version-update:semver-major]
+      - dependency-name: typescript
+        update-types: [version-update:semver-major]
