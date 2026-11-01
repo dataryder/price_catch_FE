@@ -6,7 +6,7 @@ import {
   YAxis,
   Tooltip,
   ResponsiveContainer,
-  TooltipProps,
+  TooltipContentProps,
 } from "recharts";
 import { IndexData, ProcessedDataRow, RawDataRow } from "../types";
 
@@ -24,7 +24,7 @@ function formatLabel(tickItem: Date) {
   });
 }
 
-const CustomTooltip: React.FC<TooltipProps<number, string>> = ({
+const CustomTooltip: React.FC<Partial<TooltipContentProps<number, string>>> = ({
   active,
   payload,
   label,
@@ -33,10 +33,10 @@ const CustomTooltip: React.FC<TooltipProps<number, string>> = ({
     return (
       <div className="bg-white/95 dark:bg-[#27272A]/95 backdrop-blur-xl border border-otl-gray-200/80 dark:border-gray-700 p-2.5 rounded-xl shadow-xl flex flex-col gap-1 items-center">
         <p className="text-txt-black-500 dark:text-gray-400 font-semibold tracking-widest text-[9px] uppercase">
-          {`${formatLabel(label)}`}
+          {`${formatLabel(label as unknown as Date)}`}
         </p>
         <p className="text-txt-black-900 dark:text-white font-semibold text-sm leading-none">
-          {payload[0].value?.toFixed(1)}
+          {(payload[0].value as number | undefined)?.toFixed(1)}
         </p>
       </div>
     );
