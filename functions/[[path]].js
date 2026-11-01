@@ -1,57 +1,34 @@
+import { slugify } from "../src/lib/slug";
+
+const LOOKUP_URL = "https://pricecatcher-lake.iwa.my/data/item_lookup.json";
+
+// Short URLs that people and agents tend to guess, mapped to the real pages.
+//   /item/1611        -> /item/santan-kelapa-jenama-kara-1611/
+//   /categories       -> /category/
 export async function onRequest(context) {
   const url = new URL(context.request.url);
 
-  // Fetch the actual static index.html
-  const response = await context.next();
-
-  // Only intercept requests to /item/:itemCode
-  const itemMatch = url.pathname.match(/^\/item\/(\d+)$/);
-
-  if (itemMatch) {
-    const itemCode = itemMatch[1];
-
-    // OPTIONAL: Fetch the actual item name from a lightweight JSON index in your lake
-    const metaReq = await fetch(
-      "https://pricecatcher-lake.iwa.my/data/item_lookup.json",
-    );
-    const metaMap = await metaReq.json();
-    const itemName = metaMap[itemCode] || `Item #${itemCode}`;
-
-    // Fallback if you don't have a JSON map
-    // const itemName = `Product #${itemCode}`;
-    const dynamicTitle = `${itemName} | OpenPriceCatcher`;
-    const dynamicDesc = `Track and compare prices for ${itemName} across Malaysia.`;
-
-    // Use HTMLRewriter to inject the meta tags BEFORE social media bots see the HTML
-    return new HTMLRewriter()
-      .on("title", {
-        element(e) {
-          e.setInnerContent(dynamicTitle);
-        },
-      })
-      .on('meta[property="og:title"]', {
-        element(e) {
-          e.setAttribute("content", dynamicTitle);
-        },
-      })
-      .on('meta[name="twitter:title"]', {
-        element(e) {
-          e.setAttribute("content", dynamicTitle);
-        },
-      })
-      .on('meta[name="description"]', {
-        element(e) {
-          e.setAttribute("content", dynamicDesc);
-        },
-      })
-      .on('meta[property="og:description"]', {
-        element(e) {
-          e.setAttribute("content", dynamicDesc);
-        },
-      })
-      .transform(response);
+  if (/^\/categor(y|ies)$|^\/categories\/$/.test(url.pathname)) {
+    return Response.redirect(new URL(`/category/${url.search}`, url), 301);
   }
 
-  // Return normal response for all other routes
-  return response;
+  const itemMatch = url.pathname.match(/^\/item\/(\d+)\/?$/);
+  if (itemMatch) {
+    const itemCode = itemMatch[1];
+    try {
+      const res = await fetch(LOOKUP_URL, { cf: { cacheTtl: 3600, cacheEverything: true } });
+      const lookup = res.ok ? await res.json() : {};
+      const itemName = lookup[itemCode];
+      if (itemName) {
+        return Response.redirect(
+          new URL(`/item/${slugify(itemName)}-${itemCode}/${url.search}`, url),
+          301,
+        );
+      }
+    } catch {
+      // Fall through to the normal 404 page.
+    }
+  }
+
+  return context.next();
 }

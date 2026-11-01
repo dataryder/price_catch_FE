@@ -63,6 +63,8 @@ print(df_ayam.head())
 ---
 
 ## 4. Reading Data From Item Pages
+Shortcut: if you only know the item code, request `https://pricecatcher.iwa.my/item/{item_code}` (for example `/item/1611`); it 301-redirects to the full item page. Item codes and names are listed in `https://pricecatcher-lake.iwa.my/data/item_lookup.json`.
+
 Every item page (`https://pricecatcher.iwa.my/item/{slug}-{item_code}/`) embeds its full data as one plain JSON block. If you can read raw HTML, this is the easiest option:
 
 ```html
