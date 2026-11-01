@@ -64,13 +64,13 @@ const CategoryPage: React.FC<CategoryPageProps> = ({
   const handleGroupSelect = (selectedGroup: string) => {
     setGroup(selectedGroup);
     setCategory("");
-    window.history.pushState(null, "", `/category/${encodeURIComponent(selectedGroup)}`);
+    window.history.pushState(null, "", `/category/${encodeURIComponent(selectedGroup)}/`);
   };
 
   const handleCategorySelect = (selectedCat: string) => {
     const urlSafeCatName = selectedCat.replace(/\//g, "--");
     setCategory(urlSafeCatName);
-    window.history.pushState(null, "", `/category/${encodeURIComponent(group)}/${encodeURIComponent(urlSafeCatName)}`);
+    window.history.pushState(null, "", `/category/${encodeURIComponent(group)}/${encodeURIComponent(urlSafeCatName)}/`);
   };
 
   useEffect(() => {
@@ -87,8 +87,12 @@ const CategoryPage: React.FC<CategoryPageProps> = ({
     if (preloadedItems && preloadedItems.length > 0 && group === propGroup && category === propCategory) {
       return;
     }
-    if (!isReady || !group || !category) {
+    if (!group || !category) {
       setItemsList([]);
+      return;
+    }
+    if (!isReady) {
+      setIsLoadingItems(true);
       return;
     }
     setIsLoadingItems(true);
@@ -120,14 +124,13 @@ const CategoryPage: React.FC<CategoryPageProps> = ({
   );
 
   const renderItemCard = (item: any) => (
-    <div
+    <a
       key={item.item_code}
-      tabIndex={0}
+      href={`/item/${slugify(item.item || "")}-${item.item_code}`}
       className={cn(
-        "group flex flex-row justify-between items-center p-5 gap-4 rounded-lg border border-otl-gray-200 dark:border-gray-800 shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 ease-out active:scale-[0.98] cursor-pointer outline-none focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 shrink-1 overflow-clip bg-white dark:bg-[#1D1D21]",
+        "group flex flex-row justify-between items-center p-5 gap-4 rounded-lg border border-otl-gray-200 dark:border-gray-800 shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 ease-out active:scale-[0.98] cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-otl-success-400 shrink-1 overflow-clip bg-white dark:bg-[#1D1D21]",
         item.status === "discontinued" && "opacity-60 grayscale-[50%]",
       )}
-      onClick={() => window.location.assign(`/item/${slugify(item.item || "")}-${item.item_code}`)}
     >
       <div className="flex flex-col gap-2 flex-1 min-w-0">
         <h4
@@ -169,7 +172,7 @@ const CategoryPage: React.FC<CategoryPageProps> = ({
       <div className="w-10 h-10 flex items-center justify-center transition-all">
         <ChevronRightIcon className="w-4 h-4 text-txt-black-500 group-hover:translate-x-0.5 transition-all" />
       </div>
-    </div>
+    </a>
   );
 
   return (
@@ -191,7 +194,7 @@ const CategoryPage: React.FC<CategoryPageProps> = ({
             Product Groups
           </h2>
 
-          {!isReady || isLoadingHierarchy ? (
+          {isLoadingHierarchy || hierarchy.length === 0 ? (
             <div className="flex flex-wrap gap-2">
               {[...Array(5)].map((_, i) => (
                 <div

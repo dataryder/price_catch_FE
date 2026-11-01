@@ -348,16 +348,41 @@ const ItemDetailsWrapper: React.FC<{ itemCode?: string } & PreloadedItemData> = 
     [allPriceData, selectedState],
   );
 
-  const minAvailableDate =
-    priceHistory.length > 0 ? new Date(priceHistory[0].date) : undefined;
-  const maxAvailableDate =
-    priceHistory.length > 0
-      ? new Date(priceHistory[priceHistory.length - 1].date)
+  // Days that actually have premise-level prices. Item pages embed this list
+  // (price_dates); otherwise fall back to the price-history dates.
+  const priceDates = useMemo(() => {
+    const dates = embedded?.priceDates?.length
+      ? embedded.priceDates
+      : priceHistory.map((h) => h.date);
+    return [...new Set(dates)].sort();
+  }, [embedded, priceHistory]);
+  const { firstPriceDate, lastPriceDate, missingPriceDates } = useMemo(() => {
+    if (!priceDates.length) return { firstPriceDate: undefined, lastPriceDate: undefined, missingPriceDates: [] };
+    const toLocalDate = (s: string) => {
+      const [yyyy, mm, dd] = s.split("-").map(Number);
+      return new Date(yyyy, mm - 1, dd);
+    };
+    const have = new Set(priceDates);
+    const first = toLocalDate(priceDates[0]);
+    const last = toLocalDate(priceDates[priceDates.length - 1]);
+    const missing: Date[] = [];
+    for (let d = new Date(first); d <= last; d.setDate(d.getDate() + 1)) {
+      if (!have.has(format(d, "yyyy-MM-dd"))) missing.push(new Date(d));
+    }
+    return { firstPriceDate: first, lastPriceDate: last, missingPriceDates: missing };
+  }, [priceDates]);
+
+  // Export range: any span within the available window.
+  const exportDisabledDates =
+    firstPriceDate && lastPriceDate
+      ? [{ before: firstPriceDate }, { after: lastPriceDate }]
       : undefined;
-  const disabledDates =
-    minAvailableDate && maxAvailableDate
-      ? [{ before: minAvailableDate }, { after: maxAvailableDate }]
-      : undefined;
+  // Observation date: additionally disable each day without data. Passed as a
+  // Date[] (not a function) because the MYDS month/year pickers evaluate
+  // function matchers against an arbitrary day and would disable whole months.
+  const disabledDates = exportDisabledDates
+    ? [...exportDisabledDates, missingPriceDates]
+    : undefined;
 
   const handleDownload = async () => {
     if (!itemCode) return;
@@ -504,6 +529,8 @@ const ItemDetailsWrapper: React.FC<{ itemCode?: string } & PreloadedItemData> = 
                 value={selectedDate}
                 onValueChange={setSelectedDate}
                 disabled={disabledDates}
+                minYear={firstPriceDate?.getFullYear()}
+                maxYear={lastPriceDate?.getFullYear()}
                 size="small"
               />
             </div>
@@ -578,7 +605,7 @@ const ItemDetailsWrapper: React.FC<{ itemCode?: string } & PreloadedItemData> = 
                     <DateRangePicker
                       value={downloadDateRange}
                       onValueChange={setDownloadDateRange}
-                      disabled={disabledDates}
+                      disabled={exportDisabledDates}
                       size="small"
                     />
                   </div>

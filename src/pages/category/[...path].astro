@@ -130,8 +130,28 @@ const { group, category, title, description, image, preloadedHierarchy, preloade
 
   <!-- Standard HTML fallback for scrapers, crawlers and search bots -->
   <div class="sr-only hidden" aria-hidden="true" style="display: none;">
-    <h1>Category: {category} ({group})</h1>
-    <h2>Items in this category</h2>
+    {!group && (
+      <>
+        <h1>Product Groups</h1>
+        <ul>
+          {[...new Set(preloadedHierarchy.map((h) => h.item_group))].map((g) => (
+            <li><a href={`/category/${encodeURIComponent(g)}/`}>{g}</a></li>
+          ))}
+        </ul>
+      </>
+    )}
+    {group && !category && (
+      <>
+        <h1>{group}: Sub-Categories</h1>
+        <ul>
+          {preloadedHierarchy.filter((h) => h.item_group === group).map((h) => (
+            <li><a href={`/category/${encodeURIComponent(group)}/${encodeURIComponent(h.item_category.split("/").join("--"))}/`}>{h.item_category}</a></li>
+          ))}
+        </ul>
+      </>
+    )}
+    {category && <h1>Category: {category.split("--").join("/")} ({group})</h1>}
+    {category && <h2>Items in this category</h2>}
     <ul>
       {preloadedItems.map((item) => (
         <li>

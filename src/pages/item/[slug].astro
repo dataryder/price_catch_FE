@@ -2,7 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import ItemDetailsWrapper from '../../react-pages/ItemDetailsWrapper';
 import { slugify } from '../../lib/slug';
-import { getItemPriceHistory, getItemPrices } from '../../services/apiClient';
+import { getItemPriceDates, getItemPriceHistory, getItemPrices } from '../../services/apiClient';
 import { ITEM_DATA_ELEMENT_ID, encodeItemData, serializeItemData, setServerItemData } from '../../lib/itemData';
 
 export async function getStaticPaths() {
@@ -33,6 +33,8 @@ export async function getStaticPaths() {
         getItemPriceHistory(itemCode),
         latestDateStr ? getItemPrices(itemCode, latestDateStr) : Promise.resolve([])
       ]);
+      // Reuses the prices file downloaded just above (cached by URL).
+      const priceDates = await getItemPriceDates(itemCode);
 
       const slug = `${slugify(itemName)}-${itemCode}`;
 
@@ -44,6 +46,7 @@ export async function getStaticPaths() {
           latestDateStr,
           preloadedHistory: history,
           preloadedPrices: prices,
+          priceDates,
           preloadedMetadata: searchItem || null
         }
       };
@@ -60,6 +63,7 @@ export async function getStaticPaths() {
           latestDateStr: "",
           preloadedHistory: [],
           preloadedPrices: [],
+          priceDates: [],
           preloadedMetadata: null
         }
       };
@@ -84,7 +88,7 @@ export async function getStaticPaths() {
   return Promise.all(results);
 }
 
-const { itemCode, itemName, preloadedHistory, preloadedPrices, preloadedMetadata } = Astro.props;
+const { itemCode, itemName, preloadedHistory, preloadedPrices, priceDates, preloadedMetadata } = Astro.props;
 
 // Compute min, max, average, and median price for SEO and OpenGraph tags at build time
 const pricesList = (preloadedPrices || []).map(p => p.price).filter(p => typeof p === "number");
@@ -111,7 +115,7 @@ if (minPrice !== null && maxPrice !== null && medianPrice !== null && averagePri
 const ogImage = `/og/item-${itemCode}.png`;
 
 // One plain JSON copy of the data, read by the React island and by agents.
-const itemData = encodeItemData(itemCode, itemName, preloadedMetadata, preloadedPrices || [], preloadedHistory || []);
+const itemData = encodeItemData(itemCode, itemName, preloadedMetadata, preloadedPrices || [], preloadedHistory || [], priceDates || []);
 setServerItemData(itemData);
 const itemDataJson = serializeItemData(itemData);
 ---

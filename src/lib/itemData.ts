@@ -17,6 +17,8 @@ export interface ItemDataBlock {
   item_group?: string;
   item_category?: string;
   sources: Record<string, string>;
+  /** Every date that has premise-level prices (sorted). */
+  price_dates: string[];
   latest_prices: {
     date: string | null;
     columns: string[];
@@ -31,6 +33,7 @@ export interface ItemDataBlock {
 export interface PreloadedItemData {
   history: ItemPriceHistory[];
   prices: ItemLatest[];
+  priceDates: string[];
 }
 
 // Percentiles come out of the pipeline as e.g. 2.9945000000000004.
@@ -42,6 +45,7 @@ export function encodeItemData(
   meta: { unit?: string; item_group?: string; item_category?: string } | null,
   prices: ItemLatest[],
   history: ItemPriceHistory[],
+  priceDates: string[],
 ): ItemDataBlock {
   const dates = new Set(prices.map((p) => p.date));
   const singleDate = dates.size === 1 ? [...dates][0] : null;
@@ -58,6 +62,7 @@ export function encodeItemData(
       price_history_parquet: `https://pricecatcher-lake.iwa.my/data/history/item_code=${itemCode}/data.parquet`,
       docs: "https://pricecatcher.iwa.my/llms.txt",
     },
+    price_dates: priceDates,
     latest_prices: {
       date: singleDate,
       columns: latestColumns,
@@ -86,6 +91,7 @@ function decodeItemData(block: ItemDataBlock): PreloadedItemData {
   ].map(idx);
 
   return {
+    priceDates: block.price_dates ?? [],
     prices: lp.rows.map((r) => ({
       date: (iDate >= 0 ? r[iDate] : lp.date) as string,
       premise: r[iPremise] as string,

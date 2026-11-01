@@ -13,11 +13,7 @@ const bufferCache = new Map<string, Uint8Array>();
 
 let wasmInitialized = false;
 
-const fetchParquet = async (
-  url: string,
-  filterKey?: string,
-  filterValue?: any,
-) => {
+const loadParquetTable = async (url: string) => {
   let buffer = bufferCache.get(url);
 
   if (!buffer) {
@@ -47,7 +43,15 @@ const fetchParquet = async (
   const { tableFromIPC } = await import("apache-arrow");
 
   const wasmTable = readParquet(buffer);
-  const table = tableFromIPC(wasmTable.intoIPCStream());
+  return tableFromIPC(wasmTable.intoIPCStream());
+};
+
+const fetchParquet = async (
+  url: string,
+  filterKey?: string,
+  filterValue?: any,
+) => {
+  const table = await loadParquetTable(url);
 
   let data;
   if (filterKey) {
@@ -109,6 +113,19 @@ export const getItemPrices = async (
   }
 };
 
+/** Sorted unique dates that have premise-level prices (the rolling ~2-year window). */
+export const getItemPriceDates = async (item_code: string): Promise<string[]> => {
+  try {
+    const table = await loadParquetTable(`${DATA_URL}/prices/item_code=${item_code}/data.parquet`);
+    const dates = table.getChild("date");
+    if (!dates) return [];
+    return [...new Set<string>(Array.from(dates.toArray(), String))].sort();
+  } catch (err) {
+    console.error(`Error in getItemPriceDates for item ${item_code}:`, err);
+    return [];
+  }
+};
+
 export const getItemPriceHistory = async (
   item_code: string,
 ): Promise<ItemPriceHistory[]> => {
@@ -162,7 +179,8 @@ export const getItemsByCategory = async (
   group: string,
   category: string,
 ): Promise<any[]> => {
-  const decodedCategory = category.replace(" | ", "/");
+  // URLs encode "/" in category names as "--" (e.g. MEE--KUETIAU).
+  const decodedCategory = category.replace(/--/g, "/").replace(" | ", "/");
   return globalSearchData
     .filter(
       (i) => i.item_group === group && i.item_category === decodedCategory,
