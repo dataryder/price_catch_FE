@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Data access guide for LLMs and agents: https://pricecatcher.iwa.my/llms.txt
+Sitemap: https://pricecatcher.iwa.my/sitemap-index.xml
