@@ -10,7 +10,7 @@ const __filename = fileURLToPath(import.meta.url);
 const ogDir = path.join(process.cwd(), 'dist', 'og');
 const cacheDir = path.join(process.cwd(), '.og-cache');
 const manifestPath = path.join(cacheDir, 'manifest.json');
-const fontPath = path.join(process.cwd(), 'public', 'fonts', 'GoogleSans-Regular.ttf');
+const fontPath = path.join(process.cwd(), 'scripts', 'fonts', 'GoogleSans-Regular.ttf');
 
 function getMd5(content) {
   return crypto.createHash('md5').update(content).digest('hex');
