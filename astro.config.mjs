@@ -5,7 +5,7 @@ import sitemap from '@astrojs/sitemap';
 // https://astro.build/config
 // Tailwind runs through postcss.config.js (no Astro integration needed).
 export default defineConfig({
-  site: 'https://pricecatcher.civictech.my',
+  site: 'https://pricecatcher.iwa.my',
   integrations: [react(), sitemap()],
   output: 'static',
   vite: {

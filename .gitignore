@@ -28,3 +28,4 @@ public/favi (1).svg
 .dev.vars
 .codefetchignore
 .og-cache
+.astro/preview.json
